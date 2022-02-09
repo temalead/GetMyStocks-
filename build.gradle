@@ -1,9 +1,4 @@
 import javax.swing.DefaultBoundedRangeModel
-buildscript {
-    ext{
-        tinkoffVersion= '0.5.2'
-    }
-}
 
 plugins {
     id 'java'
@@ -25,6 +20,7 @@ dependencies {
     def junitVersion="5.8.1"
     def jasyptVersion="3.0.4"
     def lombokVersion="1.18.22"
+    def telegramVersion="5.7.0"
 
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -34,6 +30,8 @@ dependencies {
 
     implementation "ru.tinkoff.invest:openapi-java-sdk-java8:$tinkoffVersion"
     implementation "ru.tinkoff.invest:openapi-java-sdk-core:$tinkoffVersion"
+
+    implementation "org.telegram:telegrambots-spring-boot-starter:$telegramVersion"
 
 
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
@@ -45,6 +43,7 @@ dependencies {
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+
 }
 
 test {
