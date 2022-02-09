@@ -1,0 +1,7 @@
+bot:
+  invest:
+    isSandBoxMode: true
+    token: ENC(jWu/SiqYJZrcRVsOoqs5OazfdjOzFKRV3TBGEcYSj+9qsEM9seY4otjn4FzMpvRyrynQG2oFRQVdq4CKp3FVTHVFGuXu3ttpWl32ZpsTr0VcgzymcxiFVyilmyr1n9PHYqOWsWiO2hs=)
+jasypt:
+  encryptor:
+    password: money!

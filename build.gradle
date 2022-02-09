@@ -1,0 +1,63 @@
+import javax.swing.DefaultBoundedRangeModel
+buildscript {
+    ext{
+        tinkoffVersion= '0.5.2'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.5.1'
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+
+}
+
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    def tinkoffVersion = "0.5.2"
+    def junitVersion="5.8.1"
+    def jasyptVersion="3.0.4"
+    def lombokVersion="1.18.22"
+
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+    implementation "ru.tinkoff.invest:openapi-java-sdk-java8:$tinkoffVersion"
+    implementation "ru.tinkoff.invest:openapi-java-sdk-core:$tinkoffVersion"
+
+
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    implementation "org.projectlombok:lombok:$lombokVersion"
+    implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:$jasyptVersion"
+
+
+
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+
+class HelloTask extends DefaultTask{
+    @TaskAction
+    def hello(){
+        print "Hello World!"
+    }
+}
+
+tasks.register("hello",HelloTask)
