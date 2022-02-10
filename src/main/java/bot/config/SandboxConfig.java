@@ -8,6 +8,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "bot.invest")
 public class SandboxConfig {
     private Boolean isSandBoxMode;
-
     private String token;
 }

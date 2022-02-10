@@ -1,10 +1,7 @@
 bot:
   telegram:
-    token: 5185545903:AAEavJeesJr3Jsqz9LOBZ_e_QO2vtA8akl0
+    token: ${secret.bot.telegram.token}
     name: get_my_stocks_bot
   invest:
     isSandBoxMode: true
     token: ${secret.bot.invest.token}
-jasypt:
-  encryptor:
-    password: money!
