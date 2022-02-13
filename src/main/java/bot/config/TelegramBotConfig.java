@@ -1,18 +1,26 @@
 package bot.config;
 
+import bot.service.telegram.Bot;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @Configuration
 @Data
-@PropertySource("classpath:application.yml")
+@EnableConfigurationProperties(TelegramBotBuilder.class)
 public class TelegramBotConfig {
-    @Value("${bot.telegram.token}")
-    private String token;
-    @Value("${bot.telegram.name}")
-    private String name;
+    private final TelegramBotBuilder builder;
 
+    @Bean
+    public Bot bot() throws TelegramApiException {
+        Bot bot = new Bot(builder.getToken(), builder.getName());
+        TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+        telegramBotsApi.registerBot(bot);
+        return bot;
+    }
 
 }

@@ -9,16 +9,17 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Component
 @RequiredArgsConstructor
 public class Bot extends TelegramLongPollingBot {
-    private final TelegramBotConfig botConfig;
+    private final String token;
+    private final String name;
 
     @Override
     public String getBotUsername() {
-        return botConfig.getName();
+        return name;
     }
 
     @Override
     public String getBotToken() {
-        return botConfig.getToken();
+        return token;
     }
 
     @Override
