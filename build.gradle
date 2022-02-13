@@ -1,5 +1,3 @@
-import javax.swing.DefaultBoundedRangeModel
-
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.5.1'
@@ -16,8 +14,8 @@ repositories {
 publishing {
     publications {
         maven(MavenPublication) {
-            from components.java
 
+            from components.java
         }
     }
 }
@@ -53,14 +51,3 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
-
-
-class HelloTask extends DefaultTask{
-    @TaskAction
-    def hello(){
-        print "Hello World!"
-    }
-}
-
-tasks.register("hello",HelloTask)
