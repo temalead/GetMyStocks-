@@ -1,6 +1,6 @@
 package bot.service.telegram;
 
-import bot.config.TelegramBotConfig;
+import bot.config.TelegramBotBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -9,17 +9,16 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Component
 @RequiredArgsConstructor
 public class Bot extends TelegramLongPollingBot {
-    private final String token;
-    private final String name;
+    private final TelegramBotBuilder builder;
 
     @Override
     public String getBotUsername() {
-        return name;
+        return builder.getName();
     }
 
     @Override
     public String getBotToken() {
-        return token;
+        return builder.getToken();
     }
 
     @Override

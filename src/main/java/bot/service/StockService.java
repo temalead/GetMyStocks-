@@ -19,14 +19,14 @@ public class StockService {
     private final InvestApi api;
     private final String classCode = "TQBR";
 
-    public Dividend getLasDividendByTicker(String ticker) throws NotFoundStockException {
+    public Long getLastDividendByTicker(String ticker) throws NotFoundStockException {
         String figiOfStock = getFigiOfStock(ticker);
 
         List<Dividend> dividends = api.getInstrumentsService().getDividendsSync(figiOfStock,
                 Instant.now().minus(1, ChronoUnit.YEARS),
                 Instant.now());
-
-        return dividends.get(0);
+        Dividend dividend = dividends.get(0);
+        return dividend.getDividendNet().getUnits();
     }
 
     private String getFigiOfStock(String ticket) throws NotFoundStockException {
