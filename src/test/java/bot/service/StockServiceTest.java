@@ -9,6 +9,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class StockServiceTest {
@@ -16,10 +19,27 @@ public class StockServiceTest {
     private StockService service;
 
     @Test
-    public void testGetLastDividendByTicker() throws NotFoundStockException {
+    public void shouldReturnIntegerDiv() throws NotFoundStockException {
+        BigDecimal expected = BigDecimal.valueOf(18.7);
+        BigDecimal result = service.getLastDividendByTicker("SBER");
 
-        BigDecimal gazp = service.getLastDividendByTicker("FEES");
-        System.out.println(gazp.doubleValue());
+        assertEquals(expected,result);
     }
+    @Test
+    public void shouldReturnDoubleDiv() throws NotFoundStockException {
+        double expected = BigDecimal.valueOf(0.016132865).doubleValue();
+        double result = service.getLastDividendByTicker("FEES").doubleValue();
+
+        assertEquals(expected,result);
+    }
+
+    @Test
+    public void shouldReturnZeroDiv() throws NotFoundStockException {
+        BigDecimal expected = BigDecimal.valueOf(0);
+        BigDecimal result = service.getLastDividendByTicker("RUAL");
+
+        assertEquals(expected,result);
+    }
+
 
 }
