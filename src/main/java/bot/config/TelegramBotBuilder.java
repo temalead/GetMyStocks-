@@ -14,3 +14,4 @@ public class TelegramBotBuilder {
     @Value("${bot.telegram.name}")
     private String name;
 }
+

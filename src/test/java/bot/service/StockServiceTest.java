@@ -23,14 +23,15 @@ public class StockServiceTest {
         BigDecimal expected = BigDecimal.valueOf(18.7);
         BigDecimal result = service.getLastDividendByTicker("SBER");
 
-        assertEquals(expected,result);
+        assertEquals(expected, result);
     }
+
     @Test
     public void shouldReturnDoubleDiv() throws NotFoundStockException {
         double expected = BigDecimal.valueOf(0.016132865).doubleValue();
         double result = service.getLastDividendByTicker("FEES").doubleValue();
 
-        assertEquals(expected,result);
+        assertEquals(expected, result);
     }
 
     @Test
@@ -38,7 +39,7 @@ public class StockServiceTest {
         BigDecimal expected = BigDecimal.valueOf(0);
         BigDecimal result = service.getLastDividendByTicker("RUAL");
 
-        assertEquals(expected,result);
+        assertEquals(expected, result);
     }
 
 
