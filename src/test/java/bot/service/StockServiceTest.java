@@ -1,12 +1,16 @@
 package bot.service;
 
 import bot.exception.NotFoundStockException;
-import junit.framework.TestCase;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.math.BigDecimal;
 
 @SpringBootTest
+@RunWith(SpringRunner.class)
 public class StockServiceTest {
     @Autowired
     private StockService service;
@@ -14,8 +18,8 @@ public class StockServiceTest {
     @Test
     public void testGetLastDividendByTicker() throws NotFoundStockException {
 
-        Long gazp = service.getLastDividendByTicker("GAZP");
-        System.out.println(gazp);
+        BigDecimal gazp = service.getLastDividendByTicker("FEES");
+        System.out.println(gazp.doubleValue());
     }
 
 }
