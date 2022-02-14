@@ -5,3 +5,6 @@ bot:
   invest:
     isSandBoxMode: true
     token: ${secret.bot.invest.token}
+spring:
+  redis:
+    host:

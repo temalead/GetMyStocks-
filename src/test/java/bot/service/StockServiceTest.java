@@ -1,15 +1,20 @@
 package bot.service;
 
 import bot.exception.NotFoundStockException;
+import bot.repository.ShareRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 
 
 @SpringBootTest
@@ -17,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class StockServiceTest {
     @Autowired
     private StockService service;
+
 
     @Test
     public void shouldReturnIntegerDiv() throws NotFoundStockException {
