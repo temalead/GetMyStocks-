@@ -28,11 +28,8 @@ public class StockService {
         List<Dividend> dividends = api.getInstrumentsService().getDividendsSync(figiOfStock,
                 Instant.now().minus(365, ChronoUnit.DAYS),
                 Instant.now());
-        for (Dividend dividend : dividends) {
-            System.out.println(dividend.getDividendNet());
-        }
-        Dividend dividend = dividends.get(0);
-        return calculateExactDividend(dividend);
+        log.info("Get dividens of {}",ticker);
+        return calculateExactDividend(dividends);
     }
 
     private String getFigiOfStock(String ticket) throws NotFoundStockException {
@@ -45,13 +42,19 @@ public class StockService {
         return shareDto.getFigi();
     }
 
-    private BigDecimal calculateExactDividend(Dividend dividend) {
-        long units = dividend.getDividendNet().getUnits();
-        BigDecimal nanos = BigDecimal.valueOf(
-                dividend.getDividendNet()
-                        .getNano()
-        );
-        BigDecimal divide = nanos.divide(BigDecimal.valueOf(1000000000l));
-        return BigDecimal.valueOf(units).add(divide);
+    private BigDecimal calculateExactDividend(List<Dividend> dividends) {
+        if (dividends.size()!=0) {
+            Dividend dividend = dividends.get(0);
+            long units = dividend.getDividendNet().getUnits();
+            BigDecimal nanos = BigDecimal.valueOf(
+                    dividend.getDividendNet()
+                            .getNano()
+            );
+            BigDecimal divide = nanos.divide(BigDecimal.valueOf(1000000000L));
+            return BigDecimal.valueOf(units).add(divide);
+        }
+        else {
+            return BigDecimal.ZERO;
+        }
     }
 }
