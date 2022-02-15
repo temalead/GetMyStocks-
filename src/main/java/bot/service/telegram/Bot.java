@@ -35,5 +35,6 @@ public class Bot extends TelegramLongPollingBot {
 
     private void handleMessage(Message message) throws TelegramApiException {
         execute(SendMessage.builder().chatId(String.valueOf(message.getChatId())).text(message.getText()).build());
+
     }
 }

@@ -2,6 +2,7 @@ package bot.service;
 
 import bot.exception.NotFoundStockException;
 import bot.service.tinkoff.StockService;
+import io.grpc.StatusRuntimeException;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
@@ -12,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -22,10 +24,9 @@ public class StockServiceTest {
 
 
     @Test
-    @DisplayName("Test apply to api to create new stock")
-    public void shouldReturnValueFromJustCreatedShare() throws Exception {
-
-        service.getLastDividendByTicker("SBER");
+    @DisplayName("Should throw exception cause share with this ticker doesn`t exist")
+    public void throwStatusRuntimeException(){
+        assertThrows(StatusRuntimeException.class,()->service.getLastDividendByTicker("saFASDF"));
     }
 
     @Test
