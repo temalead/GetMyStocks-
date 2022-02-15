@@ -1,4 +1,4 @@
-package bot.service;
+package bot.service.tinkoff;
 
 
 import bot.domain.dto.ShareDto;
@@ -30,12 +30,13 @@ public class StockService {
             return share.get().getDividend();
         }
         else {
+            log.info("Share with ticker {} not found in cache. Creating...",ticker);
             return createStock(ticker);
         }
     }
 
     private BigDecimal createStock(String ticker) throws NotFoundStockException {
-        String figiOfStock = getFigiOfStock(ticker);
+        String figiOfStock = getFigiByStock(ticker);
 
         List<Dividend> dividends = api.getInstrumentsService().getDividendsSync(figiOfStock,
                 Instant.now().minus(365, ChronoUnit.DAYS),
@@ -52,7 +53,7 @@ public class StockService {
     }
 
 
-    private String getFigiOfStock(String ticket) throws NotFoundStockException {
+    private String getFigiByStock(String ticket) throws NotFoundStockException {
         ru.tinkoff.piapi.contract.v1.Share share = api.getInstrumentsService().getShareByTickerSync(ticket, classCode).
                 orElseThrow(() -> new NotFoundStockException(ticket));
 
