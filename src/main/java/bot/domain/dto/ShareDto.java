@@ -21,8 +21,7 @@ import java.util.UUID;
 @Setter
 public class ShareDto implements Serializable {
     @Id
-    @GeneratedValue(generator = "UUID")
-    private UUID id;
+    private Long id;
     private String figi;
     private String ticker;
     private BigDecimal dividend;
@@ -38,5 +37,15 @@ public class ShareDto implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(ticker);
+    }
+
+    @Override
+    public String toString() {
+        return "ShareDto{" +
+                "id=" + id +
+                ", figi='" + figi + '\'' +
+                ", ticker='" + ticker + '\'' +
+                ", dividend=" + dividend +
+                '}';
     }
 }

@@ -1,5 +1,6 @@
 package bot.service;
 
+import bot.domain.dto.ShareDto;
 import bot.exception.NotFoundShareException;
 import bot.service.tinkoff.StockService;
 import io.grpc.StatusRuntimeException;
@@ -11,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,8 +31,6 @@ public class StockServiceTest {
     public void throwStatusRuntimeException() throws NotFoundShareException {
         String nonexistentTicker="saFASDF";
         String expectedMsg= String.format("Акция с тикером %s не существует!",nonexistentTicker);
-
-
         assertThrows(NotFoundShareException.class,()->service.getLastDividendByTicker(nonexistentTicker));
 
     }

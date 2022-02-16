@@ -18,6 +18,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +52,8 @@ public class StockService {
                 .setDividend(dividend);
 
         shareRepository.save(stock);
+
+        log.info("Share {} successfully created",stock);
 
         return stock.getDividend();
     }
@@ -86,4 +89,5 @@ public class StockService {
             return BigDecimal.ZERO;
         }
     }
+
 }
