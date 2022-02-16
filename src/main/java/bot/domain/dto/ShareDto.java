@@ -21,7 +21,7 @@ import java.util.UUID;
 @Setter
 public class ShareDto implements Serializable {
     @Id
-    private Long id;
+    private String id;
     private String figi;
     private String ticker;
     private BigDecimal dividend;

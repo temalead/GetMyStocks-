@@ -7,4 +7,5 @@ bot:
     token: ${secret.bot.invest.token}
 spring:
   redis:
-    host: 6379
+    port: 6379
+
