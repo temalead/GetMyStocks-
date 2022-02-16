@@ -2,12 +2,11 @@ package bot.service.tinkoff;
 
 
 import bot.domain.dto.ShareDto;
-import bot.exception.NotFoundStockException;
+import bot.exception.NotFoundShareException;
 import bot.repository.ShareRepository;
 import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.NotFound;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.piapi.contract.v1.Dividend;
 import ru.tinkoff.piapi.contract.v1.Share;
@@ -28,9 +27,10 @@ public class StockService {
     private final ShareRepository shareRepository;
     private final String classCode = "TQBR";
 
-    public BigDecimal getLastDividendByTicker(String ticker){
+    public BigDecimal getLastDividendByTicker(String ticker) throws NotFoundShareException {
         Optional<ShareDto> share = shareRepository.findByTicker(ticker);
         if (share.isPresent()) {
+            log.info("Found share {} in cache. Returning...",ticker);
             return share.get().getDividend();
         } else {
             log.info("Share with ticker {} not found in cache. Creating...", ticker);
@@ -38,7 +38,7 @@ public class StockService {
         }
     }
 
-    private BigDecimal createStock(String ticker) {
+    private BigDecimal createStock(String ticker) throws NotFoundShareException {
         String figiOfStock = getFigiByStock(ticker);
 
         List<Dividend> dividends = api.getInstrumentsService().getDividendsSync(figiOfStock,
@@ -56,17 +56,18 @@ public class StockService {
     }
 
 
-    private String getFigiByStock(String ticket)  {
+    private String getFigiByStock(String ticker) throws NotFoundShareException {
 
         try {
-            Optional<Share> shareOpt = api.getInstrumentsService().getShareByTickerSync(ticket, classCode);
+            Optional<Share> shareOpt = api.getInstrumentsService().getShareByTickerSync(ticker, classCode);
             Share share = shareOpt.orElseThrow(NotFoundException::new);
             ShareDto shareDto = new ShareDto()
                     .setFigi(share.getFigi())
                     .setTicker(share.getTicker());
             return shareDto.getFigi();
         } catch (StatusRuntimeException e) {
-            return NotFoundShareMessageBuilder.createMsgError(ticket);
+            log.error("Share with {} not exist!",ticker);
+            throw new NotFoundShareException(ticker);
         }
 
     }
