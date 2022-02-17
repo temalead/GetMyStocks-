@@ -11,6 +11,13 @@ import java.util.Optional;
 public class ShareRepoImpl {
     private final ShareRepository repository;
 
+
+    /**
+     *
+     * @param ticker
+     * @return Share by ticker
+     * BUT possibly Bad performance. How can i get value by not key in redis cache?
+     */
     public Optional<ShareDto> getShareByTicker(String ticker){
         Iterable<ShareDto> all = repository.findAll();
         for (ShareDto shareDto : all) {
