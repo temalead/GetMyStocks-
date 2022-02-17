@@ -8,6 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ShareRepository extends CrudRepository<ShareDto, Long> {
-    Optional<ShareDto> findByTicker(String ticker);
+public interface ShareRepository extends CrudRepository<ShareDto, String> {
+
 }

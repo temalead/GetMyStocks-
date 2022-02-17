@@ -3,7 +3,7 @@ package bot.service.tinkoff;
 
 import bot.domain.dto.ShareDto;
 import bot.exception.NotFoundShareException;
-import bot.repository.ShareRepository;
+import bot.repository.ShareRepoImpl;
 import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +22,13 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class StockService {
+public class ShareService {
     private final InvestApi api;
-    private final ShareRepository shareRepository;
+    private final ShareRepoImpl repo;
     private final String classCode = "TQBR";
 
     public BigDecimal getLastDividendByTicker(String ticker) throws NotFoundShareException {
-        Optional<ShareDto> share = shareRepository.findByTicker(ticker);
+        Optional<ShareDto> share = repo.getShareByTicker(ticker);
         if (share.isPresent()) {
             log.info("Found share {} in cache. Returning...",ticker);
             return share.get().getDividend();
@@ -50,7 +50,7 @@ public class StockService {
                 .setTicker(ticker)
                 .setDividend(dividend);
 
-        shareRepository.save(stock);
+        repo.save(stock);
 
         log.info("Share {} successfully created",stock);
         return stock.getDividend();

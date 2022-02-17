@@ -4,7 +4,7 @@ import bot.config.TelegramBotBuilder;
 import bot.exception.NotFoundShareException;
 import bot.service.telegram.utils.ShareInfoSender;
 import bot.service.tinkoff.NotFoundShareMessageBuilder;
-import bot.service.tinkoff.StockService;
+import bot.service.tinkoff.ShareService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @Component
 @RequiredArgsConstructor
 public class Bot extends TelegramLongPollingBot {
-    private final StockService service;
+    private final ShareService service;
     private final TelegramBotBuilder builder;
 
     @Override
