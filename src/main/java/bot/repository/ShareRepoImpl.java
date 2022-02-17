@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -13,19 +14,17 @@ public class ShareRepoImpl {
 
 
     /**
-     *
      * @param ticker
      * @return Share by ticker
      * BUT possibly Bad performance. How can i get value by not key in redis cache?
      */
-    public Optional<ShareDto> getShareByTicker(String ticker){
-        Iterable<ShareDto> all = repository.findAll();
-        for (ShareDto shareDto : all) {
-            if (shareDto.getTicker().equals(ticker)) return Optional.of(shareDto);
-        }
-        return Optional.empty();
+    public Optional<ShareDto> getShareByTicker(String ticker) {
+        return StreamSupport.stream(repository.findAll().spliterator(), false)
+                .filter(shareDto -> shareDto.getTicker().equals(ticker)).findAny();
+
     }
-    public ShareDto save(ShareDto shareDto){
+
+    public ShareDto save(ShareDto shareDto) {
         return repository.save(shareDto);
     }
 }
