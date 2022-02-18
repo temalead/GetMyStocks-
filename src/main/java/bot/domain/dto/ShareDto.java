@@ -7,12 +7,10 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.springframework.data.redis.core.RedisHash;
 
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Accessors(chain = true)
@@ -23,7 +21,6 @@ public class ShareDto implements Serializable {
     @Id
     private String id;
     private String figi;
-    private String ticker;
     private BigDecimal dividend;
 
     @Override
@@ -31,20 +28,19 @@ public class ShareDto implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ShareDto shareDto = (ShareDto) o;
-        return Objects.equals(ticker, shareDto.ticker);
+        return Objects.equals(id, shareDto.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ticker);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
         return "ShareDto{" +
-                "id=" + id +
-                ", figi='" + figi + '\'' +
-                ", ticker='" + ticker + '\'' +
+                "  figi='" + figi + '\'' +
+                ", ticker='" + id + '\'' +
                 ", dividend=" + dividend +
                 '}';
     }

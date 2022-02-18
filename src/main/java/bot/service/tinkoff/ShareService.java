@@ -3,7 +3,7 @@ package bot.service.tinkoff;
 
 import bot.domain.dto.ShareDto;
 import bot.exception.NotFoundShareException;
-import bot.repository.ShareRepoImpl;
+import bot.repository.ShareRepository;
 import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +24,11 @@ import java.util.Optional;
 @Slf4j
 public class ShareService {
     private final InvestApi api;
-    private final ShareRepoImpl repo;
+    private final ShareRepository repository;
     private final String classCode = "TQBR";
 
     public BigDecimal getLastDividendByTicker(String ticker) throws NotFoundShareException {
-        Optional<ShareDto> share = repo.getShareByTicker(ticker);
+        Optional<ShareDto> share = repository.findById(ticker);
         if (share.isPresent()) {
             log.info("Found share {} in cache. Returning...",ticker);
             return share.get().getDividend();
@@ -47,10 +47,10 @@ public class ShareService {
         BigDecimal dividend = calculateExactDividend(dividends);
         log.info("Get dividens of {}", ticker);
         ShareDto stock = new ShareDto().setFigi(figiOfStock)
-                .setTicker(ticker)
+                .setId(ticker)
                 .setDividend(dividend);
 
-        repo.save(stock);
+        repository.save(stock);
 
         log.info("Share {} successfully created",stock);
         return stock.getDividend();
@@ -64,7 +64,7 @@ public class ShareService {
             Share share = shareOpt.orElseThrow(NotFoundException::new);
             ShareDto shareDto = new ShareDto()
                     .setFigi(share.getFigi())
-                    .setTicker(share.getTicker());
+                    .setId(share.getTicker());
             return shareDto.getFigi();
         } catch (StatusRuntimeException e) {
             log.error("Share with {} not exist!",ticker);
