@@ -39,7 +39,7 @@ public class ShareDto implements Serializable {
     @Override
     public String toString() {
         return "ShareDto{" +
-                "  figi='" + figi + '\'' +
+                "figi='" + figi + '\'' +
                 ", ticker='" + id + '\'' +
                 ", dividend=" + dividend +
                 '}';

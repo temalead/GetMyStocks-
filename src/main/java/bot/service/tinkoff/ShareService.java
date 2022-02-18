@@ -52,7 +52,6 @@ public class ShareService {
 
         repository.save(stock);
 
-        log.info("Share {} successfully created",stock);
         return stock.getDividend();
     }
 
