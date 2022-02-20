@@ -31,6 +31,10 @@ public class Bot extends TelegramWebhookBot {
     public String getBotToken() {
         return builder.getToken();
     }
+    @Override
+    public String getBotPath() {
+        return builder.getPath();
+    }
 
 
 
@@ -53,8 +57,5 @@ public class Bot extends TelegramWebhookBot {
         return null;
     }
 
-    @Override
-    public String getBotPath() {
-        return null;
-    }
+
 }

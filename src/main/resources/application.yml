@@ -2,7 +2,7 @@ bot:
   telegram:
     token: ${secret.bot.telegram.token}
     name: get_my_stocks_bot
-    path: https://localhost:8080
+    path: https://cf10-78-85-5-52.ngrok.io
   invest:
     isSandBoxMode: true
     token: ${secret.bot.invest.token}
