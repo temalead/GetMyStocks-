@@ -3,7 +3,7 @@ package bot.service.telegram;
 import bot.config.TelegramBotBuilder;
 import bot.exception.NotFoundShareException;
 import bot.service.telegram.utils.ShareInfoSender;
-import bot.service.tinkoff.NotFoundShareMessageBuilder;
+import bot.service.tinkoff.utils.NotFoundShareMessageBuilder;
 import bot.service.tinkoff.ShareService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

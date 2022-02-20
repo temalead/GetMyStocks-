@@ -1,4 +1,4 @@
-package bot.service.tinkoff;
+package bot.service.tinkoff.utils;
 
 public abstract class NotFoundShareMessageBuilder {
     public static String createMsgError(String ticker) {

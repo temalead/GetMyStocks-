@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class ShareServiceTest {
+public class ShareDtoServiceTest {
 
     @Autowired
     private ShareService service;

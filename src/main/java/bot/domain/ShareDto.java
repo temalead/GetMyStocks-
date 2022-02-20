@@ -1,4 +1,4 @@
-package bot.domain.dto;
+package bot.domain;
 
 
 import lombok.Getter;
