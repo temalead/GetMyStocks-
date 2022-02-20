@@ -22,6 +22,7 @@ public class ShareDto implements Serializable {
     private String id;
     private String figi;
     private BigDecimal dividend;
+    private BigDecimal price;
 
     @Override
     public boolean equals(Object o) {
