@@ -7,6 +7,7 @@ import bot.domain.dto.SharePrice;
 import bot.domain.dto.SharePriceDto;
 import bot.exception.NotFoundShareException;
 import bot.repository.ShareRepository;
+import bot.service.tinkoff.utils.PriceCalculator;
 import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,13 +48,24 @@ public class ShareService {
         }
     }
 
+
+    public SharePriceDto getShares(FigiesDto figies) {
+        List<LastPrice> pricesFromApi = api.getMarketDataService().getLastPrices(figies.getFigies()).join();
+
+        List<SharePrice> prices = pricesFromApi.stream()
+                .map(price -> new SharePrice(price.getFigi(), PriceCalculator.calculateSharePrice(price.getPrice())))
+                .collect(Collectors.toList());
+        return new SharePriceDto(prices);
+    }
+
+
     private BigDecimal createStock(String ticker) throws NotFoundShareException {
         String figiOfStock = getFigiByShare(ticker);
 
         List<Dividend> dividends = api.getInstrumentsService().getDividendsSync(figiOfStock,
                 Instant.now().minus(365, ChronoUnit.DAYS),
                 Instant.now());
-        BigDecimal dividend = calculateExactDividend(dividends);
+        BigDecimal dividend = PriceCalculator.calculateShareDividends(dividends);
         log.info("Get dividens of {}", ticker);
         ShareDto stock = new ShareDto().setFigi(figiOfStock)
                 .setId(ticker)
@@ -81,36 +93,7 @@ public class ShareService {
 
     }
 
-    private BigDecimal calculateExactDividend(List<Dividend> dividends) {
-        if (dividends.size() != 0) {
-            Dividend dividend = dividends.get(0);
-            long units = dividend.getDividendNet().getUnits();
-            BigDecimal nanos = BigDecimal.valueOf(
-                    dividend.getDividendNet()
-                            .getNano()
-            );
-            BigDecimal divide = nanos.divide(BigDecimal.valueOf(1000000000L));
-            return BigDecimal.valueOf(units).add(divide);
-        } else {
-            return BigDecimal.ZERO;
-        }
-    }
 
-    public SharePriceDto getShares(FigiesDto figies) {
-        List<LastPrice> pricesFromApi = api.getMarketDataService().getLastPrices(figies.getFigies()).join();
-
-        List<SharePrice> prices = pricesFromApi.stream()
-                .map(price -> new SharePrice(price.getFigi(), calculate(price.getPrice())))
-                .collect(Collectors.toList());
-        return new SharePriceDto(prices);
-    }
-
-    private BigDecimal calculate(Quotation price) {
-        long units = price.getUnits();
-        long nano = price.getNano();
-        BigDecimal divide = BigDecimal.valueOf(nano / 1000000000L);
-        return BigDecimal.valueOf(units).add(divide);
-    }
 
 }
 
