@@ -13,5 +13,7 @@ public class TelegramBotBuilder {
     private String token;
     @Value("${bot.telegram.name}")
     private String name;
+    @Value("${}")
+    private String botPath;
 }
 

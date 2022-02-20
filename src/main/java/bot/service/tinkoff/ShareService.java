@@ -7,6 +7,7 @@ import bot.repository.ShareRepository;
 import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.piapi.contract.v1.Dividend;
 import ru.tinkoff.piapi.contract.v1.Share;
@@ -27,10 +28,11 @@ public class ShareService {
     private final ShareRepository repository;
     private final String classCode = "TQBR";
 
+
     public BigDecimal getLastDividendByTicker(String ticker) throws NotFoundShareException {
         Optional<ShareDto> share = repository.findById(ticker);
         if (share.isPresent()) {
-            log.info("Found share {} in cache. Returning...",ticker);
+            log.info("Found share {} in cache. Returning...", ticker);
             return share.get().getDividend();
         } else {
             log.info("Share with ticker {} not found in cache. Creating...", ticker);
@@ -39,24 +41,26 @@ public class ShareService {
     }
 
     private BigDecimal createStock(String ticker) throws NotFoundShareException {
+        long start=System.currentTimeMillis();
         String figiOfStock = getFigiByStock(ticker);
 
         List<Dividend> dividends = api.getInstrumentsService().getDividendsSync(figiOfStock,
                 Instant.now().minus(365, ChronoUnit.DAYS),
                 Instant.now());
         BigDecimal dividend = calculateExactDividend(dividends);
-        log.info("Get dividens of {}", ticker);
+        log.debug("Get dividens of {}", ticker);
         ShareDto stock = new ShareDto().setFigi(figiOfStock)
                 .setId(ticker)
                 .setDividend(dividend);
 
         repository.save(stock);
 
+        log.info("Time is {}", System.currentTimeMillis()-start);
+
         return stock.getDividend();
     }
 
-
-    private String getFigiByStock(String ticker) throws NotFoundShareException {
+    public String getFigiByStock(String ticker) throws NotFoundShareException {
 
         try {
             Optional<Share> shareOpt = api.getInstrumentsService().getShareByTickerSync(ticker, classCode);
@@ -66,10 +70,9 @@ public class ShareService {
                     .setId(share.getTicker());
             return shareDto.getFigi();
         } catch (StatusRuntimeException e) {
-            log.error("Share with {} not exist!",ticker);
+            log.error("Share with {} not exist!", ticker);
             throw new NotFoundShareException(ticker);
         }
-
     }
 
     private BigDecimal calculateExactDividend(List<Dividend> dividends) {
