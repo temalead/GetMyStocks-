@@ -6,7 +6,9 @@ import bot.service.telegram.utils.ShareInfoSender;
 import bot.service.tinkoff.utils.NotFoundShareMessageBuilder;
 import bot.service.tinkoff.ShareService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -18,25 +20,27 @@ import java.math.BigDecimal;
 
 @Component
 @RequiredArgsConstructor
-public class Bot extends TelegramWebhookBot {
+public class Bot extends TelegramLongPollingBot {
     private final ShareService service;
     private final TelegramBotBuilder builder;
-
 
     @Override
     public String getBotUsername() {
         return builder.getName();
     }
+
     @Override
     public String getBotToken() {
         return builder.getToken();
     }
+
     @Override
-    public String getBotPath() {
-        return builder.getPath();
+    @SneakyThrows
+    public void onUpdateReceived(Update update) {
+        if (update.hasMessage()) {
+            handleMessage(update.getMessage());
+        }
     }
-
-
 
     private void handleMessage(Message message) throws TelegramApiException {
 
@@ -51,11 +55,4 @@ public class Bot extends TelegramWebhookBot {
         }
 
     }
-
-    @Override
-    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        return null;
-    }
-
-
 }
