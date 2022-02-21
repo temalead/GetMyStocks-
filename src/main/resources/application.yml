@@ -6,6 +6,7 @@ bot:
   invest:
     isSandBoxMode: true
     token: ${secret.bot.invest.token}
+    code: TQBR
 spring:
   redis:
     port: 6379
