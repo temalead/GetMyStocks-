@@ -3,10 +3,6 @@ bot:
     botToken: ${secret.bot.telegram.token}
     botUsername: get_my_stocks_bot
     botPath: https://cf10-78-85-5-52.ngrok.io
-  proxy:
-    port: 8008
-    host: localhost
-    type: SOCKS5
   invest:
     isSandBoxMode: true
     token: ${secret.bot.invest.token}

@@ -15,9 +15,8 @@ public final class PriceCalculator {
         return BigDecimal.valueOf(units).add(divide);
     }
 
-    public static BigDecimal calculateShareDividends(List<Dividend> dividends) {
-        if (dividends.size() != 0) {
-            Dividend dividend = dividends.get(0);
+    public static BigDecimal calculateShareDividends(Dividend dividend) {
+        if (dividend!=null) {
             long units = dividend.getDividendNet().getUnits();
             BigDecimal nanos = BigDecimal.valueOf(
                     dividend.getDividendNet()

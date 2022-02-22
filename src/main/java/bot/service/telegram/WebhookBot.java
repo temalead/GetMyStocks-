@@ -23,6 +23,7 @@ public class WebhookBot extends TelegramWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        System.out.println("Something!");
         return handler.handleUpdate(update);
     }
 }

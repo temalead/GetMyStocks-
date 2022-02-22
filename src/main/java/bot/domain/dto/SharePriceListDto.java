@@ -2,13 +2,12 @@ package bot.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
-import ru.tinkoff.piapi.contract.v1.Quotation;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Value
 @AllArgsConstructor
-public class SharePrice {
-    String figi;
-    BigDecimal price;
+public class SharePriceListDto {
+    List<BigDecimal> prices;
 }

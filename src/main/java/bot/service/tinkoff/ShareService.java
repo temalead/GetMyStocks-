@@ -1,15 +1,15 @@
 package bot.service.tinkoff;
 
 
-import bot.domain.dto.TickersDto;
+import bot.domain.dto.DividendListDto;
 import bot.domain.ShareDto;
-import bot.domain.dto.SharePrice;
-import bot.domain.dto.SharePriceDto;
+import bot.domain.dto.SharePriceListDto;
 import bot.exception.NotFoundShareException;
 import bot.repository.ShareRepository;
 import bot.service.tinkoff.utils.DividendCreator;
 import bot.service.tinkoff.utils.PriceCalculator;
 import lombok.AccessLevel;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -37,33 +37,32 @@ import java.util.stream.Collectors;
 public class ShareService {
     InvestApi api;
     ShareRepository repository;
-    @Value("${bot.invest.code}")
-    String classCode;
+    String code="TQBR";
 
-
-    public BigDecimal getLastDividendByTicker(String ticker) throws NotFoundShareException {
+    @NonNull
+    public ShareDto getInfo(String ticker) {
         Optional<ShareDto> share = repository.findById(ticker);
         if (share.isPresent()) {
             log.info("Found share {} in cache. Returning...", ticker);
-            return share.get().get;
+            return share.get();
         } else {
             log.info("Share with ticker {} not found in cache. Creating...", ticker);
-            ShareDto newShareDto = createShare(ticker);
-            return newShareDto.getDividend();
+            return createShare(ticker);
         }
     }
 
 
     @Async
     public CompletableFuture<Optional<Share>> getFigiByTicker(String ticker) {
-        CompletableFuture<Optional<Share>> share = api.getInstrumentsService().getShareByTicker(ticker, classCode);
+        CompletableFuture<Optional<Share>> share = api.getInstrumentsService().getShareByTicker(ticker, code);
         log.info("Getting figi by ticker {}", ticker);
         return share;
     }
 
-    public SharePriceDto getSharesPrices(TickersDto tickers) {
+
+    public SharePriceListDto getSharesPrices(List<String> tickers) {
         List<CompletableFuture<Optional<Share>>> shareList = new ArrayList<>();
-        tickers.getTickers().forEach(ticker -> shareList.add(getFigiByTicker(ticker)));
+        tickers.forEach(ticker -> shareList.add(getFigiByTicker(ticker)));
         List<String> figies = shareList.stream()
                 .map(CompletableFuture::join)
                 .map(share -> share.orElseThrow(() -> new NotFoundShareException("Share not found!")))
@@ -71,10 +70,11 @@ public class ShareService {
 
         List<LastPrice> pricesFromApi = api.getMarketDataService().getLastPrices(figies).join();
 
-        List<SharePrice> prices = pricesFromApi.stream()
-                .map(price -> new SharePrice(price.getFigi(), PriceCalculator.calculateSharePrice(price.getPrice())))
+
+        List<BigDecimal> prices = pricesFromApi.stream()
+                .map(price -> PriceCalculator.calculateSharePrice(price.getPrice()))
                 .collect(Collectors.toList());
-        return new SharePriceDto(prices);
+        return new SharePriceListDto(prices);
     }
 
 
@@ -82,15 +82,20 @@ public class ShareService {
         Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new NotFoundShareException("Share not found"));
         String figi = share.getFigi();
 
-        List<Dividend> dividends = api.getInstrumentsService().getDividends(figi,
+
+        List<Dividend> dividendsPerYear = api.getInstrumentsService().getDividends(figi,
                         Instant.now().minus(365, ChronoUnit.DAYS),
                         Instant.now())
                 .join();
-        BigDecimal dividendPrice = PriceCalculator.calculateShareDividends(dividends);
+        DividendListDto dividends = DividendCreator.createDividend(dividendsPerYear);
         log.info("Get dividens of {}", ticker);
-        ShareDto shareDto = new ShareDto().setFigi(figi)
+        SharePriceListDto prices = getSharesPrices(List.of(ticker));
+        BigDecimal price = prices.getPrices().get(0);
+        ShareDto shareDto = new ShareDto()
+                .setPrice(price)
+                .setFigi(figi)
                 .setId(ticker)
-                .setDividend(DividendCreator.createDividend());
+                .setDividends(dividends);
 
         repository.save(shareDto);
 

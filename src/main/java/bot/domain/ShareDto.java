@@ -23,7 +23,7 @@ public class ShareDto implements Serializable {
     @Id
     private String id;
     private String figi;
-    private DividendListDto dividend;
+    private DividendListDto dividends;
     private BigDecimal price;
 
     @Override
@@ -42,9 +42,10 @@ public class ShareDto implements Serializable {
     @Override
     public String toString() {
         return "ShareDto{" +
-                "figi='" + figi + '\'' +
-                ", ticker='" + id + '\'' +
-                ", dividend=" + dividend +
+                "ticker='" + id + '\'' +
+                ", figi='" + figi + '\'' +
+                ", dividends=" + dividends +
+                ", price=" + price +
                 '}';
     }
 }

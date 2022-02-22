@@ -21,7 +21,7 @@ public class ShareDtoServiceTest {
     @Autowired
     private ShareService service;
 
-
+/*
     @Test
     @DisplayName("Should throw exception cause share with this ticker doesn`t exist")
     public void throwStatusRuntimeException() throws NotFoundShareException {
@@ -55,5 +55,5 @@ public class ShareDtoServiceTest {
         BigDecimal result = service.getLastDividendByTicker("RUAL");
 
         assertEquals(expected, result);
-    }
+    }*/
 }

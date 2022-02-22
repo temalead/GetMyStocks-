@@ -19,8 +19,7 @@ import java.util.Optional;
 public class BondService {
     InvestApi api;
     BondRepository repository;
-    @Value("${bot.invest.code}")
-    String classCode;
+    String classCode="TQBR";
 
 
     public BigDecimal getNKD(String ticker) {
