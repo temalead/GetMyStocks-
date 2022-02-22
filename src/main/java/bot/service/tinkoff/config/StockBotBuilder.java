@@ -1,4 +1,4 @@
-package bot.config;
+package bot.service.tinkoff.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Configuration;
 import ru.tinkoff.piapi.core.InvestApi;
 
 @RequiredArgsConstructor
-@EnableConfigurationProperties(StockBotBuilder.class)
+@EnableConfigurationProperties(StockBotConfig.class)
 @Configuration
-public class StockBotConfig {
-    private final StockBotBuilder builder;
+public class StockBotBuilder {
+    private final StockBotConfig builder;
 
     @Bean
     public InvestApi investApi(){

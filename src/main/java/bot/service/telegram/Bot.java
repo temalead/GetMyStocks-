@@ -1,6 +1,6 @@
 package bot.service.telegram;
 
-import bot.config.TelegramBotBuilder;
+import bot.service.telegram.config.TelegramBotConfig;
 import bot.exception.NotFoundShareException;
 import bot.service.telegram.utils.ShareInfoSender;
 import bot.service.tinkoff.utils.NotFoundShareMessageBuilder;
@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.bots.TelegramWebhookBot;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -22,7 +20,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class Bot extends TelegramLongPollingBot {
     private final ShareService service;
-    private final TelegramBotBuilder builder;
+    private final TelegramBotConfig builder;
 
     @Override
     public String getBotUsername() {
