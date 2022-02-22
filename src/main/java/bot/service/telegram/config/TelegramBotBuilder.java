@@ -16,14 +16,13 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 public class TelegramBotBuilder {
     private final TelegramBotConfig botConfig;
 
-    /*@Bean
-    public SetWebhook setWebhook(){
-        System.out.println(botConfig);
-        return SetWebhook.builder().url(botConfig.getBotPath()).build();
-    }*/
-
     @Bean
     public WebhookBot webhookBot(TelegramUpdateHandler handler){
+        DefaultBotOptions options=new DefaultBotOptions();
+        options.setProxyPort(botConfig.getProxyPort());
+        options.setProxyHost(botConfig.getProxyHost());
+        options.setProxyType(botConfig.getProxyType());
+
 
         WebhookBot webhookBot=new WebhookBot(handler);
         webhookBot.setBotUsername(botConfig.getBotUsername());

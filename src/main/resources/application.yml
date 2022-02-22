@@ -2,7 +2,10 @@ bot:
   telegram:
     botToken: ${secret.bot.telegram.token}
     botUsername: get_my_stocks_bot
-    botPath: https://cf10-78-85-5-52.ngrok.io
+    botPath: https://26aa-78-85-5-52.ngrok.io
+    proxyHost: localhost
+    proxyPort: 8080
+    proxyType: SOCKS5
   invest:
     isSandBoxMode: true
     token: ${secret.bot.invest.token}
@@ -10,4 +13,3 @@ bot:
 spring:
   redis:
     port: 6379
-
