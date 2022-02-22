@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class BondService {
+public class BondService{
     private final InvestApi api;
     private final BondRepository repository;
     @Value("${bot.invest.code}")
