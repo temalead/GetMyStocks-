@@ -3,7 +3,9 @@ package bot.service.tinkoff;
 import bot.domain.BondDto;
 import bot.exception.NotFoundBondException;
 import bot.repository.BondRepository;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.piapi.core.InvestApi;
@@ -13,19 +15,19 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class BondService{
-    private final InvestApi api;
-    private final BondRepository repository;
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+public class BondService {
+    InvestApi api;
+    BondRepository repository;
     @Value("${bot.invest.code}")
-    private String classCode;
+    String classCode;
 
 
-    public BigDecimal getNKD(String ticker){
+    public BigDecimal getNKD(String ticker) {
         Optional<BondDto> bondOpt = repository.findById(ticker);
-        if (bondOpt.isPresent()){
+        if (bondOpt.isPresent()) {
             return bondOpt.get().getNkd();
-        }
-        else{
+        } else {
             BondDto bond = createBond(ticker);
             repository.save(bond);
             return bond.getNkd();

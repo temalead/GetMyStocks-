@@ -9,8 +9,11 @@ import bot.exception.NotFoundShareException;
 import bot.repository.ShareRepository;
 import bot.service.tinkoff.utils.PriceCalculator;
 import io.grpc.StatusRuntimeException;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.piapi.contract.v1.Dividend;
@@ -30,10 +33,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ShareService {
-    private final InvestApi api;
-    private final ShareRepository repository;
-    private final String classCode = "TQBR";
+    InvestApi api;
+    ShareRepository repository;
+    @Value("${bot.invest.code}")
+    String classCode;
+
 
     public BigDecimal getLastDividendByTicker(String ticker) throws NotFoundShareException {
         Optional<ShareDto> share = repository.findById(ticker);
@@ -49,15 +55,15 @@ public class ShareService {
 
 
     @Async
-    public CompletableFuture<Optional<Share>> getFigiByTicker(String ticker){
+    public CompletableFuture<Optional<Share>> getFigiByTicker(String ticker) {
         CompletableFuture<Optional<Share>> share = api.getInstrumentsService().getShareByTicker(ticker, classCode);
-        log.info("Getting figi by ticker {}",ticker);
+        log.info("Getting figi by ticker {}", ticker);
         return share;
     }
 
     public SharePriceDto getSharesPrices(TickersDto tickers) {
-        List<CompletableFuture<Optional<Share>>> shareList=new ArrayList<>();
-        tickers.getTickers().forEach(ticker->shareList.add(getFigiByTicker(ticker)));
+        List<CompletableFuture<Optional<Share>>> shareList = new ArrayList<>();
+        tickers.getTickers().forEach(ticker -> shareList.add(getFigiByTicker(ticker)));
         List<String> figies = shareList.stream()
                 .map(CompletableFuture::join)
                 .map(share -> share.orElseThrow(() -> new NotFoundShareException("Share not found!")))
@@ -73,14 +79,15 @@ public class ShareService {
 
 
     private ShareDto createShare(String ticker) throws NotFoundShareException {
-        String figiOfStock = getFigiByShare(ticker);
+        Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new NotFoundShareException("Share not found"));
+        String figi = share.getFigi();
 
-        List<Dividend> dividends = api.getInstrumentsService().getDividendsSync(figiOfStock,
+        List<Dividend> dividends = api.getInstrumentsService().getDividendsSync(figi,
                 Instant.now().minus(365, ChronoUnit.DAYS),
                 Instant.now());
         BigDecimal dividend = PriceCalculator.calculateShareDividends(dividends);
         log.info("Get dividens of {}", ticker);
-        ShareDto shareDto = new ShareDto().setFigi(figiOfStock)
+        ShareDto shareDto = new ShareDto().setFigi(figi)
                 .setId(ticker)
                 .setDividend(dividend);
 
@@ -88,29 +95,5 @@ public class ShareService {
 
         return shareDto;
     }
-
-    private String getFigiByShare(String ticker) {
-        return null;
-    }
-
-
-    public String getFigiesByTickers(TickersDto tickers) {
-
-        /*try {
-            Optional<ru.tinkoff.piapi.contract.v1.Share> shareOpt = api.getInstrumentsService().getShareByTickerSync(ticker, classCode);
-            ru.tinkoff.piapi.contract.v1.Share share = shareOpt.orElseThrow(NotFoundException::new);
-            Share shareDto = new Share()
-                    .setFigi(share.getFigi())
-                    .setId(share.getTicker());
-            return shareDto.getFigi();
-        } catch (StatusRuntimeException e) {
-            log.error("Share with {} not exist!", ticker);
-            throw new NotFoundShareException(ticker);
-        }*/
-        return null;
-    }
-    
-
-
 }
 
