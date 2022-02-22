@@ -1,11 +1,13 @@
 package bot.domain;
 
 
+import bot.domain.dto.DividendListDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.springframework.data.redis.core.RedisHash;
+import ru.tinkoff.piapi.contract.v1.Dividend;
 
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -21,7 +23,7 @@ public class ShareDto implements Serializable {
     @Id
     private String id;
     private String figi;
-    private BigDecimal dividend;
+    private DividendListDto dividend;
     private BigDecimal price;
 
     @Override

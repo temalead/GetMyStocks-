@@ -1,6 +1,5 @@
 package bot.controller;
 
-import bot.service.telegram.Bot;
 import bot.service.telegram.WebhookBot;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

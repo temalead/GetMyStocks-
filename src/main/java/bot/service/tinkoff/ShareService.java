@@ -7,8 +7,8 @@ import bot.domain.dto.SharePrice;
 import bot.domain.dto.SharePriceDto;
 import bot.exception.NotFoundShareException;
 import bot.repository.ShareRepository;
+import bot.service.tinkoff.utils.DividendCreator;
 import bot.service.tinkoff.utils.PriceCalculator;
-import io.grpc.StatusRuntimeException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -45,7 +45,7 @@ public class ShareService {
         Optional<ShareDto> share = repository.findById(ticker);
         if (share.isPresent()) {
             log.info("Found share {} in cache. Returning...", ticker);
-            return share.get().getDividend();
+            return share.get().get;
         } else {
             log.info("Share with ticker {} not found in cache. Creating...", ticker);
             ShareDto newShareDto = createShare(ticker);
@@ -82,14 +82,15 @@ public class ShareService {
         Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new NotFoundShareException("Share not found"));
         String figi = share.getFigi();
 
-        List<Dividend> dividends = api.getInstrumentsService().getDividendsSync(figi,
-                Instant.now().minus(365, ChronoUnit.DAYS),
-                Instant.now());
-        BigDecimal dividend = PriceCalculator.calculateShareDividends(dividends);
+        List<Dividend> dividends = api.getInstrumentsService().getDividends(figi,
+                        Instant.now().minus(365, ChronoUnit.DAYS),
+                        Instant.now())
+                .join();
+        BigDecimal dividendPrice = PriceCalculator.calculateShareDividends(dividends);
         log.info("Get dividens of {}", ticker);
         ShareDto shareDto = new ShareDto().setFigi(figi)
                 .setId(ticker)
-                .setDividend(dividend);
+                .setDividend(DividendCreator.createDividend());
 
         repository.save(shareDto);
 

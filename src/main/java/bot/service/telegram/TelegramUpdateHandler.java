@@ -1,5 +1,6 @@
 package bot.service.telegram;
 
+import bot.domain.ShareDto;
 import bot.exception.NotFoundShareException;
 import bot.service.telegram.utils.ShareInfoSender;
 import bot.service.tinkoff.ShareService;
@@ -28,13 +29,13 @@ public class TelegramUpdateHandler {
 
     private SendMessage handleMessage(Message message) {
         Long chatId = message.getChatId();
-        String text = message.getText();
+        String ticker = message.getText();
         try {
-            BigDecimal dividend = service.getLastDividendByTicker(text);
-            String result = ShareInfoSender.createMessage(text, dividend);
+            ShareDto share = service.getInfo(ticker);
+            String result = ShareInfoSender.createMessage(ticker, share);
             return SendMessage.builder().chatId(String.valueOf(chatId)).text(result).build();
         } catch (NotFoundShareException e) {
-            return SendMessage.builder().chatId(String.valueOf(chatId)).text(NotFoundShareMessageBuilder.createMsgError(text)).build();
+            return SendMessage.builder().chatId(String.valueOf(chatId)).text(NotFoundShareMessageBuilder.createMsgError(ticker)).build();
         }
     }
 }
