@@ -1,31 +1,24 @@
 package bot.service.telegram;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.telegram.telegrambots.bots.DefaultBotOptions;
+import lombok.experimental.FieldDefaults;
+import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.starter.SpringWebhookBot;
 
 @Getter
 @Setter
-public class WebhookBot extends SpringWebhookBot {
-    private String botPath;
-    private String botUsername;
-    private String botToken;
-    private SetWebhook setWebhook;
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class WebhookBot extends TelegramWebhookBot {
+    String botPath;
+    String botUsername;
+    String botToken;
+    TelegramUpdateHandler handler;
 
-    private TelegramUpdateHandler handler;
-
-    public WebhookBot(SetWebhook setWebhook, TelegramUpdateHandler handler) {
-        super(setWebhook);
-        this.handler=handler;
-    }
-
-    public WebhookBot(DefaultBotOptions options, SetWebhook setWebhook,TelegramUpdateHandler handler) {
-        super(options, setWebhook);
-        this.handler=handler;
+    public WebhookBot(TelegramUpdateHandler handler) {
+        this.handler = handler;
     }
 
     @Override
