@@ -5,7 +5,6 @@ import bot.domain.dto.DividendDto;
 import bot.domain.dto.DividendListDto;
 import ru.tinkoff.piapi.contract.v1.Dividend;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class DividendCreator {
         List<DividendDto> list = new ArrayList<>();
         dividends
                 .forEach(dividend -> list.add(new DividendDto(PriceCalculator.calculateShareDividends(dividend),
-                        LocalDate.ofEpochDay(dividend.getPaymentDate().getNanos()))));
+                        DivdendPaymentDateCreator.addPaymentDate(dividend.getPaymentDate()))));
         return new DividendListDto(list);
     }
 }

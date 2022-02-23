@@ -11,9 +11,10 @@ import java.util.List;
 
 public abstract class ShareInfoSender {
     public static String createMessage(ShareDto share) {
+        System.out.println(share);
 
         String dividendMessage = createDividendMessage(share.getDividends());
-        String price="Цена:"+share.getPrice();
+        String price="Цена:"+share.getPrice()+"\n";
 
         return price+dividendMessage;
     }
@@ -22,14 +23,19 @@ public abstract class ShareInfoSender {
         StringBuilder stringBuilder=new StringBuilder();
         stringBuilder.append("Дивиденды за год\n");
         List<DividendDto> list = dividends.getDividends();
-        for (DividendDto dto : list) {
-            String payment="Выплата: "+dto.getPayment()+"\n";
-            String date="Дата: "+dto.getPayment_date()+"\n";
-
-            stringBuilder.append(payment).append(date);
-            stringBuilder.append("\n");
+        if (list.isEmpty()){
+            return "Дивиденды не выплачивались";
         }
-        return stringBuilder.toString();
+        else {
+            for (DividendDto dto : list) {
+                String payment = "Выплата: " + dto.getPayment() + "\n";
+                String date = "Дата: " + dto.getPayment_date() + "\n";
+
+                stringBuilder.append(payment).append(date);
+                stringBuilder.append("\n");
+            }
+            return stringBuilder.toString();
+        }
     }
 
 }

@@ -33,7 +33,6 @@ public class TelegramUpdateHandler {
         try {
             ShareDto share = service.getInfo(ticker);
             String result = ShareInfoSender.createMessage(share);
-            System.out.println(result);
             return SendMessage.builder().chatId(String.valueOf(chatId)).text(result).build();
         } catch (NotFoundShareException e) {
             return SendMessage.builder().chatId(String.valueOf(chatId)).text(NotFoundShareMessageBuilder.createMsgError(ticker)).build();
