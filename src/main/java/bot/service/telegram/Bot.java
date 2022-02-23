@@ -15,6 +15,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.concurrent.CompletionException;
+
 @Component
 @RequiredArgsConstructor
 public class Bot extends TelegramLongPollingBot {
@@ -44,12 +46,10 @@ public class Bot extends TelegramLongPollingBot {
         Long chatId = message.getChatId();
         String ticker = message.getText();
         try {
-
-
             ShareDto info = service.getInfo(ticker);
             String result = ShareInfoSender.createMessage(info);
             execute(SendMessage.builder().chatId(String.valueOf(chatId)).text(result).build());
-        } catch (NotFoundShareException e) {
+        } catch (CompletionException e) {
             execute(SendMessage.builder().chatId(String.valueOf(chatId)).text(NotFoundShareMessageBuilder.createMsgError(ticker)).build());
         }
 

@@ -10,8 +10,8 @@ public final class PriceCalculator {
 
     public static BigDecimal calculateSharePrice(Quotation price) {
         long units = price.getUnits();
-        long nano = price.getNano();
-        BigDecimal divide = BigDecimal.valueOf(nano / 1000000000L);
+        BigDecimal nanos = BigDecimal.valueOf(price.getNano());
+        BigDecimal divide = nanos.divide(BigDecimal.valueOf(1000000000L));
         return BigDecimal.valueOf(units).add(divide);
     }
 

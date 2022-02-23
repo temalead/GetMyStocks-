@@ -8,6 +8,7 @@ import bot.exception.NotFoundShareException;
 import bot.repository.ShareRepository;
 import bot.service.tinkoff.utils.DividendCreator;
 import bot.service.tinkoff.utils.PriceCalculator;
+import io.grpc.StatusRuntimeException;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,7 +39,7 @@ import java.util.stream.Collectors;
 public class ShareService {
     InvestApi api;
     ShareRepository repository;
-    String code="TQBR";
+    String code = "TQBR";
 
     @NonNull
     public ShareDto getInfo(String ticker) {
@@ -54,8 +56,12 @@ public class ShareService {
 
     @Async
     public CompletableFuture<Optional<Share>> getFigiByTicker(String ticker) {
-        CompletableFuture<Optional<Share>> share = api.getInstrumentsService().getShareByTicker(ticker, code);
         log.info("Getting figi by ticker {}", ticker);
+        CompletableFuture<Optional<Share>> share = api.getInstrumentsService().getShareByTicker(ticker, code)
+                .exceptionally(exception->{
+                    log.error("Share {} nor found",ticker);
+                    throw new NotFoundShareException(ticker);
+                });
         return share;
     }
 
