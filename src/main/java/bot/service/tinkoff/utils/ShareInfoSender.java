@@ -1,4 +1,4 @@
-package bot.service.telegram.utils;
+package bot.service.tinkoff.utils;
 
 import bot.domain.ShareDto;
 import bot.domain.dto.DividendDto;

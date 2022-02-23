@@ -2,7 +2,7 @@ package bot.service.telegram;
 
 import bot.domain.ShareDto;
 import bot.exception.NotFoundShareException;
-import bot.service.telegram.utils.ShareInfoSender;
+import bot.service.tinkoff.utils.ShareInfoSender;
 import bot.service.tinkoff.ShareService;
 import bot.service.tinkoff.utils.NotFoundShareMessageBuilder;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +11,6 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.math.BigDecimal;
 
 @Component
 @RequiredArgsConstructor

@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
 @EnableEncryptableProperties
 @EnableAsync
