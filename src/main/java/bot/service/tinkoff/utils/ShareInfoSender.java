@@ -14,7 +14,7 @@ public abstract class ShareInfoSender {
         System.out.println(share);
 
         String dividendMessage = createDividendMessage(share.getDividends());
-        String price="Цена:"+share.getPrice()+"\n";
+        String price="Цена: "+share.getPrice()+"\n";
 
         return price+"\n"+dividendMessage;
     }

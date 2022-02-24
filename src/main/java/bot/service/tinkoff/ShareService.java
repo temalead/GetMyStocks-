@@ -26,6 +26,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -46,11 +47,18 @@ public class ShareService {
         Optional<ShareDto> share = repository.findById(ticker);
         if (share.isPresent()) {
             log.info("Found share {} in cache. Returning...", ticker);
+            updatePrice(share.get());
             return share.get();
         } else {
             log.info("Share with ticker {} not found in cache. Creating...", ticker);
             return createShare(ticker);
         }
+    }
+
+
+    private void updatePrice(ShareDto shareDto) {
+        shareDto.setPrice(getSharePrice(shareDto.getFigi()));
+        repository.save(shareDto);
     }
 
 
@@ -63,6 +71,10 @@ public class ShareService {
                     throw new NotFoundShareException(ticker);
                 });
         return share;
+    }
+
+    public BigDecimal getSharePrice(String figi){
+        return PriceCalculator.calculateSharePrice(api.getMarketDataService().getLastPrices(Collections.singleton(figi)).join().get(0).getPrice());
     }
 
 
