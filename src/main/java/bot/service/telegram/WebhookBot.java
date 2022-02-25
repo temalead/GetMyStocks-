@@ -1,5 +1,6 @@
 package bot.service.telegram;
 
+import bot.service.telegram.handlers.UpdateHandler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +16,9 @@ public class WebhookBot extends TelegramWebhookBot {
     String botPath;
     String botUsername;
     String botToken;
-    TelegramUpdateHandler handler;
+    UpdateHandler handler;
 
-    public WebhookBot(TelegramUpdateHandler handler) {
+    public WebhookBot(UpdateHandler handler) {
         this.handler = handler;
     }
 

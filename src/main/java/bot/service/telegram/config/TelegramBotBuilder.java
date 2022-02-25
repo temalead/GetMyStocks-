@@ -1,12 +1,11 @@
 package bot.service.telegram.config;
 
-import bot.service.telegram.TelegramUpdateHandler;
+import bot.service.telegram.handlers.UpdateHandler;
 import bot.service.telegram.WebhookBot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 
 
 @Configuration
@@ -16,7 +15,7 @@ public class TelegramBotBuilder {
     private final TelegramBotConfig botConfig;
 
     @Bean
-    public WebhookBot webhookBot(TelegramUpdateHandler handler){
+    public WebhookBot webhookBot(UpdateHandler handler){
 
         WebhookBot webhookBot=new WebhookBot(handler);
         webhookBot.setBotUsername(botConfig.getBotUsername());
