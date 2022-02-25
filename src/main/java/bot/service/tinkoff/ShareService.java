@@ -1,20 +1,18 @@
 package bot.service.tinkoff;
 
 
-import bot.domain.dto.DividendListDto;
 import bot.domain.ShareDto;
+import bot.domain.dto.DividendListDto;
 import bot.domain.dto.SharePriceListDto;
 import bot.exception.NotFoundShareException;
 import bot.repository.ShareRepository;
 import bot.service.tinkoff.utils.DividendCreator;
 import bot.service.tinkoff.utils.PriceCalculator;
-import io.grpc.StatusRuntimeException;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.piapi.contract.v1.Dividend;
@@ -30,7 +28,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 import java.util.stream.Collectors;
 
 @Service
