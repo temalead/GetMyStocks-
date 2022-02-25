@@ -31,6 +31,5 @@ public class WebhookSetter {
                 .build();
 
         Response response = client.newCall(request).execute();
-        System.out.println("Setting hook");
     }
 }

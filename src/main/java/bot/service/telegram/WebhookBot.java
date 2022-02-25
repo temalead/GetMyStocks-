@@ -26,6 +26,4 @@ public class WebhookBot extends TelegramWebhookBot {
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         return handler.handleUpdate(update);
     }
-
-
 }
