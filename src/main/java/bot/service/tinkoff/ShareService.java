@@ -64,7 +64,7 @@ public class ShareService {
         log.info("Getting figi by ticker {}", ticker);
         CompletableFuture<Optional<Share>> share = api.getInstrumentsService().getShareByTicker(ticker, code)
                 .exceptionally(exception->{
-                    log.error("Share {} nor found",ticker);
+                    log.error("Share {} not found",ticker);
                     throw new NotFoundShareException(ticker);
                 });
         return share;

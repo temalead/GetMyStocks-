@@ -15,9 +15,9 @@ public class UpdateHandler {
 
     public BotApiMethod<?> handleUpdate(Update update) {
         if (update.hasCallbackQuery()) {
+            log.info("It`s a callback");
             return callbackHandler.handleCallbackQuery(update.getCallbackQuery());
         } else {
-            log.info("It`s a message");
             return messageHandler.handleMessage(update.getMessage());
         }
     }
