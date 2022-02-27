@@ -3,7 +3,7 @@ package bot.service.telegram.handlers;
 import bot.domain.ShareDto;
 import bot.service.telegram.keyboard.MainMenuKeyboard;
 import bot.service.telegram.state.BotMessageSend;
-import bot.service.telegram.state.BotMenuEnum;
+import bot.service.telegram.state.BotState;
 import bot.service.tinkoff.ShareService;
 import bot.service.tinkoff.utils.NotFoundShareMessageBuilder;
 import bot.service.tinkoff.utils.ShareInfoSender;
@@ -28,29 +28,24 @@ public class MessageUpdateHandler {
         String chatId = String.valueOf(message.getChatId());
         log.info("Message: {}", message);
         String text = message.getText();
-        BotMenuEnum botMenuEnum = BotMenuEnum.valueOf(text);
-        if (text.equals("/start")) {
+        if (text.startsWith("/start")){
             return getStartMenu(chatId);
         }
-        switch (botMenuEnum) {
-            case FIND_SHARE:
-                return sendMessage(message, chatId);
-            case SHOW_HELP:
-                return helpMessage(chatId);
-            default:
-                return sendError(chatId);
+        else{
+            return sendMessage(message);
         }
     }
 
     private SendMessage helpMessage(String chatId) {
-        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMenuEnum.SHOW_HELP.getMessage()).build();
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSend.HELP_MESSAGE.getMessage()).build();
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(menu.getMainMenuKeyboard());
         return sendMessage;
     }
 
 
-    private SendMessage sendMessage(Message message, String chatId) {
+    private SendMessage sendMessage(Message message) {
+        String chatId = String.valueOf(message.getChatId());
         String ticker = message.getText();
         try {
 
@@ -63,7 +58,7 @@ public class MessageUpdateHandler {
     }
 
     private SendMessage getStartMenu(String chatId) {
-        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMenuEnum.SHOW_HELP.getMessage()).build();
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSend.HELP_MESSAGE.getMessage()).build();
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(menu.getMainMenuKeyboard());
         return sendMessage;
