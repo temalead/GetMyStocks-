@@ -1,0 +1,4 @@
+bot/service/StockService.class
+bot/domain/dto/ShareDto.class
+bot/mapper/ShareMapper.class
+bot/exception/NotFoundStockException.class

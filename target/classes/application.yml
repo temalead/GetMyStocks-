@@ -1,0 +1,15 @@
+bot:
+  telegram:
+    botToken: ${secret.bot.telegram.token}
+    botUsername: get_my_stocks_bot
+    botPath: https://da92-78-85-5-52.ngrok.io
+  invest:
+    isSandBoxMode: true
+    token: ${secret.bot.invest.token}
+    code: TQBR
+spring:
+  redis:
+    port: 6379
+
+server:
+  port: 5000
