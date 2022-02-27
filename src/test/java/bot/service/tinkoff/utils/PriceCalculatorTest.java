@@ -1,5 +1,6 @@
 package bot.service.tinkoff.utils;
 
+import bot.tinkoff.utils.PriceCalculator;
 import org.junit.jupiter.api.Test;
 import ru.tinkoff.piapi.contract.v1.Quotation;
 

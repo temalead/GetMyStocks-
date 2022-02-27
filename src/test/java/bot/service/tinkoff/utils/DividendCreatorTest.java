@@ -1,11 +1,11 @@
 package bot.service.tinkoff.utils;
 
+import bot.tinkoff.utils.DivdendPaymentDateCreator;
 import com.google.protobuf.Timestamp;
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
