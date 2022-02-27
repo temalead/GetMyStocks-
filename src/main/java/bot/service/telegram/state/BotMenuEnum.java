@@ -1,6 +1,6 @@
 package bot.service.telegram.state;
 
-public enum BotState {
+public enum BotMenuEnum {
     FIND_BOND,
     FIND_SHARE,
     GET_LIST,
@@ -8,11 +8,11 @@ public enum BotState {
     SHOW_MAIN_MENU,
     SHOW_HELP("HI! I'll help you soon...");
 
-    BotState(String message) {
+    BotMenuEnum(String message) {
         this.message = message;
     }
 
-    BotState() {
+    BotMenuEnum() {
     }
 
     private String message;

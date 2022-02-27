@@ -16,12 +16,9 @@ public class UpdateHandler {
 
     public BotApiMethod<?> handleUpdate(Update update) {
         if (update.hasCallbackQuery()) {
-            System.out.println("Callback intercepted");
             return callbackHandler.handleCallbackQuery(update.getCallbackQuery());
         } else if (update.hasMessage()){
-            Message message = update.getMessage();
-            System.out.println("Getting message");
-            return messageHandler.handleMessage(message);
+            return messageHandler.handleMessage(update.getMessage());
         }
         return null;
     }

@@ -1,9 +1,9 @@
 package bot.service.telegram.handlers;
 
 import bot.domain.ShareDto;
-import bot.exception.NotFoundShareException;
 import bot.service.telegram.keyboard.MainMenuKeyboard;
-import bot.service.telegram.state.BotState;
+import bot.service.telegram.state.BotMessageSend;
+import bot.service.telegram.state.BotMenuEnum;
 import bot.service.tinkoff.ShareService;
 import bot.service.tinkoff.utils.NotFoundShareMessageBuilder;
 import bot.service.tinkoff.utils.ShareInfoSender;
@@ -25,24 +25,32 @@ public class MessageUpdateHandler {
 
 
     public BotApiMethod<?> handleMessage(Message message) {
-        Long chatId = message.getChatId();
-        log.info("Message: {}",message);
+        String chatId = String.valueOf(message.getChatId());
+        log.info("Message: {}", message);
         String text = message.getText();
-        if (text.equals("/start")){
-            return getStartMenu(String.valueOf(chatId));
-        }else if (text.equals("/make_collection")){
-            return SendMessage.builder().chatId(String.valueOf(chatId)).text("Not found").build();
+        BotMenuEnum botMenuEnum = BotMenuEnum.valueOf(text);
+        if (text.equals("/start")) {
+            return getStartMenu(chatId);
         }
-        else if(text.equals("Get bond by figi") || text.equals("Get portfolio") ){
-            return getStartMenu(String.valueOf(chatId));
-        }
-        else {
-            return sendMessage(message,chatId);
+        switch (botMenuEnum) {
+            case FIND_SHARE:
+                return sendMessage(message, chatId);
+            case SHOW_HELP:
+                return helpMessage(chatId);
+            default:
+                return sendError(chatId);
         }
     }
 
-    private SendMessage sendMessage(Message message,Long id) {
-        String chatId = String.valueOf(id);
+    private SendMessage helpMessage(String chatId) {
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMenuEnum.SHOW_HELP.getMessage()).build();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(menu.getMainMenuKeyboard());
+        return sendMessage;
+    }
+
+
+    private SendMessage sendMessage(Message message, String chatId) {
         String ticker = message.getText();
         try {
 
@@ -54,8 +62,16 @@ public class MessageUpdateHandler {
         }
     }
 
-    private SendMessage getStartMenu(String chatId){
-        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotState.SHOW_HELP.getMessage()).build();
+    private SendMessage getStartMenu(String chatId) {
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMenuEnum.SHOW_HELP.getMessage()).build();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(menu.getMainMenuKeyboard());
+        return sendMessage;
+    }
+
+
+    private SendMessage sendError(String chatId) {
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSend.NOT_RECOGNIZE.getMessage()).build();
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(menu.getMainMenuKeyboard());
         return sendMessage;
