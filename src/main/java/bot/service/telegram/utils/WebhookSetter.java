@@ -30,6 +30,7 @@ public class WebhookSetter {
                 .url(s)
                 .build();
 
-        Response response = client.newCall(request).execute();
+        client.newCall(request).execute().close();
+
     }
 }

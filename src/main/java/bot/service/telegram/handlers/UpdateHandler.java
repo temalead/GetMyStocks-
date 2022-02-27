@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @RequiredArgsConstructor
@@ -15,10 +16,13 @@ public class UpdateHandler {
 
     public BotApiMethod<?> handleUpdate(Update update) {
         if (update.hasCallbackQuery()) {
-            log.info("It`s a callback");
+            System.out.println("Callback intercepted");
             return callbackHandler.handleCallbackQuery(update.getCallbackQuery());
-        } else {
-            return messageHandler.handleMessage(update.getMessage());
+        } else if (update.hasMessage()){
+            Message message = update.getMessage();
+            System.out.println("Getting message");
+            return messageHandler.handleMessage(message);
         }
+        return null;
     }
 }
