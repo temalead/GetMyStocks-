@@ -1,13 +1,9 @@
 package bot.telegram.handlers;
 
-import bot.domain.ShareDto;
 import bot.telegram.keyboard.MainMenuKeyboard;
 import bot.telegram.state.BotMessageSendHinter;
 import bot.telegram.state.BotState;
 import bot.telegram.state.StateController;
-import bot.tinkoff.ShareService;
-import bot.tinkoff.utils.NotFoundShareMessageBuilder;
-import bot.tinkoff.utils.ShareInfoSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,19 +11,16 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.concurrent.CompletionException;
-
 @RequiredArgsConstructor
 @Service
 @Slf4j
 public class MessageUpdateHandler {
-    private final ShareService service;
     private final MainMenuKeyboard menu;
     private final StateController controller;
 
 
     public BotApiMethod<?> handleMessage(Message message) {
-        BotState botState = null;
+        BotState botState;
         String chatId = String.valueOf(message.getChatId());
 
         if (!message.hasText()) {
@@ -72,7 +65,7 @@ public class MessageUpdateHandler {
 
 
     private SendMessage sendError(String chatId) {
-        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSendHinter.NOT_RECOGNIZE.getMessage()).build();
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSendHinter.UNRECOGNIZED.getMessage()).build();
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(menu.getMainMenuKeyboard());
         return sendMessage;
