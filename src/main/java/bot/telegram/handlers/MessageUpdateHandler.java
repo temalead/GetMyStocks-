@@ -1,9 +1,10 @@
 package bot.telegram.handlers;
 
 import bot.domain.ShareDto;
-import bot.telegram.keyboard.ButtonMenuEnum;
 import bot.telegram.keyboard.MainMenuKeyboard;
-import bot.telegram.state.BotMessageSend;
+import bot.telegram.state.BotMessageSendHinter;
+import bot.telegram.state.BotState;
+import bot.telegram.state.StateController;
 import bot.tinkoff.ShareService;
 import bot.tinkoff.utils.NotFoundShareMessageBuilder;
 import bot.tinkoff.utils.ShareInfoSender;
@@ -22,58 +23,48 @@ import java.util.concurrent.CompletionException;
 public class MessageUpdateHandler {
     private final ShareService service;
     private final MainMenuKeyboard menu;
+    private final StateController controller;
 
 
     public BotApiMethod<?> handleMessage(Message message) {
+        BotState botState = null;
         String chatId = String.valueOf(message.getChatId());
-        log.info("Message: {}", message);
-        String text = message.getText();
-        ButtonMenuEnum value = ButtonMenuEnum.valueOf(text);
-        if (text.equals("/start")){
-            return getStartMenu(chatId);
+
+        if (!message.hasText()) {
+            return sendError(chatId);
         }
-        switch (value) {
-            case HELP:
-                return helpMessage(chatId);
-            case GET_LIST:
-                return null;
-            case GET_BOND:
-                return sendMessage(message);
-            case GET_SHARE:
-                return sendMessage(message);
-            case UPDATE_LIST:
-                return null;
-            case SET_LIST:
-                return null;
+        String input = message.getText();
+        switch (input) {
+            case "/start":
+                botState = BotState.SHOW_START_MENU;
+                break;
+            case "Get portfolio":
+            case "Update portfolio":
+            case "Get bond by figi":
+            case "Make portfolio":
+                botState = BotState.UNRECOGNIZED;
+                break;
+            case "Get share by ticker":
+                botState = BotState.SEARCH_SHARE;
+                break;
+            case "Help me!":
+                botState = BotState.SHOW_HELP_MENU;
             default:
-                return sendError(chatId);
+                botState=BotState.UNRECOGNIZED;
         }
+        return controller.processMessage(botState, message);
     }
 
     private SendMessage helpMessage(String chatId) {
-        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSend.HELP_MESSAGE.getMessage()).build();
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSendHinter.HELP_MESSAGE.getMessage()).build();
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(menu.getMainMenuKeyboard());
         return sendMessage;
     }
 
 
-
-    private SendMessage sendMessage(Message message) {
-        String chatId = String.valueOf(message.getChatId());
-        String ticker = message.getText();
-        try {
-
-            ShareDto share = service.getInfo(ticker);
-            String result = ShareInfoSender.createMessage(share);
-            return SendMessage.builder().chatId(chatId).text(result).build();
-        } catch (CompletionException e) {
-            return SendMessage.builder().chatId(chatId).text(NotFoundShareMessageBuilder.createMsgError(ticker)).build();
-        }
-    }
-
-    private SendMessage getStartMenu(String chatId) {
-        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSend.HELP_MESSAGE.getMessage()).build();
+    private SendMessage startMenu(String chatId) {
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSendHinter.HELP_MESSAGE.getMessage()).build();
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(menu.getMainMenuKeyboard());
         return sendMessage;
@@ -81,7 +72,7 @@ public class MessageUpdateHandler {
 
 
     private SendMessage sendError(String chatId) {
-        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSend.NOT_RECOGNIZE.getMessage()).build();
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSendHinter.NOT_RECOGNIZE.getMessage()).build();
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(menu.getMainMenuKeyboard());
         return sendMessage;

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @RequiredArgsConstructor
@@ -19,6 +20,6 @@ public class UpdateHandler {
         } else if (update.hasMessage()){
             return messageHandler.handleMessage(update.getMessage());
         }
-        return null;
+        return SendMessage.builder().text("test").chatId(update.getMessage().getChatId().toString()).build();
     }
 }

@@ -9,4 +9,5 @@ public enum BotState {
     UPDATE_PORTFOLIO,
     DELETE_PORTFOLIO,
     GET_PORTFOLIO,
+    UNRECOGNIZED
 }
