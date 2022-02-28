@@ -38,29 +38,15 @@ public class MessageUpdateHandler {
                 botState = BotState.UNRECOGNIZED;
                 break;
             case "Get share by ticker":
-                botState = BotState.SEARCH_SHARE;
+                botState = BotState.WANNA_GET_SHARE;
                 break;
             case "Help me!":
                 botState = BotState.SHOW_HELP_MENU;
+                break;
             default:
                 botState=BotState.UNRECOGNIZED;
         }
         return controller.processMessage(botState, message);
-    }
-
-    private SendMessage helpMessage(String chatId) {
-        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSendHinter.HELP_MESSAGE.getMessage()).build();
-        sendMessage.enableMarkdown(true);
-        sendMessage.setReplyMarkup(menu.getMainMenuKeyboard());
-        return sendMessage;
-    }
-
-
-    private SendMessage startMenu(String chatId) {
-        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSendHinter.HELP_MESSAGE.getMessage()).build();
-        sendMessage.enableMarkdown(true);
-        sendMessage.setReplyMarkup(menu.getMainMenuKeyboard());
-        return sendMessage;
     }
 
 

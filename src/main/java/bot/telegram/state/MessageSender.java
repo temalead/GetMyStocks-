@@ -24,7 +24,7 @@ public class MessageSender {
     BondService bondService;
 
 
-    public SendMessage sendShare(Message message) {
+    public SendMessage getShareInfo(Message message) {
         String ticker = message.getText();
         String chatId = message.getChatId().toString();
         try {

@@ -1,7 +1,7 @@
 package bot.telegram.state;
 
 public enum BotState {
-    SEARCH_SHARE,
+    WANNA_GET_SHARE,
     SEARCH_BOND,
     SHOW_HELP_MENU,
     SHOW_START_MENU,
@@ -9,5 +9,6 @@ public enum BotState {
     UPDATE_PORTFOLIO,
     DELETE_PORTFOLIO,
     GET_PORTFOLIO,
+    FIND_SHARE,
     UNRECOGNIZED
 }

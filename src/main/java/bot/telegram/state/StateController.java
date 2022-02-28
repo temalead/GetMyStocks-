@@ -14,7 +14,7 @@ public class StateController {
 
     public SendMessage processMessage(BotState state, Message message) {
         switch (state) {
-            case SEARCH_SHARE:
+            case WANNA_GET_SHARE:
                 return processSearchShare(state, message);
             case SEARCH_BOND:
                 return processSearchBond(state, message);
@@ -33,16 +33,19 @@ public class StateController {
     }
 
     private SendMessage processHintMessage(BotState state,String chatId) {
-        SendMessage reply= SendMessage.builder().chatId(chatId).build();
+        SendMessage reply= new SendMessage();
+        reply.setChatId(chatId);
 
         switch (state){
             case UNRECOGNIZED:
                 reply.setText(BotMessageSendHinter.UNRECOGNIZED.getMessage());
+                break;
             case SHOW_HELP_MENU:
                 reply.setText(BotMessageSendHinter.HELP_MESSAGE.getMessage());
+                break;
             case SHOW_START_MENU:
                 reply.setText(BotMessageSendHinter.START_MESSAGE.getMessage());
-
+                break;
         }
         reply.enableMarkdown(true);
         reply.setReplyMarkup(menu.getMainMenuKeyboard());
@@ -54,14 +57,16 @@ public class StateController {
         return null;
     }
 
+
     private SendMessage processSearchShare(BotState state, Message message) {
-        SendMessage result;
+        SendMessage result = null;
 
         String chatId = message.getChatId().toString();
-        if (state.equals(BotState.SEARCH_SHARE)) {
+        if (state.equals(BotState.WANNA_GET_SHARE)) {
             result = SendMessage.builder().text(BotMessageSendHinter.SEND_SHARE.getMessage()).chatId(chatId).build();
-        } else {
-            result = sender.sendShare(message);
+        }
+        if (state.equals(BotState.FIND_SHARE)){
+            result=sender.getShareInfo(message);
         }
         return result;
     }
