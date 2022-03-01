@@ -21,21 +21,26 @@ public class StateProcessor {
     UserService service;
 
     public SendMessage processMessage(BotState state, Message message) {
+        String chatId = message.getChatId().toString();
         switch (state) {
+
             case WANNA_GET_SHARE:
             case FIND_SHARE:
                 return processSearchShare(message);
+
             case WANNA_GET_BOND:
                 return processSearchBond(message);
+
             case MAKE_PORTFOLIO:
             case GET_PORTFOLIO:
             case DELETE_PORTFOLIO:
             case UPDATE_PORTFOLIO:
                 return null;
+
             case UNRECOGNIZED:
-            case GET_HELP:
             case GET_START_MENU:
-                return processHintMessage(message.getChatId().toString());
+            case GET_HELP:
+                return processHintMessage(chatId);
         }
 
         return null;
@@ -47,18 +52,21 @@ public class StateProcessor {
         SendMessage reply = SendMessage.builder().chatId(chatId).text(state.name()).build();
 
         switch (state) {
+            case GET_START_MENU:
+                reply.setText(BotMessageSendHinter.START_MESSAGE.getMessage());
+                reply.enableMarkdown(true);
+                reply.setReplyMarkup(menu.getMainMenuKeyboard());
+                break;
             case UNRECOGNIZED:
                 reply.setText(BotMessageSendHinter.UNRECOGNIZED_MESSAGE.getMessage());
                 break;
-            case GET_START_MENU:
-                reply.setText(BotMessageSendHinter.START_MESSAGE.getMessage());
-                break;
-            default:
+            case GET_HELP:
                 reply.setText(BotMessageSendHinter.HELP_MESSAGE.getMessage());
+                reply.setReplyMarkup(menu.getMainMenuKeyboard());
+                break;
         }
         user.setState(BotState.NONE);
-        reply.enableMarkdown(true);
-        reply.setReplyMarkup(menu.getMainMenuKeyboard());
+
 
         log.info("Message sent: {}", reply.getText());
 
@@ -83,7 +91,7 @@ public class StateProcessor {
         }
         if (state.equals(BotState.FIND_SHARE)) {
             reply = sender.getShareInfo(message);
-            if (reply.getText().startsWith("Share")){
+            if (reply.getText().startsWith("Share")) {
                 return reply;
             }
             user.setState(BotState.NONE);

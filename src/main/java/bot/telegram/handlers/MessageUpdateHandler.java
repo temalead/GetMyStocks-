@@ -37,9 +37,9 @@ public class MessageUpdateHandler {
         String input = message.getText();
         switch (input) {
             case "/start":
+            case "Get portfolio":
                 botState = BotState.GET_START_MENU;
                 break;
-            case "Get portfolio":
             case "Update portfolio":
             case "Get bond by figi":
             case "Make portfolio":
@@ -67,11 +67,9 @@ public class MessageUpdateHandler {
 
 
     private SendMessage sendError(String chatId) {
-        User user = service.initializeUser(chatId);
-        user.setState(BotState.NONE);
-        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSendHinter.UNRECOGNIZED_MESSAGE.getMessage()).build();
-        sendMessage.enableMarkdown(true);
-        sendMessage.setReplyMarkup(menu.getMainMenuKeyboard());
-        return sendMessage;
+        SendMessage reply = SendMessage.builder().chatId(chatId).text(BotMessageSendHinter.UNRECOGNIZED_MESSAGE.getMessage()).build();
+        reply.enableMarkdown(true);
+        reply.setReplyMarkup(menu.getMainMenuKeyboard());
+        return reply;
     }
 }
