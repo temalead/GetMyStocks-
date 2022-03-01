@@ -3,7 +3,7 @@ package bot.telegram.state;
 public enum BotState {
     NONE,
     WANNA_GET_SHARE,
-    SEARCH_BOND,
+    WANNA_GET_BOND,
     GET_HELP,
     GET_START_MENU,
     MAKE_PORTFOLIO,

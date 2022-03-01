@@ -23,8 +23,9 @@ public class StateProcessor {
     public SendMessage processMessage(BotState state, Message message) {
         switch (state) {
             case WANNA_GET_SHARE:
+            case FIND_SHARE:
                 return processSearchShare(message);
-            case SEARCH_BOND:
+            case WANNA_GET_BOND:
                 return processSearchBond(message);
             case MAKE_PORTFOLIO:
             case GET_PORTFOLIO:
@@ -47,14 +48,13 @@ public class StateProcessor {
 
         switch (state) {
             case UNRECOGNIZED:
-                reply.setText(BotMessageSendHinter.UNRECOGNIZED.getMessage());
-                break;
-            case GET_HELP:
-                reply.setText(BotMessageSendHinter.HELP_MESSAGE.getMessage());
+                reply.setText(BotMessageSendHinter.UNRECOGNIZED_MESSAGE.getMessage());
                 break;
             case GET_START_MENU:
                 reply.setText(BotMessageSendHinter.START_MESSAGE.getMessage());
                 break;
+            default:
+                reply.setText(BotMessageSendHinter.HELP_MESSAGE.getMessage());
         }
         user.setState(BotState.NONE);
         reply.enableMarkdown(true);
@@ -79,13 +79,15 @@ public class StateProcessor {
         String chatId = message.getChatId().toString();
         if (state.equals(BotState.WANNA_GET_SHARE)) {
             user.setState(BotState.FIND_SHARE);
-            reply = SendMessage.builder().text(BotMessageSendHinter.SEND_SHARE.getMessage()).chatId(chatId).build();
+            reply = SendMessage.builder().text(BotMessageSendHinter.SHARE_ADVICE_MESSAGE.getMessage()).chatId(chatId).build();
         }
         if (state.equals(BotState.FIND_SHARE)) {
             reply = sender.getShareInfo(message);
+            if (reply.getText().startsWith("Share")){
+                return reply;
+            }
+            user.setState(BotState.NONE);
         }
-        log.info("info: {}", reply.getText());
-
         service.saveCondition(user);
 
         return reply;

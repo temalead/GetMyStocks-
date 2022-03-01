@@ -59,6 +59,8 @@ public class MessageUpdateHandler {
                 }
         }
         user.setState(botState);
+
+        service.saveCondition(user);
         log.info("Current bot state {}", botState.name());
         return controller.processMessage(user.getState(), message);
     }
@@ -67,7 +69,7 @@ public class MessageUpdateHandler {
     private SendMessage sendError(String chatId) {
         User user = service.initializeUser(chatId);
         user.setState(BotState.NONE);
-        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSendHinter.UNRECOGNIZED.getMessage()).build();
+        SendMessage sendMessage = SendMessage.builder().chatId(chatId).text(BotMessageSendHinter.UNRECOGNIZED_MESSAGE.getMessage()).build();
         sendMessage.enableMarkdown(true);
         sendMessage.setReplyMarkup(menu.getMainMenuKeyboard());
         return sendMessage;

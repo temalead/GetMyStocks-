@@ -8,13 +8,16 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Id;
+
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 @Component
 @RedisHash("User")
 @Accessors(chain = true)
 public class User {
-    String chatId;
+    @Id
+    String id;
     BotState state;
 
 
