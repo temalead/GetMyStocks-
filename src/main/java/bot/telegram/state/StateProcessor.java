@@ -1,18 +1,24 @@
 package bot.telegram.state;
 
 import bot.domain.User;
+import bot.repository.UserService;
 import bot.telegram.keyboard.MainMenuKeyboard;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
 @RequiredArgsConstructor
-public class StateController {
-    private final MessageSender sender;
-    private final MainMenuKeyboard menu;
-    private final User user;
+@Slf4j
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+public class StateProcessor {
+    MessageSender sender;
+    MainMenuKeyboard menu;
+    UserService service;
 
     public SendMessage processMessage(BotState state, Message message) {
         switch (state) {
@@ -26,8 +32,8 @@ public class StateController {
             case UPDATE_PORTFOLIO:
                 return null;
             case UNRECOGNIZED:
-            case SHOW_HELP_MENU:
-            case SHOW_START_MENU:
+            case GET_HELP:
+            case GET_START_MENU:
                 return processHintMessage(message.getChatId().toString());
         }
 
@@ -35,23 +41,52 @@ public class StateController {
     }
 
     private SendMessage processHintMessage(String chatId) {
+        User user = service.initializeUser(chatId);
         BotState state = user.getState();
-        SendMessage reply= new SendMessage();
-        reply.setChatId(chatId);
+        SendMessage reply = SendMessage.builder().chatId(chatId).text(state.name()).build();
 
-        switch (state){
+        switch (state) {
             case UNRECOGNIZED:
                 reply.setText(BotMessageSendHinter.UNRECOGNIZED.getMessage());
                 break;
-            case SHOW_HELP_MENU:
+            case GET_HELP:
                 reply.setText(BotMessageSendHinter.HELP_MESSAGE.getMessage());
                 break;
-            case SHOW_START_MENU:
+            case GET_START_MENU:
                 reply.setText(BotMessageSendHinter.START_MESSAGE.getMessage());
                 break;
         }
+        user.setState(BotState.NONE);
         reply.enableMarkdown(true);
         reply.setReplyMarkup(menu.getMainMenuKeyboard());
+
+        log.info("Message sent: {}", reply.getText());
+
+
+        service.saveCondition(user);
+
+        return reply;
+
+    }
+
+
+    private SendMessage processSearchShare(Message message) {
+        User user = service.initializeUser(message.getChatId().toString());
+        BotState state = user.getState();
+
+        SendMessage reply = null;
+
+        String chatId = message.getChatId().toString();
+        if (state.equals(BotState.WANNA_GET_SHARE)) {
+            user.setState(BotState.FIND_SHARE);
+            reply = SendMessage.builder().text(BotMessageSendHinter.SEND_SHARE.getMessage()).chatId(chatId).build();
+        }
+        if (state.equals(BotState.FIND_SHARE)) {
+            reply = sender.getShareInfo(message);
+        }
+        log.info("info: {}", reply.getText());
+
+        service.saveCondition(user);
 
         return reply;
     }
@@ -61,20 +96,4 @@ public class StateController {
         return null;
     }
 
-
-    private SendMessage processSearchShare(Message message) {
-        BotState state = user.getState();
-
-        SendMessage result = null;
-
-        String chatId = message.getChatId().toString();
-        if (state.equals(BotState.WANNA_GET_SHARE)) {
-            user.setState(BotState.FIND_SHARE);
-            result = SendMessage.builder().text(BotMessageSendHinter.SEND_SHARE.getMessage()).chatId(chatId).build();
-        }
-        if (state.equals(BotState.FIND_SHARE)){
-            result=sender.getShareInfo(message);
-        }
-        return result;
-    }
 }
