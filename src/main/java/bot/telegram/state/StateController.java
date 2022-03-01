@@ -1,5 +1,6 @@
 package bot.telegram.state;
 
+import bot.domain.User;
 import bot.telegram.keyboard.MainMenuKeyboard;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,13 +12,14 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public class StateController {
     private final MessageSender sender;
     private final MainMenuKeyboard menu;
+    private final User user;
 
     public SendMessage processMessage(BotState state, Message message) {
         switch (state) {
             case WANNA_GET_SHARE:
-                return processSearchShare(state, message);
+                return processSearchShare(message);
             case SEARCH_BOND:
-                return processSearchBond(state, message);
+                return processSearchBond(message);
             case MAKE_PORTFOLIO:
             case GET_PORTFOLIO:
             case DELETE_PORTFOLIO:
@@ -26,13 +28,14 @@ public class StateController {
             case UNRECOGNIZED:
             case SHOW_HELP_MENU:
             case SHOW_START_MENU:
-                return processHintMessage(state,message.getChatId().toString());
+                return processHintMessage(message.getChatId().toString());
         }
 
         return null;
     }
 
-    private SendMessage processHintMessage(BotState state,String chatId) {
+    private SendMessage processHintMessage(String chatId) {
+        BotState state = user.getState();
         SendMessage reply= new SendMessage();
         reply.setChatId(chatId);
 
@@ -49,20 +52,24 @@ public class StateController {
         }
         reply.enableMarkdown(true);
         reply.setReplyMarkup(menu.getMainMenuKeyboard());
+
         return reply;
     }
 
 
-    private SendMessage processSearchBond(BotState state, Message message) {
+    private SendMessage processSearchBond(Message message) {
         return null;
     }
 
 
-    private SendMessage processSearchShare(BotState state, Message message) {
+    private SendMessage processSearchShare(Message message) {
+        BotState state = user.getState();
+
         SendMessage result = null;
 
         String chatId = message.getChatId().toString();
         if (state.equals(BotState.WANNA_GET_SHARE)) {
+            user.setState(BotState.FIND_SHARE);
             result = SendMessage.builder().text(BotMessageSendHinter.SEND_SHARE.getMessage()).chatId(chatId).build();
         }
         if (state.equals(BotState.FIND_SHARE)){

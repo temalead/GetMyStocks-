@@ -1,5 +1,6 @@
 package bot.telegram.handlers;
 
+import bot.domain.User;
 import bot.telegram.keyboard.MainMenuKeyboard;
 import bot.telegram.state.BotMessageSendHinter;
 import bot.telegram.state.BotState;
@@ -17,9 +18,11 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public class MessageUpdateHandler {
     private final MainMenuKeyboard menu;
     private final StateController controller;
+    private final User user;
 
 
     public BotApiMethod<?> handleMessage(Message message) {
+
         BotState botState;
         String chatId = String.valueOf(message.getChatId());
 
@@ -44,9 +47,10 @@ public class MessageUpdateHandler {
                 botState = BotState.SHOW_HELP_MENU;
                 break;
             default:
-                botState=BotState.UNRECOGNIZED;
+                botState=user.getState();
         }
-        return controller.processMessage(botState, message);
+        user.setState(botState);
+        return controller.processMessage(user.getState(), message);
     }
 
 
