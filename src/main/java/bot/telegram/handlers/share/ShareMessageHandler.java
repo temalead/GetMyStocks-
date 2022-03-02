@@ -43,5 +43,10 @@ public class ShareMessageHandler implements MessageHandler {
 
         return reply;
     }
+
+    @Override
+    public BotState getHandlerName() {
+        return BotState.WANNA_GET_SHARE;
+    }
 }
 

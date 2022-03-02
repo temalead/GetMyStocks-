@@ -18,6 +18,7 @@ public enum BotState {
     DELETE_PORTFOLIO,
     GET_PORTFOLIO,
     FIND_SHARE,
+    FIND_BOND,
     UNRECOGNIZED;
 
 }
