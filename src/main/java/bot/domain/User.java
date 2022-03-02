@@ -9,13 +9,14 @@ import org.springframework.data.redis.core.RedisHash;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 @Component
 @RedisHash("User")
 @Accessors(chain = true)
-public class User {
+public class User implements Serializable {
     @Id
     String id;
     BotState state;

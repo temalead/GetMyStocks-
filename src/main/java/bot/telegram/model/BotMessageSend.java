@@ -1,6 +1,6 @@
-package bot.telegram.state;
+package bot.telegram.model;
 
-public enum BotMessageSendHinter {
+public enum BotMessageSend {
     START_MESSAGE("I glad to see you! To see advanded info, please tap help"),
     HELP_MESSAGE("I`ll help you soon..."),
     UNRECOGNIZED_MESSAGE("I don`t recognize you. Please use help menu"),
@@ -10,7 +10,7 @@ public enum BotMessageSendHinter {
 
     private final String message;
 
-    BotMessageSendHinter(String message) {
+    BotMessageSend(String message) {
         this.message=message;
     }
 

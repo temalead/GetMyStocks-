@@ -3,6 +3,8 @@ package bot.telegram.state;
 import bot.domain.User;
 import bot.repository.UserService;
 import bot.telegram.keyboard.MainMenuKeyboard;
+import bot.telegram.model.BotMessageSend;
+import bot.telegram.utils.MessageSender;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,9 +26,9 @@ public class StateProcessor {
         String chatId = message.getChatId().toString();
         switch (state) {
 
-            case WANNA_GET_SHARE:
+            /*case WANNA_GET_SHARE:
             case FIND_SHARE:
-                return processSearchShare(message);
+                return processSearchShare(message);*/
 
             case WANNA_GET_BOND:
                 return processSearchBond(message);
@@ -47,21 +49,21 @@ public class StateProcessor {
     }
 
     private SendMessage processHintMessage(String chatId) {
-        User user = service.initializeUser(chatId);
+        User user = service.getUserOrCreateNewUserByChatId(chatId);
         BotState state = user.getState();
         SendMessage reply = SendMessage.builder().chatId(chatId).text(state.name()).build();
 
         switch (state) {
             case GET_START_MENU:
-                reply.setText(BotMessageSendHinter.START_MESSAGE.getMessage());
+                reply.setText(BotMessageSend.START_MESSAGE.getMessage());
                 reply.enableMarkdown(true);
                 reply.setReplyMarkup(menu.getMainMenuKeyboard());
                 break;
             case UNRECOGNIZED:
-                reply.setText(BotMessageSendHinter.UNRECOGNIZED_MESSAGE.getMessage());
+                reply.setText(BotMessageSend.UNRECOGNIZED_MESSAGE.getMessage());
                 break;
             case GET_HELP:
-                reply.setText(BotMessageSendHinter.HELP_MESSAGE.getMessage());
+                reply.setText(BotMessageSend.HELP_MESSAGE.getMessage());
                 reply.setReplyMarkup(menu.getMainMenuKeyboard());
                 break;
         }
@@ -75,30 +77,6 @@ public class StateProcessor {
 
         return reply;
 
-    }
-
-
-    private SendMessage processSearchShare(Message message) {
-        User user = service.initializeUser(message.getChatId().toString());
-        BotState state = user.getState();
-
-        SendMessage reply = null;
-
-        String chatId = message.getChatId().toString();
-        if (state.equals(BotState.WANNA_GET_SHARE)) {
-            user.setState(BotState.FIND_SHARE);
-            reply = SendMessage.builder().text(BotMessageSendHinter.SHARE_ADVICE_MESSAGE.getMessage()).chatId(chatId).build();
-        }
-        if (state.equals(BotState.FIND_SHARE)) {
-            reply = sender.getShareInfo(message);
-            if (reply.getText().startsWith("Share")) {
-                return reply;
-            }
-            user.setState(BotState.NONE);
-        }
-        service.saveCondition(user);
-
-        return reply;
     }
 
 

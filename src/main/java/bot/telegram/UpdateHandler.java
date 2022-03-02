@@ -1,4 +1,4 @@
-package bot.telegram.handlers;
+package bot.telegram;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

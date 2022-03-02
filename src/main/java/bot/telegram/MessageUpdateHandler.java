@@ -1,9 +1,9 @@
-package bot.telegram.handlers;
+package bot.telegram;
 
 import bot.domain.User;
 import bot.repository.UserService;
 import bot.telegram.keyboard.MainMenuKeyboard;
-import bot.telegram.state.BotMessageSendHinter;
+import bot.telegram.model.BotMessageSend;
 import bot.telegram.state.BotState;
 import bot.telegram.state.StateProcessor;
 import lombok.AccessLevel;
@@ -27,7 +27,7 @@ public class MessageUpdateHandler {
     public BotApiMethod<?> handleMessage(Message message) {
 
         String chatId = String.valueOf(message.getChatId());
-        User user = service.initializeUser(chatId);
+        User user = service.getUserOrCreateNewUserByChatId(chatId);
         BotState botState;
 
 
@@ -37,13 +37,10 @@ public class MessageUpdateHandler {
         String input = message.getText();
         switch (input) {
             case "/start":
-            case "Get portfolio":
                 botState = BotState.GET_START_MENU;
                 break;
-            case "Update portfolio":
-            case "Get bond by figi":
-            case "Make portfolio":
-                botState = BotState.UNRECOGNIZED;
+            case "My portfolio":
+                botState = BotState.PORTFOLIO;
                 break;
             case "Get share by ticker":
                 botState = BotState.WANNA_GET_SHARE;
@@ -67,7 +64,7 @@ public class MessageUpdateHandler {
 
 
     private SendMessage sendError(String chatId) {
-        SendMessage reply = SendMessage.builder().chatId(chatId).text(BotMessageSendHinter.UNRECOGNIZED_MESSAGE.getMessage()).build();
+        SendMessage reply = SendMessage.builder().chatId(chatId).text(BotMessageSend.UNRECOGNIZED_MESSAGE.getMessage()).build();
         reply.enableMarkdown(true);
         reply.setReplyMarkup(menu.getMainMenuKeyboard());
         return reply;
