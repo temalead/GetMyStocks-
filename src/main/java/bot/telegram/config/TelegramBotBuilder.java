@@ -1,6 +1,6 @@
 package bot.telegram.config;
 
-import bot.telegram.handlers.UpdateHandler;
+import bot.telegram.UpdateHandler;
 import bot.telegram.WebhookBot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

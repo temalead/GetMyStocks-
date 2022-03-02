@@ -1,4 +1,4 @@
-package bot.telegram.state;
+package bot.telegram.utils;
 
 import bot.domain.ShareDto;
 import bot.tinkoff.BondService;
@@ -24,7 +24,7 @@ public class MessageSender {
     BondService bondService;
 
 
-    public SendMessage sendShare(Message message) {
+    public SendMessage getShareInfo(Message message) {
         String ticker = message.getText();
         String chatId = message.getChatId().toString();
         try {

@@ -1,4 +1,4 @@
-package bot.telegram.keyboard;
+package bot.telegram.model;
 
 public enum ButtonMenuEnum {
     GET_LIST("Get portfolio"),
