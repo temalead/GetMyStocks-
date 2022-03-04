@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisHash;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -23,8 +24,9 @@ public class BondDto implements Serializable {
     private String name;
     private String figi;
     private BigDecimal price;
-    private BigDecimal nkd;
+    private BigDecimal ACI;
     private Integer lot;
+    private LocalDate maturityDate;
 
     @Override
     public boolean equals(Object o) {
@@ -42,10 +44,13 @@ public class BondDto implements Serializable {
     @Override
     public String toString() {
         return "BondDto{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
                 ", figi='" + figi + '\'' +
                 ", price=" + price +
-                ", nkd=" + nkd +
+                ", ACI=" + ACI +
+                ", lot=" + lot +
+                ", maturityDate=" + maturityDate +
                 '}';
     }
 }
