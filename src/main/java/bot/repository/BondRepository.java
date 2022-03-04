@@ -1,9 +1,12 @@
 package bot.repository;
 
-import bot.domain.Bond;
+import bot.domain.BondDto;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface BondRepository extends CrudRepository<Bond, String> {
+public interface BondRepository extends CrudRepository<BondDto, String> {
+    Optional<BondDto> findByName(String name);
 }

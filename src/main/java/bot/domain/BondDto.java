@@ -17,30 +17,32 @@ import java.util.Objects;
 @RedisHash("Bond")
 @Getter
 @Setter
-public class Bond implements Serializable {
+public class BondDto implements Serializable {
     @Id
     private String id;
+    private String name;
     private String figi;
     private BigDecimal price;
     private BigDecimal nkd;
+    private Integer lot;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Bond bond = (Bond) o;
-        return Objects.equals(id, bond.id);
+        BondDto bondDto = (BondDto) o;
+        return Objects.equals(name, bondDto.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(name);
     }
 
     @Override
     public String toString() {
         return "BondDto{" +
-                "ticker='" + id + '\'' +
+                "name='" + name + '\'' +
                 ", figi='" + figi + '\'' +
                 ", price=" + price +
                 ", nkd=" + nkd +

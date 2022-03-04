@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.concurrent.CompletionException;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class NotFoundShareException extends CompletionException {
-    public NotFoundShareException(String message) {
+public class ShareNotFoundException extends CompletionException {
+    public ShareNotFoundException(String message) {
         super(NotFoundShareMessageBuilder.createMsgError(message));
     }
 }

@@ -1,5 +1,6 @@
 package bot.telegram.utils;
 
+import bot.domain.BondDto;
 import bot.domain.Stock;
 import bot.tinkoff.BondService;
 import bot.tinkoff.ShareService;
@@ -34,5 +35,11 @@ public class MessageSender {
         } catch (CompletionException e) {
             return SendMessage.builder().chatId(chatId).text(NotFoundShareMessageBuilder.createMsgError(ticker)).build();
         }
+    }
+
+    public SendMessage getBondInfo(Message message){
+        String chatId = message.getChatId().toString();
+        BondDto bondDto = bondService.getInfo(message.getText());
+        return SendMessage.builder().chatId(chatId).text(bondDto.toString()).build();
     }
 }

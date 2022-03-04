@@ -7,5 +7,5 @@ import java.util.List;
 @Component
 public class Portfolio {
     List<Stock> shares;
-    List<Bond> bonds;
+    List<BondDto> bondDtos;
 }

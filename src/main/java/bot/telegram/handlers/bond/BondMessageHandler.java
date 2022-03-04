@@ -1,7 +1,11 @@
 package bot.telegram.handlers.bond;
 
+import bot.domain.User;
 import bot.telegram.handlers.MessageHandler;
+import bot.telegram.model.BotMessageSend;
 import bot.telegram.state.BotState;
+import bot.repository.UserService;
+import bot.telegram.utils.MessageSender;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,9 +17,30 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @RequiredArgsConstructor
 @Component
 public class BondMessageHandler implements MessageHandler {
+    UserService service;
+    MessageSender sender;
+
+
     @Override
     public SendMessage sendMessageDependsOnState(Message message) {
-        return null;
+        User user = service.getUserOrCreateNewUserByChatId(message.getChatId().toString());
+        BotState state = user.getState();
+
+        SendMessage reply = null;
+
+        String chatId = message.getChatId().toString();
+        if (state.equals(BotState.WANNA_GET_BOND)) {
+            user.setState(BotState.FIND_BOND);
+            reply = SendMessage.builder().text(BotMessageSend.BOND_ADVICE_MESSAGE.getMessage()).chatId(chatId).build();
+        }
+        if (state.equals(BotState.FIND_BOND)) {
+            reply = sender.getBondInfo(message);
+
+            user.setState(BotState.NONE);
+        }
+        service.saveCondition(user);
+
+        return reply;
     }
 
     @Override

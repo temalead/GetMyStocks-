@@ -21,6 +21,7 @@ import java.util.Objects;
 public class Stock implements Serializable {
     @Id
     private String id;
+    private String name;
     private String figi;
     private DividendListDto dividends;
     private BigDecimal price;

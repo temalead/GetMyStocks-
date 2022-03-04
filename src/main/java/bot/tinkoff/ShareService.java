@@ -4,7 +4,7 @@ package bot.tinkoff;
 import bot.domain.Stock;
 import bot.domain.dto.DividendListDto;
 import bot.domain.dto.SharePriceListDto;
-import bot.exception.NotFoundShareException;
+import bot.exception.ShareNotFoundException;
 import bot.repository.ShareRepository;
 import bot.tinkoff.utils.DividendCreator;
 import bot.tinkoff.utils.PriceCalculator;
@@ -48,7 +48,7 @@ public class ShareService {
             return share.get();
         } else {
             log.info("Share with ticker {} not found in cache. Creating...", ticker);
-            return createShare(ticker);
+            return addShareToCacheByTicker(ticker);
         }
     }
 
@@ -65,7 +65,7 @@ public class ShareService {
         CompletableFuture<Optional<Share>> share = api.getInstrumentsService().getShareByTicker(ticker, code)
                 .exceptionally(exception->{
                     log.error("Share {} not found",ticker);
-                    throw new NotFoundShareException(ticker);
+                    throw new ShareNotFoundException(ticker);
                 });
         return share;
     }
@@ -80,7 +80,7 @@ public class ShareService {
         tickers.forEach(ticker -> shareList.add(getFigiByTicker(ticker)));
         List<String> figies = shareList.stream()
                 .map(CompletableFuture::join)
-                .map(share -> share.orElseThrow(() -> new NotFoundShareException("Share not found!")))
+                .map(share -> share.orElseThrow(() -> new ShareNotFoundException("Share not found!")))
                 .map(Share::getFigi).collect(Collectors.toList());
 
         List<LastPrice> pricesFromApi = api.getMarketDataService().getLastPrices(figies).join();
@@ -93,8 +93,8 @@ public class ShareService {
     }
 
 
-    private Stock createShare(String ticker) throws NotFoundShareException {
-        Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new NotFoundShareException("Share not found"));
+    private Stock addShareToCacheByTicker(String ticker) throws ShareNotFoundException {
+        Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new ShareNotFoundException("Share not found"));
         String figi = share.getFigi();
 
 

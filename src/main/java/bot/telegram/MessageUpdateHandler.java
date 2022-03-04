@@ -45,6 +45,9 @@ public class MessageUpdateHandler {
             case "Get share by ticker":
                 botState = BotState.WANNA_GET_SHARE;
                 break;
+            case "Get bond by figi":
+                botState=BotState.WANNA_GET_BOND;
+                break;
             case "Help me!":
                 botState = BotState.GET_HELP;
                 break;
