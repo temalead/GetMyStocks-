@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(makeFinal = true,level = AccessLevel.PRIVATE)
 public enum BotState {
     NONE,
+    HINT,
     WANNA_GET_SHARE,
     WANNA_GET_BOND,
     GET_HELP,

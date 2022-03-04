@@ -9,6 +9,7 @@ import bot.telegram.state.BotState;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -16,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class HintMessageHandler implements MessageHandler {
     UserService service;
     MainMenuKeyboard menu;
@@ -52,6 +54,6 @@ public class HintMessageHandler implements MessageHandler {
 
     @Override
     public BotState getHandlerName() {
-        return BotState.WANNA_GET_BOND;
+        return BotState.HINT;
     }
 }

@@ -6,7 +6,8 @@ public enum ButtonMenuEnum {
     UPDATE_LIST("Update portfolio"),
     HELP("Help me!"),
     GET_SHARE("Get share by ticker"),
-    GET_BOND("Get bond by figi");
+    GET_BOND("Get bond by figi"),
+    PORTFOLIO("My portfolio");
 
     private final String buttonName;
 

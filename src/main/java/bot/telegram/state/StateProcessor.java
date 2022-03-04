@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class StateProcessor {
     Map<BotState, MessageHandler> handlers = new HashMap<>();
 
+    @Autowired
     public StateProcessor(List<MessageHandler> handlers) {
         handlers.forEach(handler -> this.handlers.put(handler.getHandlerName(), handler));
     }
@@ -40,7 +42,7 @@ public class StateProcessor {
         if (isPortfolioHandler(state)) {
             return handlers.get(BotState.PORTFOLIO);
         }
-        return handlers.get(state);
+        return handlers.get(BotState.HINT);
     }
 
     private boolean isShareHandler(BotState state) {
