@@ -1,16 +1,13 @@
 package bot.tinkoff.utils;
 
-import bot.domain.ShareDto;
+import bot.domain.Stock;
 import bot.domain.dto.DividendDto;
 import bot.domain.dto.DividendListDto;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 public abstract class ShareInfoSender {
-    public static String createMessage(ShareDto share) {
+    public static String createMessage(Stock share) {
         System.out.println(share);
 
         String dividendMessage = createDividendMessage(share.getDividends());

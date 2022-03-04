@@ -1,9 +1,9 @@
 package bot.repository;
 
-import bot.domain.BondDto;
+import bot.domain.Bond;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BondRepository extends CrudRepository<BondDto, String> {
+public interface BondRepository extends CrudRepository<Bond, String> {
 }

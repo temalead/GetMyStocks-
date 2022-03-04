@@ -1,7 +1,7 @@
 package bot.tinkoff;
 
 
-import bot.domain.ShareDto;
+import bot.domain.Stock;
 import bot.domain.dto.DividendListDto;
 import bot.domain.dto.SharePriceListDto;
 import bot.exception.NotFoundShareException;
@@ -40,8 +40,8 @@ public class ShareService {
     String code = "TQBR";
 
     @NonNull
-    public ShareDto getInfo(String ticker) {
-        Optional<ShareDto> share = repository.findById(ticker);
+    public Stock getInfo(String ticker) {
+        Optional<Stock> share = repository.findById(ticker);
         if (share.isPresent()) {
             log.info("Found share {} in cache. Returning...", ticker);
             updatePrice(share.get());
@@ -53,9 +53,9 @@ public class ShareService {
     }
 
 
-    private void updatePrice(ShareDto shareDto) {
-        shareDto.setPrice(getSharePrice(shareDto.getFigi()));
-        repository.save(shareDto);
+    private void updatePrice(Stock stock) {
+        stock.setPrice(getSharePrice(stock.getFigi()));
+        repository.save(stock);
     }
 
 
@@ -93,7 +93,7 @@ public class ShareService {
     }
 
 
-    private ShareDto createShare(String ticker) throws NotFoundShareException {
+    private Stock createShare(String ticker) throws NotFoundShareException {
         Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new NotFoundShareException("Share not found"));
         String figi = share.getFigi();
 
@@ -106,15 +106,15 @@ public class ShareService {
         log.info("Get dividens of {}", ticker);
         SharePriceListDto prices = getSharesPrices(List.of(ticker));
         BigDecimal price = prices.getPrices().get(0);
-        ShareDto shareDto = new ShareDto()
+        Stock stock = new Stock()
                 .setPrice(price)
                 .setFigi(figi)
                 .setId(ticker)
                 .setDividends(dividends);
 
-        repository.save(shareDto);
+        repository.save(stock);
 
-        return shareDto;
+        return stock;
     }
 }
 

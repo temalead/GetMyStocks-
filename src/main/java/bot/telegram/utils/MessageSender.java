@@ -1,6 +1,6 @@
 package bot.telegram.utils;
 
-import bot.domain.ShareDto;
+import bot.domain.Stock;
 import bot.tinkoff.BondService;
 import bot.tinkoff.ShareService;
 import bot.tinkoff.utils.NotFoundShareMessageBuilder;
@@ -28,7 +28,7 @@ public class MessageSender {
         String ticker = message.getText();
         String chatId = message.getChatId().toString();
         try {
-            ShareDto share = shareService.getInfo(ticker);
+            Stock share = shareService.getInfo(ticker);
             String result = ShareInfoSender.createMessage(share);
             return SendMessage.builder().chatId(chatId).text(result).build();
         } catch (CompletionException e) {

@@ -20,6 +20,7 @@ public class User implements Serializable {
     @Id
     String id;
     BotState state;
+    Portfolio portfolio;
 
 
 }

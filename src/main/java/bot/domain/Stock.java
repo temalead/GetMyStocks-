@@ -1,6 +1,7 @@
 package bot.domain;
 
 
+import bot.domain.dto.DividendListDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -14,22 +15,22 @@ import java.util.Objects;
 
 @RequiredArgsConstructor
 @Accessors(chain = true)
-@RedisHash("Bond")
+@RedisHash("Share")
 @Getter
 @Setter
-public class BondDto implements Serializable {
+public class Stock implements Serializable {
     @Id
     private String id;
     private String figi;
+    private DividendListDto dividends;
     private BigDecimal price;
-    private BigDecimal nkd;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BondDto bondDto = (BondDto) o;
-        return Objects.equals(id, bondDto.id);
+        Stock stock = (Stock) o;
+        return Objects.equals(id, stock.id);
     }
 
     @Override
@@ -39,11 +40,11 @@ public class BondDto implements Serializable {
 
     @Override
     public String toString() {
-        return "BondDto{" +
+        return "ShareDto{" +
                 "ticker='" + id + '\'' +
                 ", figi='" + figi + '\'' +
+                ", dividends=" + dividends +
                 ", price=" + price +
-                ", nkd=" + nkd +
                 '}';
     }
 }

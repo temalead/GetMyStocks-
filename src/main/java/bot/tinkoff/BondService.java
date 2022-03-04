@@ -1,12 +1,10 @@
 package bot.tinkoff;
 
-import bot.domain.BondDto;
-import bot.exception.NotFoundBondException;
+import bot.domain.Bond;
 import bot.repository.BondRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.piapi.core.InvestApi;
 
@@ -23,17 +21,17 @@ public class BondService {
 
 
     public BigDecimal getNKD(String ticker) {
-        Optional<BondDto> bondOpt = repository.findById(ticker);
+        Optional<Bond> bondOpt = repository.findById(ticker);
         if (bondOpt.isPresent()) {
             return bondOpt.get().getNkd();
         } else {
-            BondDto bond = createBond(ticker);
+            Bond bond = createBond(ticker);
             repository.save(bond);
             return bond.getNkd();
         }
     }
 
-    private BondDto createBond(String ticker) {
+    private Bond createBond(String ticker) {
         return null;
     }
 }
