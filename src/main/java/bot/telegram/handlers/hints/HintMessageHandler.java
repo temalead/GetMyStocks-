@@ -1,4 +1,4 @@
-package bot.telegram.handlers.bond.hints;
+package bot.telegram.handlers.hints;
 
 import bot.domain.User;
 import bot.repository.UserService;

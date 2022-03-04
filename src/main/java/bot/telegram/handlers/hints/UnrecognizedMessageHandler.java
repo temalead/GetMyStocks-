@@ -1,4 +1,4 @@
-package bot.telegram.handlers.bond.hints;
+package bot.telegram.handlers.hints;
 
 import bot.telegram.handlers.MessageHandler;
 import bot.telegram.state.BotState;
