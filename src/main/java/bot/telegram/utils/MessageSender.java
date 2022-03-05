@@ -2,9 +2,10 @@ package bot.telegram.utils;
 
 import bot.domain.BondDto;
 import bot.domain.Stock;
+import bot.exception.sender.Assets;
+import bot.exception.sender.NotFoundMessageBuilder;
 import bot.tinkoff.BondService;
 import bot.tinkoff.ShareService;
-import bot.tinkoff.utils.NotFoundShareMessageBuilder;
 import bot.tinkoff.utils.ShareInfoSender;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class MessageSender {
             String result = ShareInfoSender.createMessage(share);
             return SendMessage.builder().chatId(chatId).text(result).build();
         } catch (CompletionException e) {
-            return SendMessage.builder().chatId(chatId).text(NotFoundShareMessageBuilder.createMsgError(ticker)).build();
+            return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(ticker, Assets.SHARE)).build();
         }
     }
 

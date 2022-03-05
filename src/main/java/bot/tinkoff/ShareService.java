@@ -70,11 +70,6 @@ public class ShareService {
         return share;
     }
 
-    public BigDecimal getSharePrice(String figi){
-        return PriceCalculator.calculateSharePrice(api.getMarketDataService().getLastPrices(Collections.singleton(figi)).join().get(0).getPrice());
-    }
-
-
     public SharePriceListDto getSharesPrices(List<String> tickers) {
         List<CompletableFuture<Optional<Share>>> shareList = new ArrayList<>();
         tickers.forEach(ticker -> shareList.add(getFigiByTicker(ticker)));
@@ -87,7 +82,7 @@ public class ShareService {
 
 
         List<BigDecimal> prices = pricesFromApi.stream()
-                .map(price -> PriceCalculator.calculateSharePrice(price.getPrice()))
+                .map(price -> PriceCalculator.calculateValue(price.getPrice()))
                 .collect(Collectors.toList());
         return new SharePriceListDto(prices);
     }
@@ -116,5 +111,10 @@ public class ShareService {
 
         return stock;
     }
+
+    private BigDecimal getSharePrice(String figi){
+        return PriceCalculator.calculateValue(api.getMarketDataService().getLastPrices(Collections.singleton(figi)).join().get(0).getPrice());
+    }
+
 }
 
