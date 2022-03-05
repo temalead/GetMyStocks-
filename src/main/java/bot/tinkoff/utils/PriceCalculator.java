@@ -1,6 +1,5 @@
 package bot.tinkoff.utils;
 
-import ru.tinkoff.piapi.contract.v1.Bond;
 import ru.tinkoff.piapi.contract.v1.Dividend;
 import ru.tinkoff.piapi.contract.v1.MoneyValue;
 import ru.tinkoff.piapi.contract.v1.Quotation;
@@ -25,9 +24,9 @@ public final class PriceCalculator {
         }
     }
 
-    public static BigDecimal calculateACI(Bond bond){
-        MoneyValue price = bond.getAciValue();
-        return  calculateValue(Quotation.newBuilder().setNano(price.getNano()).setUnits(price.getUnits()).build());
-    }
 
+    public static BigDecimal calculateACI(MoneyValue value) {
+        System.out.println(value);
+        return calculateValue(Quotation.newBuilder().setNano(value.getNano()).setUnits(value.getUnits()).build());
+    }
 }

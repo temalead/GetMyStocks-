@@ -7,7 +7,7 @@ public enum ButtonMenuEnum {
     DELETE_PORTFOLIO("Delete portfolio"),
     HELP("Help me!"),
     GET_SHARE("Get share by ticker"),
-    GET_BOND("Get bond by figi"),
+    GET_BOND("Get bond by name"),
     PORTFOLIO("My portfolio");
 
     private final String buttonName;

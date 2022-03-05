@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.tinkoff.piapi.contract.v1.AccruedInterest;
 import ru.tinkoff.piapi.contract.v1.Bond;
 import ru.tinkoff.piapi.core.InvestApi;
 
@@ -18,7 +19,9 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,10 +34,10 @@ public class BondService {
 
     @NonNull
     public BondDto getInfo(String name) {
-        Optional<BondDto> foundBond = repository.findByName(name);
+        Optional<BondDto> foundBond = repository.findById(name);
         if (foundBond.isPresent()) {
             BondDto bond = foundBond.get();
-            log.info("Found bond in cache {}", bond.getName());
+            log.info("Found bond in cache {}", bond.getId());
             updateBond(bond);
             return bond;
         } else {
@@ -52,12 +55,19 @@ public class BondService {
     }
 
     private BondDto createBond(Bond bond) {
+
+        List<AccruedInterest> accruedInterests = api.getInstrumentsService().getAccruedInterestsSync(bond.getFigi(),
+                Instant.now().minus(365, ChronoUnit.DAYS),
+                Instant.now());
+
+        System.out.println(bond.getAciValue());
+
         BondDto result = new BondDto();
-        result.setName(bond.getName())
+        result.setId(bond.getName())
                 .setPrice(getPrice(bond).multiply(BigDecimal.valueOf(10)))
                 .setLot(bond.getLot())
                 .setMaturityDate(getMaturityDate(bond))
-                .setACI(PriceCalculator.calculateACI(bond))
+                .setAci(PriceCalculator.calculateACI(bond.getAciValue()))
                 .setFigi(bond.getFigi());
 
         repository.save(result);

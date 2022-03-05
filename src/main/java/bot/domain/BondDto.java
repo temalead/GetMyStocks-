@@ -21,10 +21,9 @@ import java.util.Objects;
 public class BondDto implements Serializable {
     @Id
     private String id;
-    private String name;
     private String figi;
     private BigDecimal price;
-    private BigDecimal ACI;
+    private BigDecimal aci;
     private Integer lot;
     private LocalDate maturityDate;
 
@@ -33,22 +32,21 @@ public class BondDto implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BondDto bondDto = (BondDto) o;
-        return Objects.equals(name, bondDto.name);
+        return Objects.equals(id, bondDto.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
         return "BondDto{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
+                ", name='" + id + '\'' +
                 ", figi='" + figi + '\'' +
                 ", price=" + price +
-                ", ACI=" + ACI +
+                ", ACI=" + aci +
                 ", lot=" + lot +
                 ", maturityDate=" + maturityDate +
                 '}';
