@@ -2,6 +2,7 @@ package bot.telegram.utils;
 
 import bot.domain.BondDto;
 import bot.domain.Stock;
+import bot.exception.BondNotFoundException;
 import bot.exception.sender.Assets;
 import bot.exception.sender.NotFoundMessageBuilder;
 import bot.tinkoff.BondService;
@@ -38,9 +39,17 @@ public class MessageSender {
         }
     }
 
-    public SendMessage getBondInfo(Message message){
+    public SendMessage getBondInfo(Message message) {
         String chatId = message.getChatId().toString();
-        BondDto bondDto = bondService.getInfo(message.getText());
-        return SendMessage.builder().chatId(chatId).text(bondDto.toString()).build();
+        String text = message.getText();
+        try {
+
+
+            BondDto bondDto = bondService.getInfo(text);
+            return SendMessage.builder().chatId(chatId).text(bondDto.toString()).build();
+
+        } catch (BondNotFoundException e) {
+            return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(text, Assets.BOND)).build();
+        }
     }
 }
