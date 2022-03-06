@@ -5,7 +5,8 @@ public enum BotMessageSend {
     HELP_MESSAGE("I`ll help you soon..."),
     UNRECOGNIZED_MESSAGE("I don`t recognize you. Please use help menu"),
     SHARE_ADVICE_MESSAGE("Please, write share ticker like GAZP or SBER"),
-    BOND_ADVICE_MESSAGE("Please, write bond ticker like ОФЗ 24019");
+    BOND_ADVICE_MESSAGE("Please, write bond ticker like ОФЗ 24019"),
+    PORTFOLIO_ADVICE("Please, use commands below to work with your portfolio");
 
 
     private final String message;

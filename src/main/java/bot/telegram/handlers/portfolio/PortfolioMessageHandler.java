@@ -1,6 +1,8 @@
 package bot.telegram.handlers.portfolio;
 
+import bot.telegram.buttons.BotMessageSend;
 import bot.telegram.handlers.MessageHandler;
+import bot.telegram.keyboard.PortfolioMenuKeyBoard;
 import bot.telegram.state.BotState;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +15,13 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @RequiredArgsConstructor
 @Component
 public class PortfolioMessageHandler implements MessageHandler {
+    PortfolioMenuKeyBoard keyBoard;
+
     @Override
     public SendMessage sendMessageDependsOnState(Message message) {
-        return null;
+        SendMessage result = SendMessage.builder().chatId(message.getChatId().toString()).text(BotMessageSend.PORTFOLIO_ADVICE.getMessage()).build();
+        result.setReplyMarkup(keyBoard.getKeyboard());
+        return result;
     }
 
     @Override
