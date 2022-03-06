@@ -1,6 +1,6 @@
 package bot.tinkoff.utils;
 
-import bot.domain.Stock;
+import bot.domain.ShareDto;
 import bot.domain.dto.DividendDto;
 import bot.domain.dto.DividendListDto;
 
@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class ShareMessageCreator {
-    public static String createMessage(Stock share) {
+    public static String createMessage(ShareDto share) {
         System.out.println(share);
 
         String dividendMessage = createDividendMessage(share.getDividends());

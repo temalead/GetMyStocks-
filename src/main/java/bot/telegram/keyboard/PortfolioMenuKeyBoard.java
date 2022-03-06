@@ -1,5 +1,6 @@
-package bot.telegram.model;
+package bot.telegram.keyboard;
 
+import bot.telegram.buttons.ButtonMenuEnum;
 import bot.telegram.utils.KeyboardCreator;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -8,8 +9,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.List;
 
 @Component
-public class PortfolioMenuKeyBoard {
-    public ReplyKeyboardMarkup getPortfolioKeyboard() {
+public class PortfolioMenuKeyBoard implements Keyboard {
+
+    @Override
+    public ReplyKeyboardMarkup getKeyboard() {
         KeyboardRow row = new KeyboardRow();
         row.addAll(List.of(ButtonMenuEnum.UPDATE_PORTFOLIO.getButtonName(),
                 ButtonMenuEnum.GET_PORTFOLIO.getButtonName()));

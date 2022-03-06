@@ -1,4 +1,4 @@
-package bot.telegram.model;
+package bot.telegram.buttons;
 
 public enum BotMessageSend {
     START_MESSAGE("I glad to see you! To see advanded info, please tap help"),

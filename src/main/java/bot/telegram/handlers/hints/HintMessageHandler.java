@@ -4,7 +4,7 @@ import bot.domain.User;
 import bot.repository.UserService;
 import bot.telegram.handlers.MessageHandler;
 import bot.telegram.keyboard.MainMenuKeyboard;
-import bot.telegram.model.BotMessageSend;
+import bot.telegram.buttons.BotMessageSend;
 import bot.telegram.state.BotState;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -34,14 +34,14 @@ public class HintMessageHandler implements MessageHandler {
             case GET_START_MENU:
                 reply.setText(BotMessageSend.START_MESSAGE.getMessage());
                 reply.enableMarkdown(true);
-                reply.setReplyMarkup(menu.getMainMenuKeyboard());
+                reply.setReplyMarkup(menu.getKeyboard());
                 break;
             case UNRECOGNIZED:
                 reply.setText(BotMessageSend.UNRECOGNIZED_MESSAGE.getMessage());
                 break;
             case GET_HELP:
                 reply.setText(BotMessageSend.HELP_MESSAGE.getMessage());
-                reply.setReplyMarkup(menu.getMainMenuKeyboard());
+                reply.setReplyMarkup(menu.getKeyboard());
                 break;
         }
         user.setState(BotState.NONE);

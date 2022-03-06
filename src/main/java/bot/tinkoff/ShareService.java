@@ -1,7 +1,7 @@
 package bot.tinkoff;
 
 
-import bot.domain.Stock;
+import bot.domain.ShareDto;
 import bot.domain.dto.DividendListDto;
 import bot.domain.dto.SharePriceListDto;
 import bot.exception.ShareNotFoundException;
@@ -40,8 +40,8 @@ public class ShareService {
     String code = "TQBR";
 
     @NonNull
-    public Stock getInfo(String ticker) {
-        Optional<Stock> share = repository.findById(ticker);
+    public ShareDto getInfo(String ticker) {
+        Optional<ShareDto> share = repository.findById(ticker);
         if (share.isPresent()) {
             log.info("Found share {} in cache. Returning...", ticker);
             updatePrice(share.get());
@@ -52,10 +52,16 @@ public class ShareService {
         }
     }
 
+    private Share findShareByName(String name){
+        return api.getInstrumentsService().getAllSharesSync()
+                .stream()
+                .filter(share -> share.getName().equals(name)).findFirst().orElseThrow(()->new ShareNotFoundException(name));
+    }
 
-    private void updatePrice(Stock stock) {
-        stock.setPrice(getSharePrice(stock.getFigi()));
-        repository.save(stock);
+    
+    private void updatePrice(ShareDto shareDto) {
+        shareDto.setPrice(getSharePrice(shareDto.getFigi()));
+        repository.save(shareDto);
     }
 
 
@@ -88,7 +94,7 @@ public class ShareService {
     }
 
 
-    private Stock addShareToCacheByTicker(String ticker) throws ShareNotFoundException {
+    private ShareDto addShareToCacheByTicker(String ticker) throws ShareNotFoundException {
         Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new ShareNotFoundException("Share not found"));
         String figi = share.getFigi();
 
@@ -101,15 +107,15 @@ public class ShareService {
         log.info("Get dividens of {}", ticker);
         SharePriceListDto prices = getSharesPrices(List.of(ticker));
         BigDecimal price = prices.getPrices().get(0);
-        Stock stock = new Stock()
+        ShareDto shareDto = new ShareDto()
                 .setPrice(price)
                 .setFigi(figi)
                 .setId(ticker)
                 .setDividends(dividends);
 
-        repository.save(stock);
+        repository.save(shareDto);
 
-        return stock;
+        return shareDto;
     }
 
     private BigDecimal getSharePrice(String figi){

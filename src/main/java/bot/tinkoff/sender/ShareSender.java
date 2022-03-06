@@ -1,6 +1,6 @@
 package bot.tinkoff.sender;
 
-import bot.domain.Stock;
+import bot.domain.ShareDto;
 import bot.tinkoff.ShareService;
 import bot.tinkoff.utils.ShareMessageCreator;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class ShareSender implements Sender{
     public SendMessage getInfo(Message message) {
         String chatId = message.getChatId().toString();
 
-        Stock info = service.getInfo(message.getText());
+        ShareDto info = service.getInfo(message.getText());
         String result = ShareMessageCreator.createMessage(info);
         return SendMessage.builder().chatId(chatId).text(result).build();
 

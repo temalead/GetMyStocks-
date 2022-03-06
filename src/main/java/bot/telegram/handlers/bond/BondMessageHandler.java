@@ -2,7 +2,7 @@ package bot.telegram.handlers.bond;
 
 import bot.domain.User;
 import bot.telegram.handlers.MessageHandler;
-import bot.telegram.model.BotMessageSend;
+import bot.telegram.buttons.BotMessageSend;
 import bot.telegram.state.BotState;
 import bot.repository.UserService;
 import bot.telegram.utils.MessageSender;

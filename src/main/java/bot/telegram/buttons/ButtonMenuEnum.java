@@ -1,4 +1,4 @@
-package bot.telegram.model;
+package bot.telegram.buttons;
 
 public enum ButtonMenuEnum {
     GET_PORTFOLIO("Get portfolio"),

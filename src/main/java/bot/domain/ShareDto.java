@@ -18,20 +18,21 @@ import java.util.Objects;
 @RedisHash("Share")
 @Getter
 @Setter
-public class Stock implements Serializable {
+public class ShareDto implements Serializable {
     @Id
     private String id;
     private String name;
     private String figi;
     private DividendListDto dividends;
     private BigDecimal price;
+    private Integer lot;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Stock stock = (Stock) o;
-        return Objects.equals(id, stock.id);
+        ShareDto shareDto = (ShareDto) o;
+        return Objects.equals(id, shareDto.id);
     }
 
     @Override
