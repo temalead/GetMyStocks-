@@ -1,6 +1,6 @@
 package bot.tinkoff.sender;
 
-import bot.domain.BondDto;
+import bot.domain.MyBond;
 import bot.tinkoff.utils.BondMessageCreator;
 import bot.tinkoff.BondService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class BondSender implements Sender{
     public SendMessage getInfo(Message message) {
         String chatId = message.getChatId().toString();
         String text = message.getText();
-        BondDto info = bondService.getInfo(text);
+        MyBond info = bondService.getInfo(text);
         String result= BondMessageCreator.createMessage(info);
         log.info("Message: {}",result);
         return SendMessage.builder().chatId(chatId).text(result).build();

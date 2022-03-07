@@ -1,7 +1,7 @@
 package bot.tinkoff;
 
 
-import bot.domain.ShareDto;
+import bot.domain.MyShare;
 import bot.domain.dto.DividendListDto;
 import bot.domain.dto.SharePriceListDto;
 import bot.exception.ShareNotFoundException;
@@ -40,8 +40,8 @@ public class ShareService {
     String code = "TQBR";
 
     @NonNull
-    public ShareDto getInfo(String ticker) {
-        Optional<ShareDto> share = repository.findById(ticker);
+    public MyShare getInfo(String ticker) {
+        Optional<MyShare> share = repository.findById(ticker);
         if (share.isPresent()) {
             log.info("Found share {} in cache. Returning...", ticker);
             updatePrice(share.get());
@@ -52,16 +52,17 @@ public class ShareService {
         }
     }
 
-    private Share findShareByName(String name){
+
+    private Share findShareByName(String name) {
         return api.getInstrumentsService().getAllSharesSync()
                 .stream()
-                .filter(share -> share.getName().equals(name)).findFirst().orElseThrow(()->new ShareNotFoundException(name));
+                .filter(share -> share.getName().equals(name)).findFirst().orElseThrow(() -> new ShareNotFoundException(name));
     }
 
-    
-    private void updatePrice(ShareDto shareDto) {
-        shareDto.setPrice(getSharePrice(shareDto.getFigi()));
-        repository.save(shareDto);
+
+    private void updatePrice( MyShare myShare) {
+        myShare.setPrice(getSharePrice(myShare.getFigi()));
+        repository.save(myShare);
     }
 
 
@@ -69,11 +70,17 @@ public class ShareService {
     public CompletableFuture<Optional<Share>> getFigiByTicker(String ticker) {
         log.info("Getting figi by ticker {}", ticker);
         CompletableFuture<Optional<Share>> share = api.getInstrumentsService().getShareByTicker(ticker, code)
-                .exceptionally(exception->{
-                    log.error("Share {} not found",ticker);
+                .exceptionally(exception -> {
+                    log.error("Share {} not found", ticker);
                     throw new ShareNotFoundException(ticker);
                 });
         return share;
+    }
+
+    public List<MyShare> createShareCollection(List<String> tickers) {
+        List<MyShare> result = new ArrayList<>();
+        tickers.forEach(ticker -> result.add(getInfo(ticker)));
+        return result;
     }
 
     public SharePriceListDto getSharesPrices(List<String> tickers) {
@@ -94,7 +101,7 @@ public class ShareService {
     }
 
 
-    private ShareDto addShareToCacheByTicker(String ticker) throws ShareNotFoundException {
+    private MyShare addShareToCacheByTicker(String ticker) throws ShareNotFoundException {
         Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new ShareNotFoundException("Share not found"));
         String figi = share.getFigi();
 
@@ -107,18 +114,18 @@ public class ShareService {
         log.info("Get dividens of {}", ticker);
         SharePriceListDto prices = getSharesPrices(List.of(ticker));
         BigDecimal price = prices.getPrices().get(0);
-        ShareDto shareDto = new ShareDto()
+        MyShare myShare = new MyShare()
                 .setPrice(price)
                 .setFigi(figi)
                 .setId(ticker)
                 .setDividends(dividends);
 
-        repository.save(shareDto);
+        repository.save(myShare);
 
-        return shareDto;
+        return myShare;
     }
 
-    private BigDecimal getSharePrice(String figi){
+    private BigDecimal getSharePrice(String figi) {
         return PriceCalculator.calculateValue(api.getMarketDataService().getLastPrices(Collections.singleton(figi)).join().get(0).getPrice());
     }
 

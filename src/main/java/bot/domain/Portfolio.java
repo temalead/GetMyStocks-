@@ -6,6 +6,6 @@ import java.util.List;
 
 @Component
 public class Portfolio {
-    List<ShareDto> shares;
-    List<BondDto> bondDtos;
+    List<MyShare> shares;
+    List<MyBond> myBonds;
 }

@@ -22,12 +22,12 @@ public class ShareMessageHandler implements MessageHandler {
 
     @Override
     public SendMessage sendMessageDependsOnState(Message message) {
-        User user = service.getUserOrCreateNewUserByChatId(message.getChatId().toString());
-        BotState state = user.getState();
+        String chatId = message.getChatId().toString();
+        User user = service.getUserOrCreateNewUserByChatId(chatId);
+        BotState state = service.getCurrentState(chatId);
 
         SendMessage reply = null;
 
-        String chatId = message.getChatId().toString();
         if (state.equals(BotState.WANNA_GET_SHARE)) {
             user.setState(BotState.FIND_SHARE);
             reply = SendMessage.builder().text(BotMessageSend.SHARE_ADVICE_MESSAGE.getMessage()).chatId(chatId).build();

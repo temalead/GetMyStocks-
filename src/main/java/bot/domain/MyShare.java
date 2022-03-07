@@ -1,38 +1,41 @@
 package bot.domain;
 
 
+import bot.domain.dto.DividendListDto;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.redis.core.RedisHash;
 
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Objects;
 
 @RequiredArgsConstructor
 @Accessors(chain = true)
-@RedisHash("Bond")
+@RedisHash("Share")
 @Getter
 @Setter
-public class BondDto implements Serializable {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class MyShare extends Security implements Serializable {
     @Id
-    private String id;
-    private String figi;
-    private BigDecimal price;
-    private BigDecimal aci;
-    private Integer lot;
-    private LocalDate maturityDate;
+    String id;
+    String name;
+    String figi;
+    DividendListDto dividends;
+    BigDecimal price;
+    Integer lot;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BondDto bondDto = (BondDto) o;
-        return Objects.equals(id, bondDto.id);
+        MyShare myShare = (MyShare) o;
+        return Objects.equals(id, myShare.id);
     }
 
     @Override
@@ -42,13 +45,11 @@ public class BondDto implements Serializable {
 
     @Override
     public String toString() {
-        return "BondDto{" +
-                ", name='" + id + '\'' +
+        return "ShareDto{" +
+                "ticker='" + id + '\'' +
                 ", figi='" + figi + '\'' +
+                ", dividends=" + dividends +
                 ", price=" + price +
-                ", ACI=" + aci +
-                ", lot=" + lot +
-                ", maturityDate=" + maturityDate +
                 '}';
     }
 }

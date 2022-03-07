@@ -1,6 +1,6 @@
 package bot.tinkoff;
 
-import bot.domain.BondDto;
+import bot.domain.MyBond;
 import bot.exception.BondNotFoundException;
 import bot.repository.BondRepository;
 import bot.tinkoff.utils.PriceCalculator;
@@ -18,7 +18,9 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,10 +32,10 @@ public class BondService {
     BondRepository repository;
 
     @NonNull
-    public BondDto getInfo(String name) {
-        Optional<BondDto> foundBond = repository.findById(name);
+    public MyBond getInfo(String name) {
+        Optional<MyBond> foundBond = repository.findById(name);
         if (foundBond.isPresent()) {
-            BondDto bond = foundBond.get();
+            MyBond bond = foundBond.get();
             log.info("Found bond in cache {}", bond.getId());
             updateBond(bond);
             return bond;
@@ -43,6 +45,11 @@ public class BondService {
             return createBond(response);
         }
     }
+    public List<MyBond> createBondCollection(List<String> tickers){
+        List<MyBond> result=new ArrayList<>();
+        tickers.forEach(ticker->result.add(getInfo(ticker)));
+        return result;
+    }
 
 
     private Bond findBondByNameFromTinkoff(String requestName) {
@@ -51,8 +58,8 @@ public class BondService {
         return response.orElseThrow(() -> new BondNotFoundException(requestName));
     }
 
-    private BondDto createBond(Bond bond) {
-        BondDto result = new BondDto();
+    private MyBond createBond(Bond bond) {
+        MyBond result = new MyBond();
         result.setId(bond.getName())
                 .setPrice(getPrice(bond).multiply(BigDecimal.valueOf(10)))
                 .setLot(bond.getLot())
@@ -65,10 +72,10 @@ public class BondService {
         return result;
     }
 
-    private void updateBond(BondDto bondDto) {
-        Bond bond = api.getInstrumentsService().getBondByFigi(bondDto.getFigi()).join().get();
-        bondDto.setPrice(getPrice(bond));
-        repository.save(bondDto);
+    private void updateBond(MyBond myBond) {
+        Bond bond = api.getInstrumentsService().getBondByFigi(myBond.getFigi()).join().get();
+        myBond.setPrice(getPrice(bond));
+        repository.save(myBond);
     }
 
 

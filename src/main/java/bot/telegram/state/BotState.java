@@ -8,23 +8,23 @@ import java.util.Arrays;
 import java.util.List;
 
 @Getter
-@FieldDefaults(makeFinal = true,level = AccessLevel.PRIVATE)
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public enum BotState {
-    NONE,
-    HINT,
-    WANNA_GET_SHARE,
-    WANNA_GET_BOND,
-    GET_HELP,
-    GET_START_MENU,
-    FIND_SHARE,
-    FIND_BOND,
     BACK,
-    UNRECOGNIZED,
-    PORTFOLIO,
-    MAKE_PORTFOLIO,
-    UPDATE_PORTFOLIO,
     DELETE_PORTFOLIO,
-    GET_PORTFOLIO;
+    FIND_BOND,
+    FIND_SHARE,
+    GET_HELP,
+    GET_PORTFOLIO,
+    GET_START_MENU,
+    HINT,
+    MAKE_PORTFOLIO,
+    NONE,
+    PORTFOLIO,
+    UNRECOGNIZED,
+    UPDATE_PORTFOLIO,
+    WANNA_GET_BOND,
+    WANNA_GET_SHARE, WAIT_MAKE_PORTFOLIO;
     /*HINT(List.of("/start","Help me!")),
     PORTFOLIO(List.of("Get portfolio","Make portfolio","Update portfolio","Delete portfolio")),
     WANNA_GET_SHARE(List.of("Get share by ticker")),
