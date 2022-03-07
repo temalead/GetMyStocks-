@@ -17,12 +17,13 @@ public class PortfolioMenuKeyBoard implements Keyboard {
         row.addAll(List.of(ButtonMenuEnum.UPDATE_PORTFOLIO.getButtonName(),
                 ButtonMenuEnum.GET_PORTFOLIO.getButtonName()));
         KeyboardRow row1 = new KeyboardRow();
-        row1.addAll(List.of(ButtonMenuEnum.SET_PORTFOLIO.getButtonName(),
+        row1.addAll(List.of(ButtonMenuEnum.MAKE_PORTFOLIO.getButtonName(),
                 ButtonMenuEnum.DELETE_PORTFOLIO.getButtonName()));
 
-        ReplyKeyboardMarkup keyboard = KeyboardCreator.createKeyboardByRows(List.of(row1, row));
+        KeyboardRow row2 = new KeyboardRow();
+        row2.add(ButtonMenuEnum.BACK.getButtonName());
 
-        return keyboard;
+        return KeyboardCreator.createKeyboardByRows(List.of(row1, row,row2));
 
     }
 }

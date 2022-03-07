@@ -42,6 +42,9 @@ public class HintMessageHandler implements MessageHandler {
             case GET_HELP:
                 reply.setText(BotMessageSend.HELP_MESSAGE.getMessage());
                 reply.setReplyMarkup(menu.getKeyboard());
+            case BACK:
+                reply.setText("Going back...");
+                reply.setReplyMarkup(menu.getKeyboard());
                 break;
         }
         user.setState(BotState.NONE);

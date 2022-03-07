@@ -51,6 +51,21 @@ public class MessageUpdateHandler {
             case "Help me!":
                 botState = BotState.GET_HELP;
                 break;
+            case "Get portfolio":
+                botState=BotState.GET_PORTFOLIO;
+                break;
+            case "Back":
+                botState=BotState.BACK;
+                break;
+            case "Make portfolio":
+                botState=BotState.MAKE_PORTFOLIO;
+                break;
+            case "Delete portfolio":
+                botState=BotState.DELETE_PORTFOLIO;
+                break;
+            case "Update portfolio":
+                botState=BotState.UPDATE_PORTFOLIO;
+                break;
             default:
                 if (user.getState().equals(BotState.NONE)) {
                     botState = BotState.UNRECOGNIZED;
