@@ -23,19 +23,19 @@ public class BondMessageHandler implements MessageHandler {
 
     @Override
     public SendMessage sendMessageDependsOnState(Message message) {
-        User user = service.getUserOrCreateNewUserByChatId(message.getChatId().toString());
+        String chatId = message.getChatId().toString();
+        User user = service.getUserOrCreateNewUserByChatId(chatId);
         BotState state = user.getState();
 
         SendMessage reply = null;
 
-        String chatId = message.getChatId().toString();
         if (state.equals(BotState.WANNA_GET_BOND)) {
             user.setState(BotState.FIND_BOND);
             reply = SendMessage.builder().text(BotMessageSend.BOND_ADVICE_MESSAGE.getMessage()).chatId(chatId).build();
         }
         if (state.equals(BotState.FIND_BOND)) {
             reply = sender.getBondInfo(message);
-            if (reply.getText().startsWith("Error")){
+            if (reply.getText().startsWith("Error")) {
                 return reply;
             }
 

@@ -24,7 +24,7 @@ public class ShareMessageHandler implements MessageHandler {
     public SendMessage sendMessageDependsOnState(Message message) {
         String chatId = message.getChatId().toString();
         User user = service.getUserOrCreateNewUserByChatId(chatId);
-        BotState state = service.getCurrentState(chatId);
+        BotState state = user.getState();
 
         SendMessage reply = null;
 
@@ -49,4 +49,5 @@ public class ShareMessageHandler implements MessageHandler {
         return BotState.WANNA_GET_SHARE;
     }
 }
+
 

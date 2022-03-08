@@ -18,7 +18,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class StateProcessor {
+public class StateProcessor implements Processor {
     Map<BotState, MessageHandler> handlers = new HashMap<>();
 
     @Autowired
@@ -26,12 +26,14 @@ public class StateProcessor {
         handlers.forEach(handler -> this.handlers.put(handler.getHandlerName(), handler));
     }
 
+    @Override
     public SendMessage processMessage(BotState state, Message message) {
         MessageHandler handler = findNeededHandler(state);
         return handler.sendMessageDependsOnState(message);
     }
 
 
+    @Override
     public MessageHandler findNeededHandler(BotState state) {
         if (isShareHandler(state)) {
             return handlers.get(BotState.WANNA_GET_SHARE);
@@ -69,6 +71,7 @@ public class StateProcessor {
             case PORTFOLIO:
             case DELETE_PORTFOLIO:
             case GET_PORTFOLIO:
+            case WANNA_MAKE_PORTFOLIO:
             case MAKE_PORTFOLIO:
             case UPDATE_PORTFOLIO:
                 return true;

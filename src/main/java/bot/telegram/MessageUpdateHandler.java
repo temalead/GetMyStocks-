@@ -58,7 +58,7 @@ public class MessageUpdateHandler {
                 botState=BotState.BACK;
                 break;
             case "Make portfolio":
-                botState=BotState.MAKE_PORTFOLIO;
+                botState=BotState.WANNA_MAKE_PORTFOLIO;
                 break;
             case "Delete portfolio":
                 botState=BotState.DELETE_PORTFOLIO;

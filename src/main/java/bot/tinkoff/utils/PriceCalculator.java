@@ -26,7 +26,6 @@ public final class PriceCalculator {
 
 
     public static BigDecimal calculateACI(MoneyValue value) {
-        System.out.println(value);
         return calculateValue(Quotation.newBuilder().setNano(value.getNano()).setUnits(value.getUnits()).build());
     }
 }
