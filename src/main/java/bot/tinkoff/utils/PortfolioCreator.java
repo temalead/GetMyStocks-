@@ -1,4 +1,4 @@
-package bot.telegram.utils;
+package bot.tinkoff.utils;
 
 import bot.domain.dto.SecurityDto;
 import bot.tinkoff.BondService;

@@ -10,7 +10,6 @@ import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.redis.core.RedisHash;
 
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -22,12 +21,9 @@ import java.util.Objects;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MyShare extends Security implements Serializable {
-    @Id
-    String id;
     String name;
     String figi;
     DividendListDto dividends;
-    BigDecimal price;
     Integer lot;
 
     @Override
@@ -52,4 +48,6 @@ public class MyShare extends Security implements Serializable {
                 ", price=" + price +
                 '}';
     }
+
+
 }

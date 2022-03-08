@@ -60,7 +60,7 @@ public class ShareService {
     }
 
 
-    private void updatePrice( MyShare myShare) {
+    private void updatePrice(MyShare myShare) {
         myShare.setPrice(getSharePrice(myShare.getFigi()));
         repository.save(myShare);
     }
@@ -115,10 +115,10 @@ public class ShareService {
         SharePriceListDto prices = getSharesPrices(List.of(ticker));
         BigDecimal price = prices.getPrices().get(0);
         MyShare myShare = new MyShare()
-                .setPrice(price)
                 .setFigi(figi)
-                .setId(ticker)
                 .setDividends(dividends);
+        myShare.setPrice(price);
+        myShare.setId(ticker);
 
         repository.save(myShare);
 

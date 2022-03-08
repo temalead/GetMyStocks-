@@ -1,22 +1,32 @@
 package bot.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
+import lombok.experimental.Accessors;
 
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.math.BigDecimal;
 
 
-@RequiredArgsConstructor
-@Getter
-@Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class Security {
-
+@MappedSuperclass
+@Accessors(chain = true)
+public abstract class Security {
+    @Id
     String id;
-    String figi;
     BigDecimal price;
-    Integer lot;
+
+    public String getId() {
+        return id;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
 }

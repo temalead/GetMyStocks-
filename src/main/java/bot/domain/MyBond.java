@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.springframework.data.redis.core.RedisHash;
 
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,10 +18,7 @@ import java.util.Objects;
 @Getter
 @Setter
 public class MyBond extends Security implements Serializable {
-    @Id
-    private String id;
     private String figi;
-    private BigDecimal price;
     private BigDecimal aci;
     private Integer lot;
     private LocalDate maturityDate;

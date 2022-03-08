@@ -45,24 +45,25 @@ public class BondService {
             return createBond(response);
         }
     }
-    public List<MyBond> createBondCollection(List<String> tickers){
-        List<MyBond> result=new ArrayList<>();
-        tickers.forEach(ticker->result.add(getInfo(ticker)));
+
+    public List<MyBond> createBondCollection(List<String> tickers) {
+        List<MyBond> result = new ArrayList<>();
+        tickers.forEach(ticker -> result.add(getInfo(ticker)));
         return result;
     }
 
 
     private Bond findBondByNameFromTinkoff(String requestName) {
         Optional<Bond> response = api.getInstrumentsService().getAllBondsSync().stream().filter(bond -> bond.getName().equals(requestName)).findFirst();
-        log.info("Getting bond {} from tinkoff api",requestName);
+        log.info("Getting bond {} from tinkoff api", requestName);
         return response.orElseThrow(() -> new BondNotFoundException(requestName));
     }
 
     private MyBond createBond(Bond bond) {
         MyBond result = new MyBond();
-        result.setId(bond.getName())
-                .setPrice(getPrice(bond).multiply(BigDecimal.valueOf(10)))
-                .setLot(bond.getLot())
+        result.setId(bond.getName());
+        result.setPrice(getPrice(bond).multiply(BigDecimal.valueOf(10)));
+        result.setLot(bond.getLot())
                 .setMaturityDate(getMaturityDate(bond))
                 .setAci(PriceCalculator.calculateACI(bond.getAciValue()))
                 .setFigi(bond.getFigi());
