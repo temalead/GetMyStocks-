@@ -3,7 +3,7 @@ package bot.telegram.handlers.portfolio;
 import bot.domain.User;
 import bot.repository.UserService;
 import bot.telegram.buttons.BotMessageSend;
-import bot.telegram.handlers.PortfolioMessageHandler;
+import bot.telegram.handlers.MessageHandler;
 import bot.telegram.keyboard.PortfolioMenuKeyBoard;
 import bot.telegram.state.BotState;
 import bot.telegram.state.PortfolioStateProcessor;
@@ -18,7 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 @Component
-public class AbsPortfolioMessageHandler implements PortfolioMessageHandler {
+public class AbsPortfolioMessageHandler implements MessageHandler {
     UserService service;
     PortfolioMenuKeyBoard keyBoard;
     PortfolioStateProcessor processor;
@@ -36,6 +36,8 @@ public class AbsPortfolioMessageHandler implements PortfolioMessageHandler {
         if (state.equals(BotState.PORTFOLIO)){
             return reply;
         }
+
+        service.saveCondition(user);
 
         return processor.processMessage(state,message);
     }

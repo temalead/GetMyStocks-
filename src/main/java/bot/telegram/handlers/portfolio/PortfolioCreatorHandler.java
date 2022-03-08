@@ -42,6 +42,8 @@ public class PortfolioCreatorHandler implements PortfolioMessageHandler {
             user.setState(BotState.NONE);
             reply.setReplyMarkup(mainMenuKeyboard.getKeyboard());
         }
+        service.saveCondition(user);
+
         return reply;
     }
 
