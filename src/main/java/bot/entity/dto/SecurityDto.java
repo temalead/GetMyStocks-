@@ -1,4 +1,4 @@
-package bot.domain.dto;
+package bot.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
@@ -12,4 +12,6 @@ import java.math.BigDecimal;
 public class SecurityDto {
     BigDecimal price;
     String name;
+    Integer lot;
+    boolean isShare;
 }

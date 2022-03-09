@@ -1,6 +1,6 @@
 package bot.telegram.handlers.portfolio;
 
-import bot.domain.User;
+import bot.entity.User;
 import bot.repository.UserService;
 import bot.telegram.buttons.BotMessageSend;
 import bot.telegram.handlers.MessageHandler;

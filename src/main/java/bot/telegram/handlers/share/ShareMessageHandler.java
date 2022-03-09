@@ -1,6 +1,6 @@
 package bot.telegram.handlers.share;
 
-import bot.domain.User;
+import bot.entity.User;
 import bot.repository.UserService;
 import bot.telegram.handlers.MessageHandler;
 import bot.telegram.buttons.BotMessageSend;

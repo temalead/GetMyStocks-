@@ -1,8 +1,8 @@
 package bot.tinkoff.sender;
 
-import bot.domain.MyShare;
-import bot.domain.dto.DividendDto;
-import bot.domain.dto.DividendListDto;
+import bot.entity.MyShare;
+import bot.entity.dto.DividendDto;
+import bot.entity.dto.DividendListDto;
 import bot.tinkoff.ShareService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

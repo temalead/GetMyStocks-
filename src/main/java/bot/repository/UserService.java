@@ -1,6 +1,6 @@
 package bot.repository;
 
-import bot.domain.User;
+import bot.entity.User;
 import bot.telegram.state.BotState;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

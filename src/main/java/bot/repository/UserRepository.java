@@ -1,6 +1,6 @@
 package bot.repository;
 
-import bot.domain.User;
+import bot.entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

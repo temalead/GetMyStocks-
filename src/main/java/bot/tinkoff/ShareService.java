@@ -1,9 +1,9 @@
 package bot.tinkoff;
 
 
-import bot.domain.MyShare;
-import bot.domain.dto.DividendListDto;
-import bot.domain.dto.SharePriceListDto;
+import bot.entity.MyShare;
+import bot.entity.dto.DividendListDto;
+import bot.entity.dto.SharePriceListDto;
 import bot.exception.ShareNotFoundException;
 import bot.repository.ShareRepository;
 import bot.tinkoff.utils.DividendCreator;

@@ -1,6 +1,6 @@
 package bot.repository;
 
-import bot.domain.MyShare;
+import bot.entity.MyShare;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

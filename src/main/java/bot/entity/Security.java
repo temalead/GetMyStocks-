@@ -1,4 +1,4 @@
-package bot.domain;
+package bot.entity;
 
 import lombok.experimental.Accessors;
 
@@ -13,6 +13,7 @@ public abstract class Security {
     @Id
     String id;
     BigDecimal price;
+    Integer lot;
 
     public String getId() {
         return id;
@@ -28,5 +29,13 @@ public abstract class Security {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Integer getLot() {
+        return lot;
+    }
+
+    public void setLot(Integer lot) {
+        this.lot = lot;
     }
 }

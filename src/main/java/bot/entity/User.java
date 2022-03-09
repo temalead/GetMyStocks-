@@ -1,4 +1,4 @@
-package bot.domain;
+package bot.entity;
 
 import bot.telegram.state.BotState;
 import lombok.AccessLevel;
@@ -21,6 +21,5 @@ public class User implements Serializable {
     String id;
     BotState state;
     Portfolio portfolio;
-
 
 }

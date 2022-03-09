@@ -1,6 +1,6 @@
 package bot.repository;
 
-import bot.domain.MyBond;
+import bot.entity.MyBond;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,13 +1,12 @@
 package bot.telegram.utils;
 
-import bot.domain.dto.SecurityDto;
 import bot.exception.BondNotFoundException;
 import bot.exception.ValidateDataException;
 import bot.exception.sender.Assets;
 import bot.exception.sender.NotFoundMessageBuilder;
 import bot.tinkoff.sender.BondSender;
+import bot.tinkoff.sender.PortfolioCompositionSender;
 import bot.tinkoff.sender.ShareSender;
-import bot.tinkoff.utils.PortfolioCreator;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.List;
 import java.util.concurrent.CompletionException;
 
 @Service
@@ -26,7 +24,7 @@ import java.util.concurrent.CompletionException;
 public class MessageSender {
     ShareSender shareSender;
     BondSender bondSender;
-    PortfolioCreator creator;
+    PortfolioCompositionSender compositionSender;
 
 
     public SendMessage getShareInfo(Message message) {
@@ -51,12 +49,8 @@ public class MessageSender {
 
     public SendMessage getCreatedPortfolio(Message message){
         String chatId = message.getChatId().toString();
-        String text = message.getText();
         try {
-            List<SecurityDto> portfolio = creator.createPortfolio(text);
-            return SendMessage.builder().chatId(chatId)
-                    .text(portfolio.toString())
-                    .build();
+            return compositionSender.getInfo(message);
         }catch (ValidateDataException e){
             return SendMessage.builder().text(e.getCause().toString()).chatId(chatId).build();
         }

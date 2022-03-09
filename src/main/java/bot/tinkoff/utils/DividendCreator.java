@@ -1,8 +1,8 @@
 package bot.tinkoff.utils;
 
 
-import bot.domain.dto.DividendDto;
-import bot.domain.dto.DividendListDto;
+import bot.entity.dto.DividendDto;
+import bot.entity.dto.DividendListDto;
 import ru.tinkoff.piapi.contract.v1.Dividend;
 
 import java.util.ArrayList;

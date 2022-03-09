@@ -1,6 +1,6 @@
 package bot.tinkoff;
 
-import bot.domain.MyBond;
+import bot.entity.MyBond;
 import bot.exception.BondNotFoundException;
 import bot.repository.BondRepository;
 import bot.tinkoff.utils.PriceCalculator;

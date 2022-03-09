@@ -1,6 +1,6 @@
 package bot.telegram.handlers.bond;
 
-import bot.domain.User;
+import bot.entity.User;
 import bot.telegram.handlers.MessageHandler;
 import bot.telegram.buttons.BotMessageSend;
 import bot.repository.UserService;

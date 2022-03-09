@@ -1,6 +1,6 @@
 package bot.tinkoff.sender;
 
-import bot.domain.MyBond;
+import bot.entity.MyBond;
 import bot.tinkoff.BondService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

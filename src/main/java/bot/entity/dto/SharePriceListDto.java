@@ -1,4 +1,4 @@
-package bot.domain.dto;
+package bot.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;

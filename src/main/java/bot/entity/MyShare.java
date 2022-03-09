@@ -1,7 +1,7 @@
-package bot.domain;
+package bot.entity;
 
 
-import bot.domain.dto.DividendListDto;
+import bot.entity.dto.DividendListDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Objects;
 
 @RequiredArgsConstructor

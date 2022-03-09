@@ -1,6 +1,6 @@
 package bot.telegram;
 
-import bot.domain.User;
+import bot.entity.User;
 import bot.repository.UserService;
 import bot.telegram.keyboard.MainMenuKeyboard;
 import bot.telegram.buttons.BotMessageSend;
