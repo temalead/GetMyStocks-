@@ -1,5 +1,6 @@
 package bot.entity;
 
+import bot.entity.dto.SecurityDto;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +10,6 @@ import java.util.List;
 @Component
 @Data
 public class Portfolio {
-    List<MyShare> shares;
-    List<MyBond> myBonds;
     BigDecimal portfolioValue;
+    List<SecurityDto> securityList;
 }

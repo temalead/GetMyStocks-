@@ -1,6 +1,6 @@
 package bot.exception.sender;
 
-public enum Assets {
+public enum Asset {
     SHARE,
     BOND;
 }

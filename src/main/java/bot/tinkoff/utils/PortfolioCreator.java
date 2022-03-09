@@ -3,6 +3,7 @@ package bot.tinkoff.utils;
 import bot.entity.Portfolio;
 import bot.entity.User;
 import bot.entity.dto.SecurityDto;
+import bot.exception.sender.Asset;
 import bot.repository.UserService;
 import bot.tinkoff.BondService;
 import bot.tinkoff.ShareService;
@@ -12,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +24,10 @@ public class PortfolioCreator {
     ShareService shareService;
     BondService bondService;
     UserService service;
+    FractionOccupiedPortfolioCalculator portfolioCalculator;
 
 
-    public List<SecurityDto> createPortfolio(Message message) {
+    public Portfolio createPortfolio(Message message) {
         String chatId = message.getChatId().toString();
         String text = message.getText();
         User user = service.getUserOrCreateNewUserByChatId(chatId);
@@ -36,17 +39,22 @@ public class PortfolioCreator {
             if (security.contains("ОФЗ")) {
                 String[] securityResult = security.split("-");
                 String securityName = securityResult[0];
-                String lot = securityResult[1];
-                result.add(SecurityDtoTranslator.translateToSecurityDto(bondService.getInfo(securityName),lot,false));
+                BigDecimal lot = BigDecimal.valueOf(Long.parseLong(securityResult[1]));
+                result.add(SecurityDtoTranslator.translateToSecurityDto(bondService.getInfo(securityName),lot, Asset.BOND));
             } else {
                 String[] securityResult = security.split("-");
                 String securityName = securityResult[0];
-                String lot = securityResult[1];
-                result.add(SecurityDtoTranslator.translateToSecurityDto(shareService.getInfo(securityName),lot,true));
+                BigDecimal lot = BigDecimal.valueOf(Long.parseLong(securityResult[1]));
+                result.add(SecurityDtoTranslator.translateToSecurityDto(shareService.getInfo(securityName),lot,Asset.SHARE));
             }
         }
+        portfolio.setSecurityList(result);
+        BigDecimal value = portfolioCalculator.calculatePortfolioValue(portfolio);
+        portfolio.setPortfolioValue(value);
 
+        user.setPortfolio(portfolio);
+        service.saveCondition(user);
 
-        return result;
+        return portfolio;
     }
 }

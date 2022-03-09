@@ -2,7 +2,7 @@ package bot.telegram.utils;
 
 import bot.exception.BondNotFoundException;
 import bot.exception.ValidateDataException;
-import bot.exception.sender.Assets;
+import bot.exception.sender.Asset;
 import bot.exception.sender.NotFoundMessageBuilder;
 import bot.tinkoff.sender.BondSender;
 import bot.tinkoff.sender.PortfolioCompositionSender;
@@ -33,7 +33,7 @@ public class MessageSender {
         try {
             return shareSender.getInfo(message);
         } catch (CompletionException e) {
-            return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(ticker, Assets.SHARE)).build();
+            return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(ticker, Asset.SHARE)).build();
         }
     }
 
@@ -43,7 +43,7 @@ public class MessageSender {
         try {
             return bondSender.getInfo(message);
         } catch (BondNotFoundException e) {
-            return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(text, Assets.BOND)).build();
+            return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(text, Asset.BOND)).build();
         }
     }
 
