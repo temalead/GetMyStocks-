@@ -63,8 +63,8 @@ public class BondService {
         MyBond result = new MyBond();
         result.setId(bond.getName());
         result.setPrice(getPrice(bond).multiply(BigDecimal.valueOf(10)));
-        result.setLot(bond.getLot())
-                .setMaturityDate(getMaturityDate(bond))
+        result.setLot(bond.getLot());
+        result.setMaturityDate(getMaturityDate(bond))
                 .setAci(PriceCalculator.calculateACI(bond.getAciValue()))
                 .setFigi(bond.getFigi());
 

@@ -20,7 +20,6 @@ import java.util.Objects;
 public class MyBond extends Security implements Serializable {
     private String figi;
     private BigDecimal aci;
-    private Integer lot;
     private LocalDate maturityDate;
 
     @Override

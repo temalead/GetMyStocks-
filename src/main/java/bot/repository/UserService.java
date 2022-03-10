@@ -22,8 +22,4 @@ public class UserService {
     public void saveCondition(User user){
         repository.save(user);
     }
-
-    public BotState getCurrentState(String chatId){
-        return getUserOrCreateNewUserByChatId(chatId).getState();
-    }
 }

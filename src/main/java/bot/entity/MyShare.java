@@ -23,7 +23,6 @@ public class MyShare extends Security implements Serializable {
     String name;
     String figi;
     DividendListDto dividends;
-    Integer lot;
 
     @Override
     public boolean equals(Object o) {
