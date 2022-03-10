@@ -24,4 +24,7 @@ public class SecurityDto {
         this.lot = lot;
         this.asset = asset;
     }
+
+    public SecurityDto() {
+    }
 }

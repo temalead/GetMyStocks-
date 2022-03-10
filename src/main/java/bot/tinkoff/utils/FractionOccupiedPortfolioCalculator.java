@@ -8,6 +8,7 @@ import bot.repository.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -17,11 +18,14 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Slf4j
 public class FractionOccupiedPortfolioCalculator {
     UserService service;
 
     public String calculateOccupiedFractionOfSecurityByUser(SecurityDto security, String chatId) {
         User user = service.getUserOrCreateNewUserByChatId(chatId);
+        log.info("User {}",user);
+
         BigDecimal result = calculatePrice(security, user.getPortfolio());
 
 
@@ -33,10 +37,10 @@ public class FractionOccupiedPortfolioCalculator {
         BigDecimal portfolioValue = portfolio.getPortfolioValue();
         BigDecimal securityValue = securityDto.getPrice().multiply(securityDto.getLot());
 
-        return securityValue.divide(portfolioValue).multiply(BigDecimal.valueOf(100));
+        return securityValue.divide(portfolioValue,RoundingMode.UP).multiply(BigDecimal.valueOf(100));
     }
 
-    public BigDecimal calculatePortfolioValue(Portfolio portfolio) {
+    public BigDecimal calculatePortfolioValue(Portfolio portfolio, User user) {
 
         final BigDecimal[] portfolioValue = {BigDecimal.ZERO};
 
@@ -45,6 +49,9 @@ public class FractionOccupiedPortfolioCalculator {
         list.forEach(security -> portfolioValue[0] = portfolioValue[0].add(calculateSecurityValue(security)));
 
         portfolio.setPortfolioValue(portfolioValue[0]);
+
+        user.setPortfolio(portfolio);
+        service.saveCondition(user);
 
         return portfolioValue[0];
     }

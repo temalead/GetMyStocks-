@@ -38,7 +38,7 @@ public class PortfolioCompositionSender implements Sender {
         for (SecurityDto security : list) {
             stringBuilder.append(createMessage(security));
             String fraction = calculator.calculateOccupiedFractionOfSecurityByUser(security, chatId);
-            stringBuilder.append("Fraction: ").append(fraction).append("\n");
+            stringBuilder.append(fraction).append("\n");
             stringBuilder.append("\n");
         }
 
@@ -51,7 +51,7 @@ public class PortfolioCompositionSender implements Sender {
         return SendMessage.builder().chatId(chatId).text(stringBuilder.toString()).build();
     }
 
-    private String createMessage(SecurityDto securityDto) {
+    public String createMessage(SecurityDto securityDto) {
         StringBuilder stringBuilder = new StringBuilder();
 
         BigDecimal price = securityDto.getPrice();

@@ -49,10 +49,6 @@ public class MessageSender {
 
     public SendMessage getCreatedPortfolio(Message message){
         String chatId = message.getChatId().toString();
-        try {
-            return compositionSender.getInfo(message);
-        }catch (ValidateDataException e){
-            return SendMessage.builder().text(e.getCause().toString()).chatId(chatId).build();
-        }
+        return compositionSender.getInfo(message);
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true,level = AccessLevel.PRIVATE)
-public class PortfolioService {
+public class PortfolioService implements SecurityService{
     ShareService shareService;
     BondService bondService;
 }
