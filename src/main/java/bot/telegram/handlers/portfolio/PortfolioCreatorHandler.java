@@ -35,7 +35,7 @@ public class PortfolioCreatorHandler implements PortfolioMessageHandler {
             reply=SendMessage.builder().chatId(chatId).text(BotMessageSend.MAKE_PORTFOLIO_ADVICE.getMessage()).build();
         }
         if (state.equals(BotState.MAKE_PORTFOLIO)){
-            reply=sender.getCreatedPortfolio(message);
+            reply=sender.getPortfolioInfo(message);
             if (reply.getText().startsWith("Error")) {
                 return reply;
             }

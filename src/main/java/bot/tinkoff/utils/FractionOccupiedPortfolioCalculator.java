@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 @Component
@@ -34,6 +33,7 @@ public class FractionOccupiedPortfolioCalculator {
         security.setFraction(fraction);
 
 
+        log.info("");
 
         return "Fraction of Portfolio: " +
                 String.format("%.2f ", fraction.floatValue())+"%";
@@ -41,6 +41,7 @@ public class FractionOccupiedPortfolioCalculator {
 
 
     public BigDecimal calculatePortfolioValue(Portfolio portfolio, User user) {
+        log.info("Calculating portfolio value");
 
         final BigDecimal[] portfolioValue = {BigDecimal.ZERO};
 

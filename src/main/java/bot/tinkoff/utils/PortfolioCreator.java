@@ -39,15 +39,13 @@ public class PortfolioCreator {
 
         String[] securities = text.split(", ");
         for (String security : securities) {
+            String[] securityResult = security.split("-");
+            String securityName = securityResult[0];
             if (security.contains("ОФЗ")) {
-                String[] securityResult = security.split("-");
-                String securityName = securityResult[0];
                 log.info("Security {}", (Object[]) securityResult);
                 BigDecimal lot = BigDecimal.valueOf(Long.parseLong(securityResult[1]));
                 result.add(SecurityDtoTranslator.translateToSecurityDto(bondService.getInfo(securityName),lot, Asset.BOND));
             } else {
-                String[] securityResult = security.split("-");
-                String securityName = securityResult[0];
                 BigDecimal lot = BigDecimal.valueOf(Long.parseLong(securityResult[1]));
                 result.add(SecurityDtoTranslator.translateToSecurityDto(shareService.getInfo(securityName),lot,Asset.SHARE));
             }

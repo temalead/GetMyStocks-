@@ -5,8 +5,9 @@ import bot.entity.User;
 import bot.entity.dto.SecurityDto;
 import bot.exception.sender.Asset;
 import bot.repository.UserService;
-import bot.tinkoff.utils.PortfolioCreator;
+import bot.telegram.state.BotState;
 import bot.tinkoff.utils.FractionOccupiedPortfolioCalculator;
+import bot.tinkoff.utils.PortfolioCreator;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -31,13 +32,24 @@ public class PortfolioCompositionSender implements Sender {
 
     @Override
     public SendMessage getInfo(Message message) {
+
         String chatId = message.getChatId().toString();
         User user = service.getUserOrCreateNewUserByChatId(chatId);
+        log.info("Got portfolio from user {}",user);
 
-        Portfolio portfolio = creator.createPortfolio(message);
+        Portfolio portfolio;
+
+        if (user.getPortfolio() != null) {
+            portfolio = user.getPortfolio();
+        } else {
+            return SendMessage.builder().chatId(chatId).text(user.toString()).build();
+
+            /*portfolio = creator.createPortfolio(message);
+            user.setPortfolio(portfolio);*/
+        }
+
         List<SecurityDto> list = portfolio.getSecurityList();
 
-        user.setPortfolio(portfolio);
         StringBuilder stringBuilder = new StringBuilder();
 
 
@@ -53,6 +65,9 @@ public class PortfolioCompositionSender implements Sender {
 
         stringBuilder.append("Share fraction: ").append(shareFraction).append("\n");
         stringBuilder.append("Bond fraction: ").append(bondFraction).append("\n");
+
+        user.setState(BotState.NONE);
+        service.saveCondition(user);
 
         return SendMessage.builder().chatId(chatId).text(stringBuilder.toString()).build();
     }

@@ -39,6 +39,9 @@ public class PortfolioStateProcessor implements Processor {
         if (isCreatedHandler(state)) {
             return handlers.get(BotState.WANNA_MAKE_PORTFOLIO);
         }
+        if (state.equals(BotState.GET_PORTFOLIO)){
+            return handlers.get(BotState.GET_PORTFOLIO);
+        }
         return null;
     }
 

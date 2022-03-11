@@ -1,7 +1,7 @@
 package bot.telegram.utils;
 
+import bot.entity.Portfolio;
 import bot.exception.BondNotFoundException;
-import bot.exception.ValidateDataException;
 import bot.exception.sender.Asset;
 import bot.exception.sender.NotFoundMessageBuilder;
 import bot.tinkoff.sender.BondSender;
@@ -47,8 +47,8 @@ public class MessageSender {
         }
     }
 
-    public SendMessage getCreatedPortfolio(Message message){
-        String chatId = message.getChatId().toString();
+    public SendMessage getPortfolioInfo(Message message){
         return compositionSender.getInfo(message);
     }
+
 }
