@@ -23,23 +23,22 @@ public class FractionOccupiedPortfolioCalculator {
     UserService service;
 
     public String calculateOccupiedFractionOfSecurityByUser(SecurityDto security,User user) {
+        Portfolio portfolio = user.getPortfolio();
+        BigDecimal portfolioValue = portfolio.getPortfolioValue();
+        BigDecimal securityValue = security.getPrice().multiply(security.getLot());
 
-        BigDecimal result = calculatePrice(security, user.getPortfolio());
+
+        float v = securityValue.floatValue() / portfolioValue.floatValue();
+        BigDecimal fraction = BigDecimal.valueOf(v).multiply(BigDecimal.valueOf(100));
+
+        security.setFraction(fraction);
+
 
 
         return "Fraction of Portfolio: " +
-                String.format("%.2f", result.floatValue());
+                String.format("%.2f ", fraction.floatValue())+"%";
     }
 
-    private BigDecimal calculatePrice(SecurityDto securityDto, Portfolio portfolio) {
-        BigDecimal portfolioValue = portfolio.getPortfolioValue();
-        BigDecimal securityValue = securityDto.getPrice().multiply(securityDto.getLot());
-
-        BigDecimal fraction = securityValue.divide(portfolioValue, RoundingMode.UP).multiply(BigDecimal.valueOf(100));
-
-        securityDto.setFraction(fraction);
-        return fraction;
-    }
 
     public BigDecimal calculatePortfolioValue(Portfolio portfolio, User user) {
 
@@ -68,8 +67,8 @@ public class FractionOccupiedPortfolioCalculator {
         BigDecimal dividend = findAssetByRequest(portfolio, asset);
         BigDecimal divisor = portfolio.getPortfolioValue();
 
-        BigDecimal result = dividend.divide(divisor, RoundingMode.UP);
-        return String.format("%s: %.2f",asset,result);
+        float result = dividend.floatValue() / divisor.floatValue()*100;
+        return String.format("%s: %.2f",asset,result)+"%";
     }
 
     private BigDecimal findAssetByRequest(Portfolio portfolioDto, Asset asset) {
