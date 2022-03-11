@@ -1,6 +1,7 @@
 package bot.telegram.handlers.portfolio;
 
 import bot.entity.User;
+import bot.exception.NonExistentPortfolioException;
 import bot.repository.UserService;
 import bot.telegram.buttons.BotMessageSend;
 import bot.telegram.handlers.PortfolioMessageHandler;

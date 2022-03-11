@@ -3,6 +3,7 @@ package bot.tinkoff.sender;
 import bot.entity.Portfolio;
 import bot.entity.User;
 import bot.entity.dto.SecurityDto;
+import bot.exception.NonExistentPortfolioException;
 import bot.exception.sender.Asset;
 import bot.repository.UserService;
 import bot.telegram.state.BotState;

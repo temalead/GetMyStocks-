@@ -3,7 +3,9 @@ package bot.telegram.utils;
 import bot.entity.Portfolio;
 import bot.entity.User;
 import bot.exception.BondNotFoundException;
+import bot.exception.NonExistentPortfolioException;
 import bot.exception.sender.Asset;
+import bot.exception.sender.NonExistentPortfolioMessage;
 import bot.exception.sender.NotFoundMessageBuilder;
 import bot.tinkoff.sender.BondSender;
 import bot.tinkoff.sender.PortfolioCompositionSender;
@@ -48,7 +50,7 @@ public class MessageSender {
         }
     }
 
-    public SendMessage getPortfolioInfo(Message message, User user){
+    public SendMessage getPortfolioInfo(Message message, User user)  {
         return compositionSender.getInfo(message,user);
     }
 
