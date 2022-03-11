@@ -1,6 +1,7 @@
 package bot.tinkoff.sender;
 
 import bot.entity.MyShare;
+import bot.entity.User;
 import bot.entity.dto.DividendDto;
 import bot.entity.dto.DividendListDto;
 import bot.tinkoff.ShareService;
@@ -18,7 +19,7 @@ public class ShareSender implements Sender {
     private final ShareService service;
 
     @Override
-    public SendMessage getInfo(Message message) {
+    public SendMessage getInfo(Message message, User user) {
         String chatId = message.getChatId().toString();
 
         MyShare info = service.getInfo(message.getText());

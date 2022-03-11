@@ -33,7 +33,7 @@ public class ShareMessageHandler implements MessageHandler {
             reply = SendMessage.builder().text(BotMessageSend.SHARE_ADVICE_MESSAGE.getMessage()).chatId(chatId).build();
         }
         if (state.equals(BotState.FIND_SHARE)) {
-            reply = sender.getShareInfo(message);
+            reply = sender.getShareInfo(message, user);
             if (reply.getText().startsWith("Error")) {
                 return reply;
             }

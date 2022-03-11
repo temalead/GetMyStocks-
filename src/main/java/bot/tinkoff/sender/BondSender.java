@@ -1,6 +1,7 @@
 package bot.tinkoff.sender;
 
 import bot.entity.MyBond;
+import bot.entity.User;
 import bot.tinkoff.BondService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,7 @@ public class BondSender implements Sender{
     private final BondService bondService;
 
     @Override
-    public SendMessage getInfo(Message message) {
+    public SendMessage getInfo(Message message, User user) {
         String chatId = message.getChatId().toString();
         String text = message.getText();
         MyBond info = bondService.getInfo(text);

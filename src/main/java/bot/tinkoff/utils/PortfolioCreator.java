@@ -29,12 +29,10 @@ public class PortfolioCreator {
     FractionOccupiedPortfolioCalculator portfolioCalculator;
 
 
-    public Portfolio createPortfolio(Message message) {
+    public Portfolio createPortfolio(Message message, User user) {
         log.info("Creating new user portfolio");
-        String chatId = message.getChatId().toString();
         String text = message.getText();
-        User user = service.getUserOrCreateNewUserByChatId(chatId);
-        Portfolio portfolio=new Portfolio();
+        Portfolio portfolio = new Portfolio();
         List<SecurityDto> result = new ArrayList<>();
 
         String[] securities = text.split(", ");
@@ -44,19 +42,21 @@ public class PortfolioCreator {
             if (security.contains("ОФЗ")) {
                 log.info("Security {}", (Object[]) securityResult);
                 BigDecimal lot = BigDecimal.valueOf(Long.parseLong(securityResult[1]));
-                result.add(SecurityDtoTranslator.translateToSecurityDto(bondService.getInfo(securityName),lot, Asset.BOND));
+                result.add(SecurityDtoTranslator.translateToSecurityDto(bondService.getInfo(securityName), lot, Asset.BOND));
             } else {
                 BigDecimal lot = BigDecimal.valueOf(Long.parseLong(securityResult[1]));
-                result.add(SecurityDtoTranslator.translateToSecurityDto(shareService.getInfo(securityName),lot,Asset.SHARE));
+                result.add(SecurityDtoTranslator.translateToSecurityDto(shareService.getInfo(securityName), lot, Asset.SHARE));
             }
         }
         portfolio.setSecurityList(result);
-        log.info("Portfolio {}",portfolio.getSecurityList());
-        BigDecimal value = portfolioCalculator.calculatePortfolioValue(portfolio,user);
+        log.info("Portfolio {}", portfolio.getSecurityList());
+        BigDecimal value = portfolioCalculator.calculatePortfolioValue(portfolio);
         portfolio.setPortfolioValue(value);
-
         user.setPortfolio(portfolio);
+
         service.saveCondition(user);
+
+        log.info("User {}", user);
 
         return portfolio;
     }

@@ -19,28 +19,20 @@ import java.util.List;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Slf4j
 public class FractionOccupiedPortfolioCalculator {
-    UserService service;
 
-    public String calculateOccupiedFractionOfSecurityByUser(SecurityDto security,User user) {
+    public BigDecimal calculateOccupiedFractionOfSecurityByUser(SecurityDto security, User user) {
         Portfolio portfolio = user.getPortfolio();
         BigDecimal portfolioValue = portfolio.getPortfolioValue();
         BigDecimal securityValue = security.getPrice().multiply(security.getLot());
 
 
         float v = securityValue.floatValue() / portfolioValue.floatValue();
-        BigDecimal fraction = BigDecimal.valueOf(v).multiply(BigDecimal.valueOf(100));
 
-        security.setFraction(fraction);
-
-
-        log.info("");
-
-        return "Fraction of Portfolio: " +
-                String.format("%.2f ", fraction.floatValue())+"%";
+        return BigDecimal.valueOf(v).multiply(BigDecimal.valueOf(100));
     }
 
 
-    public BigDecimal calculatePortfolioValue(Portfolio portfolio, User user) {
+    public BigDecimal calculatePortfolioValue(Portfolio portfolio) {
         log.info("Calculating portfolio value");
 
         final BigDecimal[] portfolioValue = {BigDecimal.ZERO};
@@ -48,12 +40,6 @@ public class FractionOccupiedPortfolioCalculator {
         List<SecurityDto> list = portfolio.getSecurityList();
 
         list.forEach(security -> portfolioValue[0] = portfolioValue[0].add(calculateSecurityValue(security)));
-
-        portfolio.setPortfolioValue(portfolioValue[0]);
-
-        user.setPortfolio(portfolio);
-        service.saveCondition(user);
-
 
         return portfolioValue[0];
     }
@@ -63,13 +49,12 @@ public class FractionOccupiedPortfolioCalculator {
     }
 
 
-
-    public String calculateFraction(Portfolio portfolio, Asset asset){
+    public String calculateFraction(Portfolio portfolio, Asset asset) {
         BigDecimal dividend = findAssetByRequest(portfolio, asset);
         BigDecimal divisor = portfolio.getPortfolioValue();
 
-        float result = dividend.floatValue() / divisor.floatValue()*100;
-        return String.format("%s: %.2f",asset,result)+"%";
+        float result = dividend.floatValue() / divisor.floatValue() * 100;
+        return String.format("%s: %.2f", asset, result) + "%";
     }
 
     private BigDecimal findAssetByRequest(Portfolio portfolioDto, Asset asset) {

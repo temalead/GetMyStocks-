@@ -27,25 +27,20 @@ import java.util.List;
 public class PortfolioCompositionSender implements Sender {
     PortfolioCreator creator;
     FractionOccupiedPortfolioCalculator calculator;
-    UserService service;
 
 
     @Override
-    public SendMessage getInfo(Message message) {
+    public SendMessage getInfo(Message message, User user) {
 
         String chatId = message.getChatId().toString();
-        User user = service.getUserOrCreateNewUserByChatId(chatId);
-        log.info("Got portfolio from user {}",user);
+        log.info("Got portfolio from user {}", user);
 
         Portfolio portfolio;
 
         if (user.getPortfolio() != null) {
             portfolio = user.getPortfolio();
         } else {
-            return SendMessage.builder().chatId(chatId).text(user.toString()).build();
-
-            /*portfolio = creator.createPortfolio(message);
-            user.setPortfolio(portfolio);*/
+            portfolio = creator.createPortfolio(message, user);
         }
 
         List<SecurityDto> list = portfolio.getSecurityList();
@@ -55,8 +50,8 @@ public class PortfolioCompositionSender implements Sender {
 
         for (SecurityDto security : list) {
             stringBuilder.append(createMessage(security));
-            String fraction = calculator.calculateOccupiedFractionOfSecurityByUser(security, user);
-            stringBuilder.append(fraction).append("\n");
+            BigDecimal fraction = calculator.calculateOccupiedFractionOfSecurityByUser(security, user);
+            stringBuilder.append("Fraction of Portfolio:").append(fraction).append("%").append("\n");
             stringBuilder.append("\n");
         }
 
@@ -66,8 +61,6 @@ public class PortfolioCompositionSender implements Sender {
         stringBuilder.append("Share fraction: ").append(shareFraction).append("\n");
         stringBuilder.append("Bond fraction: ").append(bondFraction).append("\n");
 
-        user.setState(BotState.NONE);
-        service.saveCondition(user);
 
         return SendMessage.builder().chatId(chatId).text(stringBuilder.toString()).build();
     }

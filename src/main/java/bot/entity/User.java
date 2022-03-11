@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Objects;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
@@ -17,9 +18,21 @@ import java.io.Serializable;
 @RedisHash("User")
 @Accessors(chain = true)
 public class User implements Serializable {
-    @Id
     String id;
     BotState state;
     Portfolio portfolio;
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

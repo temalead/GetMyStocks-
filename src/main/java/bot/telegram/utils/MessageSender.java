@@ -1,6 +1,7 @@
 package bot.telegram.utils;
 
 import bot.entity.Portfolio;
+import bot.entity.User;
 import bot.exception.BondNotFoundException;
 import bot.exception.sender.Asset;
 import bot.exception.sender.NotFoundMessageBuilder;
@@ -27,28 +28,28 @@ public class MessageSender {
     PortfolioCompositionSender compositionSender;
 
 
-    public SendMessage getShareInfo(Message message) {
+    public SendMessage getShareInfo(Message message, User user) {
         String ticker = message.getText();
         String chatId = message.getChatId().toString();
         try {
-            return shareSender.getInfo(message);
+            return shareSender.getInfo(message,user);
         } catch (CompletionException e) {
             return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(ticker, Asset.SHARE)).build();
         }
     }
 
-    public SendMessage getBondInfo(Message message) {
+    public SendMessage getBondInfo(Message message, User user) {
         String chatId = message.getChatId().toString();
         String text = message.getText();
         try {
-            return bondSender.getInfo(message);
+            return bondSender.getInfo(message,user);
         } catch (BondNotFoundException e) {
             return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(text, Asset.BOND)).build();
         }
     }
 
-    public SendMessage getPortfolioInfo(Message message){
-        return compositionSender.getInfo(message);
+    public SendMessage getPortfolioInfo(Message message, User user){
+        return compositionSender.getInfo(message,user);
     }
 
 }

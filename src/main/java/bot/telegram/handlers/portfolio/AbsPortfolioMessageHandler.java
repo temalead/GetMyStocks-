@@ -10,6 +10,7 @@ import bot.telegram.state.PortfolioStateProcessor;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -18,6 +19,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class AbsPortfolioMessageHandler implements MessageHandler {
     UserService service;
     PortfolioMenuKeyBoard keyBoard;
@@ -37,7 +39,6 @@ public class AbsPortfolioMessageHandler implements MessageHandler {
             return reply;
         }
 
-        service.saveCondition(user);
 
         return processor.processMessage(state,message);
     }
