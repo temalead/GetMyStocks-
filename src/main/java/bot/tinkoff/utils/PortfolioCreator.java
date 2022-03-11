@@ -60,8 +60,6 @@ public class PortfolioCreator {
         user.setPortfolio(portfolio);
         service.saveCondition(user);
 
-        log.info("Current portfolio: {}",portfolio);
-
         return portfolio;
     }
 }

@@ -22,9 +22,7 @@ import java.util.List;
 public class FractionOccupiedPortfolioCalculator {
     UserService service;
 
-    public String calculateOccupiedFractionOfSecurityByUser(SecurityDto security, String chatId) {
-        User user = service.getUserOrCreateNewUserByChatId(chatId);
-        log.info("User {}",user);
+    public String calculateOccupiedFractionOfSecurityByUser(SecurityDto security,User user) {
 
         BigDecimal result = calculatePrice(security, user.getPortfolio());
 
@@ -37,7 +35,10 @@ public class FractionOccupiedPortfolioCalculator {
         BigDecimal portfolioValue = portfolio.getPortfolioValue();
         BigDecimal securityValue = securityDto.getPrice().multiply(securityDto.getLot());
 
-        return securityValue.divide(portfolioValue,RoundingMode.UP).multiply(BigDecimal.valueOf(100));
+        BigDecimal fraction = securityValue.divide(portfolioValue, RoundingMode.UP).multiply(BigDecimal.valueOf(100));
+
+        securityDto.setFraction(fraction);
+        return fraction;
     }
 
     public BigDecimal calculatePortfolioValue(Portfolio portfolio, User user) {
@@ -52,6 +53,7 @@ public class FractionOccupiedPortfolioCalculator {
 
         user.setPortfolio(portfolio);
         service.saveCondition(user);
+
 
         return portfolioValue[0];
     }

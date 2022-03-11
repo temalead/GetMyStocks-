@@ -1,8 +1,10 @@
 package bot.tinkoff.sender;
 
 import bot.entity.Portfolio;
+import bot.entity.User;
 import bot.entity.dto.SecurityDto;
 import bot.exception.sender.Asset;
+import bot.repository.UserService;
 import bot.tinkoff.utils.PortfolioCreator;
 import bot.tinkoff.utils.FractionOccupiedPortfolioCalculator;
 import lombok.AccessLevel;
@@ -24,20 +26,24 @@ import java.util.List;
 public class PortfolioCompositionSender implements Sender {
     PortfolioCreator creator;
     FractionOccupiedPortfolioCalculator calculator;
+    UserService service;
 
 
     @Override
     public SendMessage getInfo(Message message) {
         String chatId = message.getChatId().toString();
+        User user = service.getUserOrCreateNewUserByChatId(chatId);
 
         Portfolio portfolio = creator.createPortfolio(message);
         List<SecurityDto> list = portfolio.getSecurityList();
+
+        user.setPortfolio(portfolio);
         StringBuilder stringBuilder = new StringBuilder();
 
 
         for (SecurityDto security : list) {
             stringBuilder.append(createMessage(security));
-            String fraction = calculator.calculateOccupiedFractionOfSecurityByUser(security, chatId);
+            String fraction = calculator.calculateOccupiedFractionOfSecurityByUser(security, user);
             stringBuilder.append(fraction).append("\n");
             stringBuilder.append("\n");
         }
