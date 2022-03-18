@@ -30,7 +30,6 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<>(producerFactory);
     }
 
-
     private Map<String, Object> producerConfig(){
         Map<String, Object> properties = new HashMap<>();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
