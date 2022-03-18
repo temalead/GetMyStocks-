@@ -9,7 +9,7 @@ public class KafkaListeners {
     @KafkaListener(groupId = "tcs",
             topics = {"security_t"})
     void listener(String data){
-        System.out.println("Listener recieved: "+data);
+        System.out.println("Listener received: "+data);
     }
 }
 

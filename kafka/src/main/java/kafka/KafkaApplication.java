@@ -19,9 +19,8 @@ public class KafkaApplication {
         return args ->
         {
             for (int i = 0; i < 100; i++) {
-                kafkaTemplate.send("security_t","boot yourself! "+i);
+                kafkaTemplate.send("security_t","Kafka is cool! "+ i);
             }
-            System.out.println(args.length);
         };
     }
 }
