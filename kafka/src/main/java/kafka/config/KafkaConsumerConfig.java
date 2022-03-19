@@ -21,21 +21,24 @@ public class KafkaConsumerConfig {
     private String bootstrapServers;
 
     @Bean
-    public ConsumerFactory<String, String> consumerFactory(){
+    public ConsumerFactory<String, String> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerConfig());
     }
 
     @Bean
     public KafkaListenerContainerFactory
-            <ConcurrentMessageListenerContainer<String,String>> factory(ConsumerFactory<String, String> consumerFactory){
-        ConcurrentKafkaListenerContainerFactory<String, String> factory=
+            <ConcurrentMessageListenerContainer<String, String>> factory(ConsumerFactory<String, String> consumerFactory) {
+        ConcurrentKafkaListenerContainerFactory<String, String> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
+        factory.setConcurrency(3);
+        factory.getContainerProperties().setPollTimeout(3000);
         return factory;
     }
 
 
-    private Map<String, Object> consumerConfig(){
+    @Bean
+    public Map<String, Object> consumerConfig() {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringSerializer.class);

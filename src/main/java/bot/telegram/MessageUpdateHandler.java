@@ -2,6 +2,7 @@ package bot.telegram;
 
 import bot.entity.User;
 import bot.repository.UserService;
+import bot.telegram.handlers_v2.MessageProcessor;
 import bot.telegram.keyboard.MainMenuKeyboard;
 import bot.telegram.buttons.BotMessageSend;
 import bot.telegram.state.BotState;
@@ -23,6 +24,7 @@ public class MessageUpdateHandler {
     MainMenuKeyboard menu;
     StateProcessor controller;
     UserService service;
+    MessageProcessor processor;
 
     public BotApiMethod<?> handleMessage(Message message) {
 
@@ -30,11 +32,12 @@ public class MessageUpdateHandler {
         User user = service.getUserOrCreateNewUserByChatId(chatId);
         BotState botState;
 
+        String input = message.getText();
 
+        processor.sendMessageDependsOnState(input);
         if (!message.hasText()) {
             return sendError(chatId);
         }
-        String input = message.getText();
         switch (input) {
             case "/start":
                 botState = BotState.GET_START_MENU;
