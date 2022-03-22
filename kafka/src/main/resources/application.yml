@@ -1,3 +1,0 @@
-spring:
-    kafka:
-      bootstrap-servers: temapc:9092
