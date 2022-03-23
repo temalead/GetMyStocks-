@@ -143,6 +143,11 @@
             <artifactId>kafka</artifactId>
             <version>1.16.3</version>
         </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <version>1.43.2</version>
+        </dependency>
 
 
     </dependencies>

@@ -1,4 +1,4 @@
-package client;
+package producer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClient;
@@ -15,6 +15,7 @@ import java.util.concurrent.TimeoutException;
 import static org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG;
 
 @Slf4j
+public
 class KafkaBase {
     private final static KafkaContainer kafka=new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.0.0"));
     private static String bootstrapServers;

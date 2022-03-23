@@ -1,18 +1,26 @@
-package client;
+package producer;
 
+import org.apache.kafka.clients.admin.NewTopic;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.LongStream;
 
+import static producer.Producer.TOPIC_NAME;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 class DataSenderTest {
+
+    @BeforeAll
+    static void init() throws ExecutionException, InterruptedException, TimeoutException {
+        KafkaBase.start(List.of(new NewTopic(TOPIC_NAME,1,(short) 1)));
+    }
 
     @Test
     void dataHandle() {
