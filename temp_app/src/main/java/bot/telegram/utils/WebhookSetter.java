@@ -2,24 +2,21 @@ package bot.telegram.utils;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 
 @Component
 public class WebhookSetter {
     @Value("${bot.telegram.botPath}")
-    private static String setWebhook;
+    private String setWebhook;
     @Value("${bot.telegram.botToken}")
-    private static String token;
+    private String token;
 
-    public static void setWebHook() throws IOException {
+    @PostConstruct
+    public void setWebHook() throws IOException {
 
         OkHttpClient client = new OkHttpClient();
 

@@ -26,11 +26,6 @@ public class WebhookBot extends TelegramWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        try {
-            WebhookSetter.setWebHook();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return handler.handleUpdate(update);
     }
 }
