@@ -1,0 +1,11 @@
+services:
+  discovery:
+    image: discovery
+    ports:
+      - 8080:8080
+    environment:
+      - EUREKA_HOST=http://discovery:8080/eureka/
+  backend:
+    image: temp_app
+    environment:
+      - EUREKA_HOST=http://discovery:8080/eureka/

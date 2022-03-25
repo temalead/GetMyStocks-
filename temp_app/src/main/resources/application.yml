@@ -13,3 +13,13 @@ bot:
 spring:
   redis:
     port: 6379
+  application:
+    name: temp_app
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_HOST:http://localhost:8080/eureka/}
+  instance:
+    instance-id: temp_app-${random.uuid}
+
