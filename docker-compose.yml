@@ -1,11 +1,9 @@
 services:
   discovery:
-    image: discovery
+    image: discovery:1.0-SNAPSHOT
+    ports:
+      - 8761:8761
+  backend:
+    image: temp_app:1.0-SNAPSHOT
     ports:
       - 8080:8080
-    environment:
-      - EUREKA_HOST=http://discovery:8080/eureka/
-  backend:
-    image: temp_app
-    environment:
-      - EUREKA_HOST=http://discovery:8080/eureka/

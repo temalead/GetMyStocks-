@@ -9,10 +9,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 
 @SpringBootApplication
+@EnableEurekaClient
 @EnableEncryptableProperties
 @EnableAsync
 @EnableRedisRepositories
-@EnableEurekaClient
 public class InvestServiceRunner {
     public static void main(String[] args) {
         SpringApplication.run(InvestServiceRunner.class,args);

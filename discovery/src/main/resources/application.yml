@@ -1,8 +1,11 @@
-server:
-  port: 8080
 eureka:
   client:
-    registerWithEureka: false
-    fetchRegistry: false
-    service-url:
-      defaultZone: ${EUREKA_HOST:http://localhost:8080/eureka/}
+    fetch-registry: false
+    register-with-eureka: false
+server:
+  port: 8761
+
+spring:
+  application:
+    name: discovery
+
