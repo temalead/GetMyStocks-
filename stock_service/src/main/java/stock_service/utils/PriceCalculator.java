@@ -5,13 +5,14 @@ import ru.tinkoff.piapi.contract.v1.MoneyValue;
 import ru.tinkoff.piapi.contract.v1.Quotation;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public final class PriceCalculator {
 
     public static BigDecimal calculateValue(Quotation price) {
         long units = price.getUnits();
         BigDecimal nanos = BigDecimal.valueOf(price.getNano());
-        BigDecimal divide = nanos.divide(BigDecimal.valueOf(1000000000L));
+        BigDecimal divide = nanos.divide(BigDecimal.valueOf(1000000000L), RoundingMode.CEILING);
         return BigDecimal.valueOf(units).add(divide);
     }
 
