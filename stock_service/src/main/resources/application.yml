@@ -1,0 +1,11 @@
+bot:
+  invest:
+    isSandBoxMode: true
+    token: ENC(18NCfenZ1cvQsFhuS5ofIIAkhR4k3YgtU4Bm6HZNNJ+NIglKfuKR8pZqDLXGpOY8NIYqv1apNdW111WbWJxN2i7EzI7xdjtPaFWVTEacOVL6FVTcwma3Ul6NxMGbKY9nGLeIhZ5GRwU=)
+    code: TQBR
+
+spring:
+  redis:
+    port: 6379
+  application:
+    name: temp

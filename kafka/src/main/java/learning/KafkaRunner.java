@@ -9,5 +9,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 public class KafkaRunner {
     public static void main(String[] args) {
         SpringApplication.run(KafkaRunner.class, args);
+
+
     }
 }

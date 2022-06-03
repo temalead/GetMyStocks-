@@ -16,6 +16,7 @@
         <module>telegramBotMessageConsumer</module>
         <module>temp_app</module>
         <module>discovery</module>
+        <module>stock_service</module>
     </modules>
     <packaging>pom</packaging>
 
