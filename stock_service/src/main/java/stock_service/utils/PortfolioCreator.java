@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import stock_service.entity.Portfolio;
 import stock_service.entity.User;
 import stock_service.entity.dto.SecurityDto;
-import stock_service.exception.sender.Asset;
+import stock_service.entity.Asset;
 import stock_service.service.BondService;
 import stock_service.service.ShareService;
 
@@ -48,8 +48,8 @@ public class PortfolioCreator {
                 result.add(SecurityDtoTranslator.translateToSecurityDto(shareService.getInfo(securityName), lot, Asset.SHARE));
             }
         }
-        portfolio.setSecurityList(result);
-        log.info("Portfolio {}", portfolio.getSecurityList());
+        portfolio.setSecurities(result);
+        log.info("Portfolio {}", portfolio.getSecurities());
         BigDecimal value = portfolioCalculator.calculatePortfolioValue(portfolio);
         portfolio.setPortfolioValue(value);
         user.setPortfolio(portfolio);

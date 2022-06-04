@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import stock_service.entity.Portfolio;
 import stock_service.entity.User;
 import stock_service.entity.dto.SecurityDto;
-import stock_service.exception.sender.Asset;
+import stock_service.entity.Asset;
 import stock_service.utils.FractionOccupiedPortfolioCalculator;
 import stock_service.utils.PortfolioCreator;
 
@@ -42,7 +42,7 @@ public class PortfolioCompositionSender implements Sender {
             portfolio = creator.createPortfolio(message, user);
         }
 
-        List<SecurityDto> list = portfolio.getSecurityList();
+        List<SecurityDto> list = portfolio.getSecurities();
 
         StringBuilder stringBuilder = new StringBuilder();
 

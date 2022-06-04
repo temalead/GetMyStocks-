@@ -3,7 +3,7 @@ package stock_service.entity.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import stock_service.exception.sender.Asset;
+import stock_service.entity.Asset;
 
 import java.math.BigDecimal;
 

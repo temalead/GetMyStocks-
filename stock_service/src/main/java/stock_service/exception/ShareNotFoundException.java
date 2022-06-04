@@ -3,7 +3,7 @@ package stock_service.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import stock_service.exception.sender.Asset;
+import stock_service.entity.Asset;
 import stock_service.exception.sender.NotFoundMessageBuilder;
 
 import java.util.concurrent.CompletionException;

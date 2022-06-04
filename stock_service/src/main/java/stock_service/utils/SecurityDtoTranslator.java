@@ -4,7 +4,7 @@ package stock_service.utils;
 
 import stock_service.entity.Security;
 import stock_service.entity.dto.SecurityDto;
-import stock_service.exception.sender.Asset;
+import stock_service.entity.Asset;
 
 import java.math.BigDecimal;
 

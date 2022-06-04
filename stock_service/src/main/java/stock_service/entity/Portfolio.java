@@ -11,5 +11,5 @@ import java.util.List;
 @Data
 public class Portfolio {
     BigDecimal portfolioValue;
-    List<SecurityDto> securityList;
+    List<SecurityDto> securities;
 }

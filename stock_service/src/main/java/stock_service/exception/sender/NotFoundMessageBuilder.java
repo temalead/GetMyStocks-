@@ -1,5 +1,7 @@
 package stock_service.exception.sender;
 
+import stock_service.entity.Asset;
+
 import java.util.Locale;
 
 public class NotFoundMessageBuilder {

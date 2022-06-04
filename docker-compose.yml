@@ -7,3 +7,9 @@ services:
     image: temp_app:1.0-SNAPSHOT
     ports:
       - 8080:8080
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+
+    kafka:
+      image: 'bitnami/kafka:latest'
+

@@ -1,4 +1,4 @@
-package stock_service.exception.sender;
+package stock_service.entity;
 
 public enum Asset {
     SHARE,

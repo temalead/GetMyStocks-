@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import stock_service.entity.Portfolio;
 import stock_service.entity.User;
 import stock_service.entity.dto.SecurityDto;
-import stock_service.exception.sender.Asset;
+import stock_service.entity.Asset;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,7 +37,7 @@ public class FractionOccupiedPortfolioCalculator {
 
         final BigDecimal[] portfolioValue = {BigDecimal.ZERO};
 
-        List<SecurityDto> list = portfolio.getSecurityList();
+        List<SecurityDto> list = portfolio.getSecurities();
 
         list.forEach(security -> portfolioValue[0] = portfolioValue[0].add(calculateSecurityValue(security)));
 
@@ -59,7 +59,7 @@ public class FractionOccupiedPortfolioCalculator {
 
     private BigDecimal findAssetByRequest(Portfolio portfolioDto, Asset asset) {
 
-        List<SecurityDto> portfolio = portfolioDto.getSecurityList();
+        List<SecurityDto> portfolio = portfolioDto.getSecurities();
         final BigDecimal[] result = {BigDecimal.ZERO};
 
 
