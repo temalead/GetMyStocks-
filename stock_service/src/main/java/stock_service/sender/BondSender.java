@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import stock_service.entity.MyBond;
 import stock_service.entity.User;
+import stock_service.kafka.TopicProducer;
 import stock_service.service.BondService;
 
 import java.math.BigDecimal;
@@ -18,15 +19,17 @@ import java.time.LocalDate;
 @Slf4j
 public class BondSender implements Sender{
     private final BondService bondService;
+    private final TopicProducer producer;
 
     @Override
-    public SendMessage getInfo(Message message, User user) {
+    public void getInfo(Message message, User user) {
         String chatId = message.getChatId().toString();
         String text = message.getText();
         MyBond info = bondService.getInfo(text);
         String result= createMessage(info);
         log.info("Message: {}",result);
-        return SendMessage.builder().chatId(chatId).text(result).build();
+        //producer.sendToTopic(einfo)
+        //return SendMessage.builder().chatId(chatId).text(result).build();
     }
 
 

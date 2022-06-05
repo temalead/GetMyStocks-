@@ -7,7 +7,7 @@ import stock_service.entity.User;
 import stock_service.exception.NonExistentPortfolioException;
 
 public interface Sender {
-    SendMessage getInfo(Message message, User user) throws NonExistentPortfolioException;
+    void getInfo(Message message, User user) throws NonExistentPortfolioException;
 
 
 }

@@ -14,7 +14,7 @@
     <modules>
         <module>kafka</module>
         <module>telegramBotMessageConsumer</module>
-        <module>temp_app</module>
+        <module>telegram_service</module>
         <module>discovery</module>
         <module>stock_service</module>
     </modules>
