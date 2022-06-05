@@ -1,6 +1,5 @@
 package bot.telegram;
 
-import bot.telegram.utils.WebhookSetter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,8 +7,6 @@ import lombok.experimental.FieldDefaults;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.io.IOException;
 
 @Getter
 @Setter

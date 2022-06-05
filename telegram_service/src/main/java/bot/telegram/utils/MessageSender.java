@@ -4,9 +4,7 @@ import bot.entity.User;
 import bot.exception.BondNotFoundException;
 import bot.exception.sender.Asset;
 import bot.exception.sender.NotFoundMessageBuilder;
-import bot.tinkoff.sender.BondSender;
-import bot.tinkoff.sender.PortfolioCompositionSender;
-import bot.tinkoff.sender.ShareSender;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
