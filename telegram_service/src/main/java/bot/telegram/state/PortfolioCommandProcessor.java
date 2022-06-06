@@ -20,34 +20,34 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class PortfolioStateProcessor implements Processor {
-    Map<BotState, PortfolioMessageHandler> handlers = new HashMap<>();
+public class PortfolioCommandProcessor implements Processor {
+    Map<BotCommand, PortfolioMessageHandler> handlers = new HashMap<>();
 
     @Autowired
-    public PortfolioStateProcessor(List<PortfolioMessageHandler> handlers) {
+    public PortfolioCommandProcessor(List<PortfolioMessageHandler> handlers) {
         handlers.forEach(handler -> this.handlers.put(handler.getHandlerName(), handler));
     }
 
 
     @Override
-    public SendMessage processMessage(BotState state, Message message) {
+    public SendMessage processMessage(BotCommand state, Message message) {
         MessageHandler handler = findNeededHandler(state);
         return handler.sendMessageDependsOnState(message);
     }
 
-    public PortfolioMessageHandler findNeededHandler(BotState state) {
+    public PortfolioMessageHandler findNeededHandler(BotCommand state) {
         if (isCreatedHandler(state)) {
-            return handlers.get(BotState.WANNA_MAKE_PORTFOLIO);
+            return handlers.get(BotCommand.WISH_MAKE_PORTFOLIO);
         }
-        if (state.equals(BotState.GET_PORTFOLIO)){
-            return handlers.get(BotState.GET_PORTFOLIO);
+        if (state.equals(BotCommand.GET_PORTFOLIO)){
+            return handlers.get(BotCommand.GET_PORTFOLIO);
         }
         return null;
     }
 
-    private boolean isCreatedHandler(BotState state) {
+    private boolean isCreatedHandler(BotCommand state) {
         switch (state) {
-            case WANNA_MAKE_PORTFOLIO:
+            case WISH_MAKE_PORTFOLIO:
             case MAKE_PORTFOLIO:
                 return true;
         }

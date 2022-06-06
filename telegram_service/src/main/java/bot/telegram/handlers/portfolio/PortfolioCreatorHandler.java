@@ -5,7 +5,7 @@ import bot.repository.UserService;
 import bot.telegram.buttons.BotMessageSend;
 import bot.telegram.handlers.PortfolioMessageHandler;
 import bot.telegram.keyboard.MainMenuKeyboard;
-import bot.telegram.state.BotState;
+import bot.telegram.state.BotCommand;
 import bot.telegram.utils.MessageSender;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,15 +29,15 @@ public class PortfolioCreatorHandler implements PortfolioMessageHandler {
     public SendMessage sendMessageDependsOnState(Message message) {
         String chatId = message.getChatId().toString();
         User user = service.getUserOrCreateNewUserByChatId(chatId);
-        BotState state = user.getState();
+        BotCommand state = user.getState();
         SendMessage reply = SendMessage.builder().chatId(chatId).text(state.name()).build();
 
 
-        if (state.equals(BotState.WANNA_MAKE_PORTFOLIO)){
-            user.setState(BotState.MAKE_PORTFOLIO);
+        if (state.equals(BotCommand.WANNA_MAKE_PORTFOLIO)){
+            user.setState(BotCommand.MAKE_PORTFOLIO);
             reply=SendMessage.builder().chatId(chatId).text(BotMessageSend.MAKE_PORTFOLIO_ADVICE.getMessage()).build();
         }
-        if (state.equals(BotState.MAKE_PORTFOLIO)){
+        if (state.equals(BotCommand.MAKE_PORTFOLIO)){
             reply=sender.getPortfolioInfo(message, user);
             if (reply.getText().startsWith("Error")) {
                 return reply;
@@ -53,7 +53,7 @@ public class PortfolioCreatorHandler implements PortfolioMessageHandler {
     }
 
     @Override
-    public BotState getHandlerName() {
-        return BotState.WANNA_MAKE_PORTFOLIO;
+    public BotCommand getHandlerName() {
+        return BotCommand.WANNA_MAKE_PORTFOLIO;
     }
 }

@@ -13,7 +13,6 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>kafka</module>
-        <module>telegramBotMessageConsumer</module>
         <module>telegram_service</module>
         <module>discovery</module>
         <module>stock_service</module>

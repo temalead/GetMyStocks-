@@ -5,7 +5,7 @@ import bot.repository.UserService;
 import bot.telegram.handlers.MessageHandler;
 import bot.telegram.keyboard.MainMenuKeyboard;
 import bot.telegram.buttons.BotMessageSend;
-import bot.telegram.state.BotState;
+import bot.telegram.state.BotCommand;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -27,11 +27,11 @@ public class HintMessageHandler implements MessageHandler {
     public SendMessage sendMessageDependsOnState(Message message) {
         String chatId = message.getChatId().toString();
         User user = service.getUserOrCreateNewUserByChatId(chatId);
-        BotState state = user.getState();
+        BotCommand state = user.getState();
         SendMessage reply = SendMessage.builder().chatId(chatId).text(state.name()).build();
 
         switch (state) {
-            case GET_START_MENU:
+            case START:
                 reply.setText(BotMessageSend.START_MESSAGE.getMessage());
                 reply.enableMarkdown(true);
                 reply.setReplyMarkup(menu.getKeyboard());
@@ -39,7 +39,7 @@ public class HintMessageHandler implements MessageHandler {
             case UNRECOGNIZED:
                 reply.setText(BotMessageSend.UNRECOGNIZED_MESSAGE.getMessage());
                 break;
-            case GET_HELP:
+            case HELP:
                 reply.setText(BotMessageSend.HELP_MESSAGE.getMessage());
                 reply.setReplyMarkup(menu.getKeyboard());
                 break;
@@ -48,7 +48,7 @@ public class HintMessageHandler implements MessageHandler {
                 reply.setReplyMarkup(menu.getKeyboard());
                 break;
         }
-        user.setState(BotState.NONE);
+        user.setState(BotCommand.DEFAULT);
 
 
         service.saveCondition(user);
@@ -57,7 +57,7 @@ public class HintMessageHandler implements MessageHandler {
     }
 
     @Override
-    public BotState getHandlerName() {
-        return BotState.HINT;
+    public BotCommand getHandlerName() {
+        return BotCommand.HINT;
     }
 }

@@ -1,6 +1,6 @@
 package bot.entity;
 
-import bot.telegram.state.BotState;
+import bot.telegram.state.BotCommand;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -18,7 +18,7 @@ import java.util.Objects;
 @Accessors(chain = true)
 public class User implements Serializable {
     String id;
-    BotState state;
+    BotCommand state;
     Portfolio portfolio;
 
 

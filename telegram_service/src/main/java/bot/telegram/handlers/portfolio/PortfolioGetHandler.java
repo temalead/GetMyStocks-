@@ -6,7 +6,7 @@ import bot.exception.sender.NonExistentPortfolioMessage;
 import bot.repository.UserService;
 import bot.telegram.handlers.PortfolioMessageHandler;
 import bot.telegram.keyboard.PortfolioMenuKeyBoard;
-import bot.telegram.state.BotState;
+import bot.telegram.state.BotCommand;
 import bot.telegram.utils.MessageSender;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class PortfolioGetHandler implements PortfolioMessageHandler {
     }
 
     @Override
-    public BotState getHandlerName() {
-        return BotState.GET_PORTFOLIO;
+    public BotCommand getHandlerName() {
+        return BotCommand.GET_PORTFOLIO;
     }
 }

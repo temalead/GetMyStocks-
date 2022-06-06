@@ -1,7 +1,7 @@
 package bot.repository;
 
 import bot.entity.User;
-import bot.telegram.state.BotState;
+import bot.telegram.state.BotCommand;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,7 +24,7 @@ public class UserService {
         }
         else {
             log.info("Creating new user..." );
-            return new User().setState(BotState.NONE).setId(chatId);
+            return new User().setState(BotCommand.NONE).setId(chatId);
         }
     }
 

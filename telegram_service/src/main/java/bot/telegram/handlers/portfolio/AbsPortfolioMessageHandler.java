@@ -5,8 +5,8 @@ import bot.repository.UserService;
 import bot.telegram.buttons.BotMessageSend;
 import bot.telegram.handlers.MessageHandler;
 import bot.telegram.keyboard.PortfolioMenuKeyBoard;
-import bot.telegram.state.BotState;
-import bot.telegram.state.PortfolioStateProcessor;
+import bot.telegram.state.BotCommand;
+import bot.telegram.state.PortfolioCommandProcessor;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,19 +23,19 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public class AbsPortfolioMessageHandler implements MessageHandler {
     UserService service;
     PortfolioMenuKeyBoard keyBoard;
-    PortfolioStateProcessor processor;
+    PortfolioCommandProcessor processor;
 
 
     @Override
     public SendMessage sendMessageDependsOnState(Message message) {
         String chatId = message.getChatId().toString();
         User user = service.getUserOrCreateNewUserByChatId(chatId);
-        BotState state = user.getState();
+        BotCommand state = user.getState();
 
         SendMessage reply = SendMessage.builder().chatId(message.getChatId().toString()).text(BotMessageSend.PORTFOLIO_ADVICE.getMessage()).build();
         reply.setReplyMarkup(keyBoard.getKeyboard());
 
-        if (state.equals(BotState.PORTFOLIO)){
+        if (state.equals(BotCommand.PORTFOLIO)){
             return reply;
         }
 
@@ -44,7 +44,7 @@ public class AbsPortfolioMessageHandler implements MessageHandler {
     }
 
     @Override
-    public BotState getHandlerName() {
-        return BotState.PORTFOLIO;
+    public BotCommand getHandlerName() {
+        return BotCommand.PORTFOLIO;
     }
 }

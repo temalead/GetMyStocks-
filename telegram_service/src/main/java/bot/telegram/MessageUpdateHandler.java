@@ -4,8 +4,9 @@ import bot.entity.User;
 import bot.repository.UserService;
 import bot.telegram.keyboard.MainMenuKeyboard;
 import bot.telegram.buttons.BotMessageSend;
-import bot.telegram.state.BotState;
-import bot.telegram.state.StateProcessor;
+import bot.telegram.state.AvailableCommands;
+import bot.telegram.state.BotCommand;
+import bot.telegram.state.CommandProcessor;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,63 +22,35 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class MessageUpdateHandler {
     MainMenuKeyboard menu;
-    StateProcessor controller;
+    CommandProcessor controller;
     UserService service;
+
 
     public BotApiMethod<?> handleMessage(Message message) {
 
+
         String chatId = String.valueOf(message.getChatId());
         User user = service.getUserOrCreateNewUserByChatId(chatId);
-        BotState botState;
 
         String input = message.getText();
 
-        //processor.sendMessageDependsOnState(input);
+        BotCommand botCommand = AvailableCommands.findCommand(input);
+
+        if (botCommand == null) {
+            botCommand = user.getState();
+        }
+        if (user.getState().equals(BotCommand.DEFAULT)) {
+            botCommand = BotCommand.UNRECOGNIZED;
+        }
+
         if (!message.hasText()) {
             return sendError(chatId);
         }
-        switch (input) {
-            case "/start":
-                botState = BotState.GET_START_MENU;
-                break;
-            case "My portfolio":
-                botState = BotState.PORTFOLIO;
-                break;
-            case "Get share by ticker":
-                botState = BotState.WANNA_GET_SHARE;
-                break;
-            case "Get bond by name":
-                botState=BotState.WANNA_GET_BOND;
-                break;
-            case "Help me!":
-                botState = BotState.GET_HELP;
-                break;
-            case "Get portfolio":
-                botState=BotState.GET_PORTFOLIO;
-                break;
-            case "Back":
-                botState=BotState.BACK;
-                break;
-            case "Make portfolio":
-                botState=BotState.WANNA_MAKE_PORTFOLIO;
-                break;
-            case "Delete portfolio":
-                botState=BotState.DELETE_PORTFOLIO;
-                break;
-            case "Update portfolio":
-                botState=BotState.UPDATE_PORTFOLIO;
-                break;
-            default:
-                if (user.getState().equals(BotState.NONE)) {
-                    botState = BotState.UNRECOGNIZED;
-                } else {
-                    botState = user.getState();
-                }
-        }
-        user.setState(botState);
+
+        user.setState(botCommand);
 
         service.saveCondition(user);
-        log.info("Current bot state {}", botState.name());
+        log.info("Current bot state {}", botCommand.name());
         return controller.processMessage(user.getState(), message);
     }
 

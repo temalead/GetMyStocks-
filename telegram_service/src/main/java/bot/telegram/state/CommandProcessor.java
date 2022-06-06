@@ -18,60 +18,60 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class StateProcessor implements Processor {
-    Map<BotState, MessageHandler> handlers = new HashMap<>();
+public class CommandProcessor implements Processor {
+    Map<BotCommand, MessageHandler> handlers = new HashMap<>();
 
     @Autowired
-    public StateProcessor(List<MessageHandler> handlers) {
+    public CommandProcessor(List<MessageHandler> handlers) {
         handlers.forEach(handler -> this.handlers.put(handler.getHandlerName(), handler));
     }
 
     @Override
-    public SendMessage processMessage(BotState state, Message message) {
+    public SendMessage processMessage(BotCommand state, Message message) {
         MessageHandler handler = findNeededHandler(state);
         return handler.sendMessageDependsOnState(message);
     }
 
 
     @Override
-    public MessageHandler findNeededHandler(BotState state) {
+    public MessageHandler findNeededHandler(BotCommand state) {
         if (isShareHandler(state)) {
-            return handlers.get(BotState.WANNA_GET_SHARE);
+            return handlers.get(BotCommand.FIND_SHARE);
         }
         if (isBondHandler(state)) {
-            return handlers.get(BotState.WANNA_GET_BOND);
+            return handlers.get(BotCommand.FIND_BOND);
         }
         if (isPortfolioHandler(state)) {
-            return handlers.get(BotState.PORTFOLIO);
+            return handlers.get(BotCommand.PORTFOLIO);
         }
-        return handlers.get(BotState.HINT);
+        return handlers.get(BotCommand.HINT);
     }
 
-    private boolean isShareHandler(BotState state) {
+    private boolean isShareHandler(BotCommand state) {
         switch (state) {
+            case FOUND_SHARE:
             case FIND_SHARE:
-            case WANNA_GET_SHARE:
                 return true;
         }
         return false;
     }
 
-    private boolean isBondHandler(BotState state) {
+    private boolean isBondHandler(BotCommand state) {
         switch (state) {
-            case WANNA_GET_BOND:
             case FIND_BOND:
+            case FOUND_BOND:
                 return true;
         }
         return false;
     }
 
 
-    private boolean isPortfolioHandler(BotState state) {
+    private boolean isPortfolioHandler(BotCommand state) {
         switch (state) {
             case PORTFOLIO:
             case DELETE_PORTFOLIO:
             case GET_PORTFOLIO:
-            case WANNA_MAKE_PORTFOLIO:
+            case WISH_MAKE_PORTFOLIO:
             case MAKE_PORTFOLIO:
             case UPDATE_PORTFOLIO:
                 return true;
