@@ -1,5 +1,6 @@
 package bot.telegram;
 
+import bot.telegram.handler.UpdateHandler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

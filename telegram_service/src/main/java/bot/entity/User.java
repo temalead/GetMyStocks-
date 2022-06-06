@@ -18,7 +18,7 @@ import java.util.Objects;
 @Accessors(chain = true)
 public class User implements Serializable {
     String id;
-    BotCommand state;
+    BotCommand command;
     Portfolio portfolio;
 
 

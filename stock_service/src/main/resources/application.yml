@@ -10,3 +10,7 @@ spring:
   application:
     name: stock_service
 
+
+server:
+  port: 8081
+

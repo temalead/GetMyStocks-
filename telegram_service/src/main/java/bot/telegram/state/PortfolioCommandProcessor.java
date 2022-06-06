@@ -1,8 +1,8 @@
 package bot.telegram.state;
 
 
-import bot.telegram.handlers.MessageHandler;
-import bot.telegram.handlers.PortfolioMessageHandler;
+import bot.telegram.state.handlers.MessageHandler;
+import bot.telegram.state.handlers.PortfolioMessageHandler;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -32,7 +32,7 @@ public class PortfolioCommandProcessor implements Processor {
     @Override
     public SendMessage processMessage(BotCommand state, Message message) {
         MessageHandler handler = findNeededHandler(state);
-        return handler.sendMessageDependsOnState(message);
+        return handler.sendMessageDependsOnCommand(message);
     }
 
     public PortfolioMessageHandler findNeededHandler(BotCommand state) {

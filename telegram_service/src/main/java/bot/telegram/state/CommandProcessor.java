@@ -1,6 +1,6 @@
 package bot.telegram.state;
 
-import bot.telegram.handlers.MessageHandler;
+import bot.telegram.state.handlers.MessageHandler;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,7 +29,7 @@ public class CommandProcessor implements Processor {
     @Override
     public SendMessage processMessage(BotCommand state, Message message) {
         MessageHandler handler = findNeededHandler(state);
-        return handler.sendMessageDependsOnState(message);
+        return handler.sendMessageDependsOnCommand(message);
     }
 
 

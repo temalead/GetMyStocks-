@@ -28,7 +28,7 @@ public class BondSender implements Sender{
         MyBond info = bondService.getInfo(text);
         String result= createMessage(info);
         log.info("Message: {}",result);
-        //producer.sendToTopic(einfo)
+        //producer.sendToTopic(info)
         //return SendMessage.builder().chatId(chatId).text(result).build();
     }
 
