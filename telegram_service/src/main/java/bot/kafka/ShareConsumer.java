@@ -8,7 +8,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 @Slf4j
@@ -20,9 +19,10 @@ public class ShareConsumer {
 
     @KafkaListener(topics = "share.security")
     @SneakyThrows
-    public void getShareInfoFromKafka(String message) {
+    public MyShare getShareInfoFromKafka(String message) {
         log.info("Got share {}", message);
-        mapper.readValue(message, MyShare.class);
+        MyShare result = mapper.readValue(message, MyShare.class);
 
+        return result;
     }
 }

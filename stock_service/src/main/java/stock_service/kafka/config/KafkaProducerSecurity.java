@@ -24,20 +24,36 @@ public class KafkaProducerSecurity {
 
 
     @Bean
-    public ProducerFactory<String, String> producerFactory(){
+    public ProducerFactory<String, String> producerFactory() {
         Map<String, Object> properties = kafkaProperties.buildProducerProperties();
         return new DefaultKafkaProducerFactory<>(properties);
     }
 
 
-
+    @Bean
+    public NewTopic shareTopic() {
+        return TopicBuilder
+                .name("share.topic")
+                .partitions(1)
+                .replicas(1)
+                .build();
+    }
 
     @Bean
-    public NewTopic securityTopic(){
+    public NewTopic bondTopic() {
         return TopicBuilder
-                .name("security.topic")
-                .partitions(2)
-                .replicas(2)
+                .name("bond.topic")
+                .partitions(1)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    public NewTopic portfolioTopic() {
+        return TopicBuilder
+                .name("portfolio.topic")
+                .partitions(1)
+                .replicas(1)
                 .build();
     }
 

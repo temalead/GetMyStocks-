@@ -1,8 +1,11 @@
 package bot.service;
 
 import bot.entity.User;
+import bot.exception.sender.Asset;
+import bot.exception.sender.NotFoundMessageBuilder;
 import bot.kafka.RequestProducer;
 import bot.kafka.ShareConsumer;
+import bot.service.sender.ShareSender;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -19,16 +22,16 @@ import java.util.concurrent.CompletionException;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class MessageSender {
 
-    private final ShareConsumer shareConsumer;
-    private final RequestProducer producer;
 
+    private final ShareSender sender;
 
     public SendMessage getShareInfo(Message message, User user) {
         String ticker = message.getText();
         String chatId = message.getChatId().toString();
         try {
-            shareConsumer.getShareInfoFromKafka(message);
-            return shareSender.getInfo(message,user);
+
+            return sender.getInfo(message, user);
+
         } catch (CompletionException e) {
             return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(ticker, Asset.SHARE)).build();
         }
@@ -36,27 +39,7 @@ public class MessageSender {
 
 
 
-
-
-    /*ShareSender shareSender;
-    BondSender bondSender;
-    PortfolioCompositionSender compositionSender;
-
-    SecurityConsumer securityConsumer;
-    RequestProducer requestProducer;*/
-
-    /*public SendMessage getShareInfo(Message message, User user) {
-        String ticker = message.getText();
-        String chatId = message.getChatId().toString();
-        try {
-            securityConsumer.produceRequest(message)
-            return shareSender.getInfo(message,user);
-        } catch (CompletionException e) {
-            return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(ticker, Asset.SHARE)).build();
-        }
-    }
-
-    public SendMessage getBondInfo(Message message, User user) {
+    /*public SendMessage getBondInfo(Message message, User user) {
         String chatId = message.getChatId().toString();
         String text = message.getText();
         try {

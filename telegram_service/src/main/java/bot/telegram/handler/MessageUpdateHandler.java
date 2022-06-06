@@ -51,7 +51,7 @@ public class MessageUpdateHandler {
 
         service.saveCondition(user);
         log.info("Current bot state {}", botCommand.name());
-        return controller.processMessage(user.getCommand(), message);
+        return controller.processMessage(botCommand, message);
     }
 
 

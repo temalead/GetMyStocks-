@@ -1,15 +1,15 @@
-package stock_service.sender;
+package bot.service.sender;
 
 
+import bot.entity.MyShare;
+import bot.entity.User;
+import bot.entity.dto.DividendDto;
+import bot.entity.dto.DividendListDto;
+import bot.kafka.ShareConsumer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import stock_service.entity.MyShare;
-import stock_service.entity.User;
-import stock_service.entity.dto.DividendDto;
-import stock_service.entity.dto.DividendListDto;
-import stock_service.service.ShareService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,20 +17,20 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class ShareSender implements Sender {
-    private final ShareService service;
+    private final ShareConsumer shareConsumer;
 
     @Override
     public SendMessage getInfo(Message message, User user) {
         String chatId = message.getChatId().toString();
 
-        MyShare info = service.getInfo(message.getText());
+        MyShare info = shareConsumer.getShareInfoFromKafka(message.getText());
         String result = createMessage(info);
         return SendMessage.builder().chatId(chatId).text(result).build();
+
 
     }
 
     public String createMessage(MyShare share) {
-        System.out.println(share);
 
         String dividendMessage = createDividendMessage(share.getDividends());
         String price = "Price: " + share.getPrice() + "\n";

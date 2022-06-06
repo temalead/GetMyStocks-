@@ -1,14 +1,13 @@
-package stock_service.sender;
+package bot.service.sender;
 
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import stock_service.entity.MyBond;
 import stock_service.entity.User;
-import stock_service.kafka.TopicProducer;
+import stock_service.kafka.ShareProducer;
 import stock_service.service.BondService;
 
 import java.math.BigDecimal;
@@ -19,7 +18,7 @@ import java.time.LocalDate;
 @Slf4j
 public class BondSender implements Sender{
     private final BondService bondService;
-    private final TopicProducer producer;
+    private final ShareProducer producer;
 
     @Override
     public void getInfo(Message message, User user) {

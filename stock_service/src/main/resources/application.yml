@@ -14,3 +14,10 @@ spring:
 server:
   port: 8081
 
+
+topic:
+  share: share.topic
+  bond: bond.topic
+  portfolio: portfolio.topic
+  request: req.topic
+

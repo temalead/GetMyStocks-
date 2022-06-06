@@ -1,4 +1,4 @@
-package stock_service.sender;
+package bot.service.sender;
 
 
 import lombok.AccessLevel;
