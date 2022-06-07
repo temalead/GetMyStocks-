@@ -1,6 +1,7 @@
 package stock_service.kafka;
 
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -13,12 +14,15 @@ public class RequestConsumer {
 
 
     private final String TOPIC = "req.topic";
+    private final ShareProducer shareProducer;
 
 
     @KafkaListener(topics = TOPIC)
-    public String getRequestFromTelegram(Request request) {
+    public void getRequestFromTelegram(Request request) {
 
-        return request.getMessage().getText();
+        String requestedShare = request.getMessage().getText();
+
+        shareProducer.sendResponse(requestedShare);
 
     }
 }
