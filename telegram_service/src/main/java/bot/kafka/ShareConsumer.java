@@ -21,8 +21,7 @@ public class ShareConsumer {
     @SneakyThrows
     public MyShare getShareInfoFromKafka(String message) {
         log.info("Got share {}", message);
-        MyShare result = mapper.readValue(message, MyShare.class);
 
-        return result;
+        return mapper.readValue(message, MyShare.class);
     }
 }

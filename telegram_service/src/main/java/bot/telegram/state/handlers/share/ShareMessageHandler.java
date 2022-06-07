@@ -1,6 +1,8 @@
 package bot.telegram.state.handlers.share;
 
+import bot.entity.Request;
 import bot.entity.User;
+import bot.kafka.RequestProducer;
 import bot.repository.UserService;
 import bot.telegram.state.handlers.MessageHandler;
 import bot.telegram.ui.buttons.BotMessageSend;
@@ -20,6 +22,8 @@ public class ShareMessageHandler implements MessageHandler {
     UserService service;
     MessageSender sender;
 
+    RequestProducer producer;
+
     @Override
     public SendMessage sendMessageDependsOnCommand(Message message) {
         String chatId = message.getChatId().toString();
@@ -27,12 +31,14 @@ public class ShareMessageHandler implements MessageHandler {
         BotCommand state = user.getCommand();
 
         SendMessage reply = null;
+        Request request = new Request(message, user);
 
         if (state.equals(BotCommand.FIND_SHARE)) {
             user.setCommand(BotCommand.FOUND_SHARE);
             reply = SendMessage.builder().text(BotMessageSend.SHARE_ADVICE_MESSAGE.getMessage()).chatId(chatId).build();
         }
         if (state.equals(BotCommand.FOUND_SHARE)) {
+            producer.sendRequest(request);
             reply = sender.getShareInfo(message, user);
             if (reply.getText().startsWith("Error")) {
                 return reply;

@@ -25,6 +25,7 @@ public class MessageSender {
 
     private final ShareSender sender;
 
+
     public SendMessage getShareInfo(Message message, User user) {
         String ticker = message.getText();
         String chatId = message.getChatId().toString();

@@ -1,6 +1,10 @@
 package bot.service.sender;
 
 
+import bot.entity.Portfolio;
+import bot.entity.User;
+import bot.entity.dto.SecurityDto;
+import bot.exception.sender.Asset;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -8,12 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import stock_service.entity.Portfolio;
-import stock_service.entity.User;
-import stock_service.entity.dto.SecurityDto;
-import stock_service.entity.Asset;
-import stock_service.utils.FractionOccupiedPortfolioCalculator;
-import stock_service.utils.PortfolioCreator;
 
 import java.math.BigDecimal;
 import java.util.List;
