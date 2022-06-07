@@ -30,7 +30,7 @@ public class KafkaProducerConfig {
     @Bean
     public NewTopic requestSecurityTopic() {
         return TopicBuilder
-                .name("req.topic")
+                .name("share.topic")
                 .replicas(2)
                 .partitions(2)
                 .build();

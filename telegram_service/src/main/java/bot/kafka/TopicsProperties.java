@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "topic")
 public class TopicsProperties {
-    private String request;
-    private String security;
+    String share;
+    String bond;
+    String portfolio;
 }

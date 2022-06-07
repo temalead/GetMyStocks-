@@ -16,7 +16,7 @@ public class RequestProducer {
 
     public void sendRequest(Request request) {
 
-        kafkaTemplate.send(topics.getRequest(), request);
+        kafkaTemplate.send(topics.getShare(), request);
 
     }
 }
