@@ -4,6 +4,7 @@ package bot.service.sender;
 import bot.entity.Portfolio;
 import bot.entity.User;
 import bot.entity.dto.SecurityDto;
+import bot.exception.NonExistentPortfolioException;
 import bot.exception.sender.Asset;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,14 @@ import java.util.List;
 @Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class PortfolioCompositionSender implements Sender {
-    PortfolioCreator creator;
+
+    //TODO portfolio actions: create, get, update, delete
+    @Override
+    public SendMessage getInfo(Message message, User user) throws NonExistentPortfolioException {
+        return null;
+    }
+
+    /*PortfolioCreator creator;
     FractionOccupiedPortfolioCalculator calculator;
 
 
@@ -73,5 +81,5 @@ public class PortfolioCompositionSender implements Sender {
         stringBuilder.append("Quantity: ").append(lot).append("\n");
 
         return stringBuilder.toString();
-    }
+    }*/
 }

@@ -1,6 +1,7 @@
 package stock_service.service;
 
 
+import ru.tinkoff.piapi.contract.v1.Quotation;
 import stock_service.entity.MyShare;
 import stock_service.entity.dto.DividendListDto;
 import stock_service.entity.dto.SharePriceListDto;
