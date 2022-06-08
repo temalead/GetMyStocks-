@@ -2,13 +2,15 @@ package stock_service.entity;
 
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.redis.core.RedisHash;
-import stock_service.entity.dto.DividendListDto;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -19,10 +21,12 @@ import java.util.Objects;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@Builder
 public class MyShare extends Security implements Serializable {
     String name;
     String figi;
-    DividendListDto dividends;
+    DividendList dividends;
 
     @Override
     public boolean equals(Object o) {
@@ -46,6 +50,7 @@ public class MyShare extends Security implements Serializable {
                 ", price=" + price +
                 '}';
     }
+
 
 
 }

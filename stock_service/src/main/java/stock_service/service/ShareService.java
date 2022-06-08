@@ -1,9 +1,8 @@
 package stock_service.service;
 
 
-import ru.tinkoff.piapi.contract.v1.Quotation;
 import stock_service.entity.MyShare;
-import stock_service.entity.dto.DividendListDto;
+import stock_service.entity.DividendList;
 import stock_service.entity.dto.SharePriceListDto;
 import stock_service.exception.ShareNotFoundException;
 import stock_service.utils.DividendCreator;
@@ -48,21 +47,42 @@ public class ShareService {
             return share.get();
         } else {
             log.info("Share with ticker {} not found in cache. Creating...", ticker);
-            return addShareToCacheByTicker(ticker);
+            return createShare(ticker);
         }
     }
 
+    private MyShare createShare(String ticker) throws ShareNotFoundException {
+        Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new ShareNotFoundException("Share not found"));
+        String figi = share.getFigi();
 
-    private Share findShareByName(String name) {
-        return api.getInstrumentsService().getAllSharesSync()
-                .stream()
-                .filter(share -> share.getName().equals(name)).findFirst().orElseThrow(() -> new ShareNotFoundException(name));
+
+        List<Dividend> dividendsPerYear = api.getInstrumentsService().getDividends(figi,
+                        Instant.now().minus(365, ChronoUnit.DAYS),
+                        Instant.now())
+                .join();
+        DividendList dividends = DividendCreator.createDividend(dividendsPerYear);
+        log.info("Get dividens of {}", ticker);
+        SharePriceListDto prices = getSharesPrices(List.of(ticker));
+        BigDecimal price = prices.getPrices().get(0);
+        MyShare myShare = new MyShare()
+                .setFigi(figi)
+                .setDividends(dividends);
+        myShare.setPrice(price);
+        myShare.setId(ticker);
+
+        repository.save(myShare);
+
+        return myShare;
     }
 
 
     private void updatePrice(MyShare myShare) {
         myShare.setPrice(getSharePrice(myShare.getFigi()));
         repository.save(myShare);
+    }
+
+    private BigDecimal getSharePrice(String figi) {
+        return PriceCalculator.calculateValue(api.getMarketDataService().getLastPrices(Collections.singleton(figi)).join().get(0).getPrice());
     }
 
 
@@ -101,33 +121,13 @@ public class ShareService {
     }
 
 
-    private MyShare addShareToCacheByTicker(String ticker) throws ShareNotFoundException {
-        Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new ShareNotFoundException("Share not found"));
-        String figi = share.getFigi();
 
 
-        List<Dividend> dividendsPerYear = api.getInstrumentsService().getDividends(figi,
-                        Instant.now().minus(365, ChronoUnit.DAYS),
-                        Instant.now())
-                .join();
-        DividendListDto dividends = DividendCreator.createDividend(dividendsPerYear);
-        log.info("Get dividens of {}", ticker);
-        SharePriceListDto prices = getSharesPrices(List.of(ticker));
-        BigDecimal price = prices.getPrices().get(0);
-        MyShare myShare = new MyShare()
-                .setFigi(figi)
-                .setDividends(dividends);
-        myShare.setPrice(price);
-        myShare.setId(ticker);
 
-        repository.save(myShare);
-
-        return myShare;
+    private Share findShareByName(String name) {
+        return api.getInstrumentsService().getAllSharesSync()
+                .stream()
+                .filter(share -> share.getName().equals(name)).findFirst().orElseThrow(() -> new ShareNotFoundException(name));
     }
-
-    private BigDecimal getSharePrice(String figi) {
-        return PriceCalculator.calculateValue(api.getMarketDataService().getLastPrices(Collections.singleton(figi)).join().get(0).getPrice());
-    }
-
 }
 

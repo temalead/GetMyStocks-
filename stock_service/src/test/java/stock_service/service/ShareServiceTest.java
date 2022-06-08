@@ -1,7 +1,6 @@
 package stock_service.service;
 
 import lombok.SneakyThrows;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,11 +8,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.tinkoff.piapi.contract.v1.LastPrice;
 import ru.tinkoff.piapi.contract.v1.Share;
 import ru.tinkoff.piapi.core.InvestApi;
+import stock_service.entity.MyShare;
+import stock_service.entity.Dividend;
+import stock_service.entity.DividendList;
 import stock_service.exception.ShareNotFoundException;
+import stock_service.utils.PriceCalculator;
 
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,6 +33,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ShareServiceTest {
 
+    final String exchangeCode = "TQBR";
     @Mock
     ShareRepository repository;
     InvestApi api;
@@ -38,32 +48,53 @@ class ShareServiceTest {
     }
 
 
+    @Test
+    void shouldCallUpdatePriceOfShare() {
+        //given
+        final String ticker = "GAZP";
+        final String figi = "AAA";
+        MyShare shareInDB = MyShare.builder()
+                .name(ticker)
+                .dividends(new DividendList(List.of(Dividend.getDefaultDividend())))
+                .figi(figi)
+                .build();
+        shareInDB.setPrice(BigDecimal.ZERO);
+        Mockito.mockStatic(PriceCalculator.class);
+
+        BigDecimal expected = BigDecimal.ONE;
+        when(repository.findById(any())).thenReturn(Optional.of(shareInDB));
+        when(PriceCalculator.calculateValue(any())).thenReturn(BigDecimal.ONE);
+
+        //when
+        MyShare result = service.getInfo(ticker);
+
+
+        //then
+        assertEquals(expected, result.getPrice());
+
+    }
+
+
     @SneakyThrows
     @Test
     void shouldThrowShareNotFoundExceptionWhenFindingFigiOfShare() {
         final String ticker = "GAZSADF";
         CompletableFuture<Optional<Share>> futureWithException = new CompletableFuture<>();
         futureWithException.completeExceptionally(new ShareNotFoundException(ticker));
-        when(api.getInstrumentsService().getShareByTicker(ticker, "TQBR"))
+        when(api.getInstrumentsService().getShareByTicker(ticker, exchangeCode))
                 .thenReturn(futureWithException);
 
 
-        CompletableFuture<Optional<Share>> actual = service.getFigiByTicker(ticker)
+        service.getFigiByTicker(ticker)
                 .exceptionally(e -> {
 
-                    try {
 
-                        throw new ShareNotFoundException(ticker);
-                    } catch (ShareNotFoundException ex) {
-                        System.out.println("Exception was caught");
-                        Assertions.fail();
-                    }
+                    throw new ShareNotFoundException(ticker);
 
-                    return null;
+
                 });
 
 
     }
-
 
 }
