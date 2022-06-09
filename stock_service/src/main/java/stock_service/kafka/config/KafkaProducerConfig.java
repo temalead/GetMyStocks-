@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -17,11 +18,10 @@ import java.util.Map;
 @EnableKafka
 @EnableScheduling
 @RequiredArgsConstructor
-public class KafkaProducerSecurity {
+public class KafkaProducerConfig {
 
 
     private final KafkaProperties kafkaProperties;
-
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
@@ -30,30 +30,26 @@ public class KafkaProducerSecurity {
     }
 
 
+
+    @Bean
+    public KafkaTemplate<String, String> kafkaTemplate(){
+        return new KafkaTemplate<>(producerFactory());
+    }
+
     @Bean
     public NewTopic shareTopic() {
         return TopicBuilder
                 .name("share.topic")
-                .partitions(1)
-                .replicas(1)
+                .replicas(2)
+                .partitions(2)
                 .build();
     }
-
     @Bean
     public NewTopic bondTopic() {
         return TopicBuilder
                 .name("bond.topic")
-                .partitions(1)
-                .replicas(1)
-                .build();
-    }
-
-    @Bean
-    public NewTopic portfolioTopic() {
-        return TopicBuilder
-                .name("portfolio.topic")
-                .partitions(1)
-                .replicas(1)
+                .replicas(2)
+                .partitions(2)
                 .build();
     }
 

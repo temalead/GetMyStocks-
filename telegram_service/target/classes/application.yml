@@ -4,7 +4,7 @@ bot:
   telegram:
     botToken: ${secret.bot.telegram.token}
     botUsername: get_my_stocks_bot
-    botPath: https://0dd8-78-85-4-68.ngrok.io
+    botPath: https://14e9-78-85-4-68.ngrok.io
 spring:
   application:
     name: telegram_service
