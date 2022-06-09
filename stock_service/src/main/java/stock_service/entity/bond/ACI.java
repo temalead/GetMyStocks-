@@ -1,5 +1,4 @@
-package stock_service.entity;
-
+package stock_service.entity.bond;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
@@ -9,12 +8,7 @@ import java.time.LocalDate;
 
 @Value
 @AllArgsConstructor
-public class Dividend {
+public class ACI {
     BigDecimal payment;
     LocalDate paymentDate;
-
-
-    public static Dividend getDefaultDividend() {
-       return new Dividend(BigDecimal.ZERO, LocalDate.MIN);
-    }
 }

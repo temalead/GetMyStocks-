@@ -46,12 +46,6 @@ public class BondService {
         }
     }
 
-    public List<MyBond> createBondCollection(List<String> tickers) {
-        List<MyBond> result = new ArrayList<>();
-        tickers.forEach(ticker -> result.add(getInfo(ticker)));
-        return result;
-    }
-
 
     private Bond findBondByNameFromTinkoff(String requestName) {
         Optional<Bond> response = api.getInstrumentsService().getAllBondsSync().stream().filter(bond -> bond.getName().equals(requestName)).findFirst();
@@ -62,7 +56,7 @@ public class BondService {
     private MyBond createBond(Bond bond) {
         MyBond result = new MyBond();
         result.setId(bond.getName());
-        result.setPrice(getPrice(bond).multiply(BigDecimal.valueOf(10)));
+        result.setPrice(getPrice(bond.getFigi()));
         result.setLot(bond.getLot());
         result.setMaturityDate(getMaturityDate(bond))
                 .setAci(PriceCalculator.calculateACI(bond.getAciValue()))
@@ -73,10 +67,9 @@ public class BondService {
         return result;
     }
 
-    private void updateBond(MyBond myBond) {
-        Bond bond = api.getInstrumentsService().getBondByFigi(myBond.getFigi()).join().get();
-        myBond.setPrice(getPrice(bond));
-        repository.save(myBond);
+    private void updateBond(MyBond bond) {
+        bond.setPrice(getPrice(bond.getFigi()));
+        repository.save(bond);
     }
 
 
@@ -85,7 +78,15 @@ public class BondService {
         return Instant.ofEpochSecond(date.getSeconds()).atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
-    private BigDecimal getPrice(Bond bond) {
-        return PriceCalculator.calculateValue(api.getMarketDataService().getLastPrices(Collections.singleton(bond.getFigi())).join().get(0).getPrice());
+    private BigDecimal getPrice(String figi) {
+        return PriceCalculator.calculateValue(api.getMarketDataService().getLastPrices(Collections.singleton(figi)).join().get(0).getPrice())
+                .multiply(BigDecimal.valueOf(10));  //multiply x10 because price of bond in percent
+    }
+
+
+    public List<MyBond> createBondCollection(List<String> tickers) {
+        List<MyBond> result = new ArrayList<>();
+        tickers.forEach(ticker -> result.add(getInfo(ticker)));
+        return result;
     }
 }

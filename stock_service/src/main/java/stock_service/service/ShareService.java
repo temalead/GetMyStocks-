@@ -2,8 +2,8 @@ package stock_service.service;
 
 
 import stock_service.entity.MyShare;
-import stock_service.entity.DividendList;
-import stock_service.entity.dto.SharePriceListDto;
+import stock_service.entity.share.DividendList;
+import stock_service.entity.share.SharePriceList;
 import stock_service.exception.ShareNotFoundException;
 import stock_service.utils.DividendCreator;
 import stock_service.utils.PriceCalculator;
@@ -54,16 +54,8 @@ public class ShareService {
     private MyShare createShare(String ticker) throws ShareNotFoundException {
         Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new ShareNotFoundException("Share not found"));
         String figi = share.getFigi();
-
-
-        List<Dividend> dividendsPerYear = api.getInstrumentsService().getDividends(figi,
-                        Instant.now().minus(365, ChronoUnit.DAYS),
-                        Instant.now())
-                .join();
-        DividendList dividends = DividendCreator.createDividend(dividendsPerYear);
-        log.info("Get dividens of {}", ticker);
-        SharePriceListDto prices = getSharesPrices(List.of(ticker));
-        BigDecimal price = prices.getPrices().get(0);
+        DividendList dividends = getDividendsForYear(figi);
+        BigDecimal price = getSharePrice(figi);
         MyShare myShare = new MyShare()
                 .setFigi(figi)
                 .setDividends(dividends);
@@ -73,6 +65,25 @@ public class ShareService {
         repository.save(myShare);
 
         return myShare;
+    }
+
+    @Async
+    public CompletableFuture<Optional<Share>> getFigiByTicker(String ticker) {
+        log.info("Getting figi by ticker {}", ticker);
+        return api.getInstrumentsService().getShareByTicker(ticker, code)
+                .exceptionally(exception -> {
+                    log.error("Share {} not found", ticker);
+                    throw new ShareNotFoundException(ticker);
+                });
+    }
+
+
+    private DividendList getDividendsForYear(String figi) {
+        List<Dividend> dividendList = api.getInstrumentsService().getDividends(figi,
+                        Instant.now().minus(365, ChronoUnit.DAYS),
+                        Instant.now())
+                .join();
+        return DividendCreator.createDividends(dividendList);
     }
 
 
@@ -86,24 +97,20 @@ public class ShareService {
     }
 
 
-    @Async
-    public CompletableFuture<Optional<Share>> getFigiByTicker(String ticker) {
-        log.info("Getting figi by ticker {}", ticker);
-        CompletableFuture<Optional<Share>> share = api.getInstrumentsService().getShareByTicker(ticker, code)
-                .exceptionally(exception -> {
-                    log.error("Share {} not found", ticker);
-                    throw new ShareNotFoundException(ticker);
-                });
-        return share;
-    }
-
     public List<MyShare> createShareCollection(List<String> tickers) {
         List<MyShare> result = new ArrayList<>();
         tickers.forEach(ticker -> result.add(getInfo(ticker)));
         return result;
     }
 
-    public SharePriceListDto getSharesPrices(List<String> tickers) {
+
+    private Share findShareByName(String name) {
+        return api.getInstrumentsService().getAllSharesSync()
+                .stream()
+                .filter(share -> share.getName().equals(name)).findFirst().orElseThrow(() -> new ShareNotFoundException(name));
+    }
+
+    private SharePriceList getSharesPrices(List<String> tickers) {
         List<CompletableFuture<Optional<Share>>> shareList = new ArrayList<>();
         tickers.forEach(ticker -> shareList.add(getFigiByTicker(ticker)));
         List<String> figies = shareList.stream()
@@ -117,17 +124,7 @@ public class ShareService {
         List<BigDecimal> prices = pricesFromApi.stream()
                 .map(price -> PriceCalculator.calculateValue(price.getPrice()))
                 .collect(Collectors.toList());
-        return new SharePriceListDto(prices);
-    }
-
-
-
-
-
-    private Share findShareByName(String name) {
-        return api.getInstrumentsService().getAllSharesSync()
-                .stream()
-                .filter(share -> share.getName().equals(name)).findFirst().orElseThrow(() -> new ShareNotFoundException(name));
+        return new SharePriceList(prices);
     }
 }
 

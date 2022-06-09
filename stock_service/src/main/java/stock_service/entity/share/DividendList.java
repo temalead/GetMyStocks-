@@ -1,4 +1,4 @@
-package stock_service.entity;
+package stock_service.entity.share;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;

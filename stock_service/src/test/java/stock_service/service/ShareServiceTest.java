@@ -1,33 +1,29 @@
 package stock_service.service;
 
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.tinkoff.piapi.contract.v1.LastPrice;
 import ru.tinkoff.piapi.contract.v1.Share;
 import ru.tinkoff.piapi.core.InvestApi;
 import stock_service.entity.MyShare;
-import stock_service.entity.Dividend;
-import stock_service.entity.DividendList;
+import stock_service.entity.share.Dividend;
+import stock_service.entity.share.DividendList;
 import stock_service.exception.ShareNotFoundException;
 import stock_service.utils.PriceCalculator;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,7 +45,7 @@ class ShareServiceTest {
 
 
     @Test
-    void shouldCallUpdatePriceOfShare() {
+    void shouldUpdatePriceOfShareInDB() {
         //given
         final String ticker = "GAZP";
         final String figi = "AAA";
@@ -71,6 +67,11 @@ class ShareServiceTest {
 
         //then
         assertEquals(expected, result.getPrice());
+
+    }
+
+    @Test
+    void shouldReturnPricesOfShares(){
 
     }
 
