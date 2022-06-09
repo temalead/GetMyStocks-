@@ -2,7 +2,6 @@ package bot.service.sender;
 
 
 import bot.entity.MyShare;
-import bot.entity.User;
 import bot.entity.dto.DividendDto;
 import bot.entity.dto.DividendListDto;
 import bot.kafka.ShareConsumer;
@@ -16,14 +15,14 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ShareSender implements Sender {
+public class ShareSender implements SecuritySender {
     private final ShareConsumer shareConsumer;
 
     @Override
-    public SendMessage getInfo(Message message, User user) {
+    public SendMessage getInfo(Message message) {
         String chatId = message.getChatId().toString();
 
-        MyShare info = shareConsumer.getShareInfoFromKafka(message.getText());
+        MyShare info = shareConsumer.getSecurityFromKafka(message.getText());
         String result = createMessage(info);
         return SendMessage.builder().chatId(chatId).text(result).build();
 

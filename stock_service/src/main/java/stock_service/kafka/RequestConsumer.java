@@ -15,6 +15,7 @@ public class RequestConsumer {
     private final String SHARE_TOPIC = "share.topic";
     private final String BOND_TOPIC = "bond.topic";
     private final ShareProducer shareProducer;
+    private final BondProducer bondProducer;
 
 
     @KafkaListener(topics = SHARE_TOPIC)
@@ -31,7 +32,7 @@ public class RequestConsumer {
 
         String requestedShare = request.getMessage().getText();
 
-        shareProducer.sendResponse(requestedShare);
+        bondProducer.sendResponse(requestedShare);
 
     }
 }

@@ -1,11 +1,8 @@
 package bot.service.sender;
 
 
-import bot.entity.Portfolio;
 import bot.entity.User;
-import bot.entity.dto.SecurityDto;
 import bot.exception.NonExistentPortfolioException;
-import bot.exception.sender.Asset;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,18 +11,14 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class PortfolioCompositionSender implements Sender {
+public class PortfolioCompositionSender {
 
     //TODO portfolio actions: create, get, update, delete
-    @Override
     public SendMessage getInfo(Message message, User user) throws NonExistentPortfolioException {
         return null;
     }

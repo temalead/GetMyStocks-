@@ -2,7 +2,7 @@ package bot.service.sender;
 
 
 import bot.entity.MyBond;
-import bot.entity.User;
+import bot.kafka.BondConsumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,24 +16,25 @@ import java.time.LocalDate;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class BondSender implements Sender{
+public class BondSender implements SecuritySender {
+    private final BondConsumer consumer;
+
 
     @Override
-    public SendMessage getInfo(Message message, User user) {
+    public SendMessage getInfo(Message message) {
         String chatId = message.getChatId().toString();
-        String text = message.getText();
-        /*MyBond info = bondService.getInfo(text);
-        String result= createMessage(info);
-        log.info("Message: {}",result);*/
-        //producer.sendToTopic(info)
-        //return SendMessage.builder().chatId(chatId).text(result).build();
 
-        return null;
+        MyBond bond = consumer.getSecurityFromKafka(message.getText());
+        String result = createMessage(bond);
+
+
+        return SendMessage.builder().chatId(chatId).text(result).build();
+
     }
 
 
     private String createMessage(MyBond myBond) {
-        StringBuilder stringBuilder=new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
 
         LocalDate date = myBond.getMaturityDate();
         BigDecimal price = myBond.getPrice();

@@ -33,12 +33,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class ShareService {
+public class ShareService implements SecurityService{
     InvestApi api;
     ShareRepository repository;
     String code = "TQBR";
 
     @NonNull
+    @Override
     public MyShare getInfo(String ticker) {
         Optional<MyShare> share = repository.findById(ticker);
         if (share.isPresent()) {

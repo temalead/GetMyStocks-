@@ -27,11 +27,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Slf4j
-public class BondService {
+public class BondService implements SecurityService{
     InvestApi api;
     BondRepository repository;
 
     @NonNull
+    @Override
     public MyBond getInfo(String name) {
         Optional<MyBond> foundBond = repository.findById(name);
         if (foundBond.isPresent()) {

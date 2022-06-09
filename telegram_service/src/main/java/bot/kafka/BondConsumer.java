@@ -1,7 +1,8 @@
 package bot.kafka;
 
 
-import bot.entity.MyShare;
+import bot.entity.MyBond;
+import bot.entity.Security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -12,17 +13,16 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class ShareConsumer implements Consumer{
-
+public class BondConsumer implements Consumer {
     private final ObjectMapper mapper;
 
 
-    @KafkaListener(topics = "share.topic")
+    @KafkaListener(topics = "bond.topic")
     @SneakyThrows
     @Override
-    public MyShare getSecurityFromKafka(String message) {
-        log.info("Got share {}", message);
+    public MyBond getSecurityFromKafka(String message) {
+        log.info("Got Bond {}", message);
 
-        return mapper.readValue(message, MyShare.class);
+        return mapper.readValue(message, MyBond.class);
     }
 }

@@ -6,8 +6,8 @@ import bot.exception.NonExistentPortfolioException;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-public interface Sender {
-    SendMessage getInfo(Message message, User user) throws NonExistentPortfolioException;
+public interface SecuritySender {
+    SendMessage getInfo(Message message) throws NonExistentPortfolioException;
 
 
 }

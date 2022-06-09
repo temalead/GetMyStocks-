@@ -1,10 +1,8 @@
 package bot.service;
 
-import bot.entity.User;
 import bot.exception.sender.Asset;
 import bot.exception.sender.NotFoundMessageBuilder;
-import bot.kafka.RequestProducer;
-import bot.kafka.ShareConsumer;
+import bot.service.sender.BondSender;
 import bot.service.sender.ShareSender;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,32 +21,36 @@ import java.util.concurrent.CompletionException;
 public class MessageSender {
 
 
-    private final ShareSender sender;
+    private final ShareSender shareSender;
+    private final BondSender bondSender;
 
-
-    public SendMessage getShareInfo(Message message, User user) {
+    public SendMessage getShareInfo(Message message) {
         String ticker = message.getText();
         String chatId = message.getChatId().toString();
         try {
 
-            return sender.getInfo(message, user);
+            return shareSender.getInfo(message);
 
         } catch (CompletionException e) {
             return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(ticker, Asset.SHARE)).build();
         }
     }
 
-
-
-    /*public SendMessage getBondInfo(Message message, User user) {
+    public SendMessage getBondMessage(Message message){
+        String ticker = message.getText();
         String chatId = message.getChatId().toString();
-        String text = message.getText();
         try {
-            return bondSender.getInfo(message,user);
-        } catch (BondNotFoundException e) {
-            return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(text, Asset.BOND)).build();
+
+            return bondSender.getInfo(message);
+
+        } catch (CompletionException e) {
+            return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(ticker, Asset.BOND)).build();
         }
     }
+
+
+
+    /*
 
     public SendMessage getPortfolioInfo(Message message, User user)  {
         return compositionSender.getInfo(message,user);
