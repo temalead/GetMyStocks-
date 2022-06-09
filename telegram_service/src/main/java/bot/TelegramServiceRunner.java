@@ -5,7 +5,9 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 
@@ -13,9 +15,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableEncryptableProperties
 @EnableAsync
 @EnableRedisRepositories
-@EnableConfigurationProperties(TopicsProperties.class)
-public class InvestServiceRunner {
+@EnableKafka
+@PropertySource(name = "EncryptedProperties",value = "classpath:encrypted.properties")
+public class TelegramServiceRunner {
     public static void main(String[] args) {
-        SpringApplication.run(InvestServiceRunner.class, args);
+        SpringApplication.run(TelegramServiceRunner.class, args);
     }
 }

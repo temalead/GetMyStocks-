@@ -34,7 +34,7 @@ public class BondMessageHandler implements MessageHandler {
             reply = SendMessage.builder().text(BotMessageSend.BOND_ADVICE_MESSAGE.getMessage()).chatId(chatId).build();
         }
         if (state.equals(BotCommand.FOUND_BOND)) {
-            reply = sender.getBondInfo(message, user);
+            reply = sender.getBondInfo(message);
             if (reply.getText().startsWith("Error")) {
                 return reply;
             }

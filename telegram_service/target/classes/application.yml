@@ -2,16 +2,10 @@ server:
   port: 8080
 bot:
   telegram:
-    botToken: ENC(S6KgwujnT1YaGVmbZV8w1zb9HVza/OE2HqRleKLnaE4J7FaXWHkne+bml39uoLOMWktqUhosVkY=)
+    botToken: ${secret.bot.telegram.token}
     botUsername: get_my_stocks_bot
-    botPath: https://20de-78-85-4-62.ngrok.io
-  invest:
-    isSandBoxMode: true
-    token: ENC(18NCfenZ1cvQsFhuS5ofIIAkhR4k3YgtU4Bm6HZNNJ+NIglKfuKR8pZqDLXGpOY8NIYqv1apNdW111WbWJxN2i7EzI7xdjtPaFWVTEacOVL6FVTcwma3Ul6NxMGbKY9nGLeIhZ5GRwU=)
-    code: TQBR
+    botPath: https://0dd8-78-85-4-68.ngrok.io
 spring:
-  redis:
-    port: 6379
   application:
     name: telegram_service
 
@@ -20,3 +14,7 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
+topic:
+  portfolio: portfolio.topic
+  share: share.topic
+  bond: bond.topic

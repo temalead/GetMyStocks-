@@ -39,7 +39,7 @@ public class ShareMessageHandler implements MessageHandler {
         }
         if (state.equals(BotCommand.FOUND_SHARE)) {
             producer.sendRequest(request);
-            reply = sender.getShareInfo(message, user);
+            reply = sender.getShareInfo(message);
             if (reply.getText().startsWith("Error")) {
                 return reply;
             }

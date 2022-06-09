@@ -1,5 +1,6 @@
 package bot.config;
 
+import lombok.RequiredArgsConstructor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,18 +10,17 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 @Component
+@RequiredArgsConstructor
 public class WebhookSetter {
-    @Value("${bot.telegram.botPath}")
-    private String setWebhook;
-    @Value("${bot.telegram.botToken}")
-    private String token;
+
+    private final TelegramBotConfig config;
 
     @PostConstruct
     public void setWebHook() throws IOException {
 
         OkHttpClient client = new OkHttpClient();
 
-        String s = "https://api.telegram.org/bot" + token + "/setWebhook?url=" + setWebhook;
+        String s = "https://api.telegram.org/bot" + config.getBotToken() + "/setWebhook?url=" + config.getBotPath();
 
         Request request = new Request.Builder()
                 .url(s)

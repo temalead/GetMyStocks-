@@ -2,9 +2,9 @@ server:
   port: 8080
 bot:
   telegram:
-    botToken: ENC(S6KgwujnT1YaGVmbZV8w1zb9HVza/OE2HqRleKLnaE4J7FaXWHkne+bml39uoLOMWktqUhosVkY=)
+    botToken: ${secret.bot.telegram.token}
     botUsername: get_my_stocks_bot
-    botPath: https://20de-78-85-4-62.ngrok.io
+    botPath: https://0dd8-78-85-4-68.ngrok.io
 spring:
   application:
     name: telegram_service

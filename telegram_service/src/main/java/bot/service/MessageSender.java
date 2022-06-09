@@ -1,11 +1,14 @@
 package bot.service;
 
+import bot.entity.User;
 import bot.exception.sender.Asset;
 import bot.exception.sender.NotFoundMessageBuilder;
 import bot.service.sender.BondSender;
+import bot.service.sender.PortfolioCompositionSender;
 import bot.service.sender.ShareSender;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,8 @@ public class MessageSender {
     private final ShareSender shareSender;
     private final BondSender bondSender;
 
+    private final PortfolioCompositionSender compositionSender;
+
     public SendMessage getShareInfo(Message message) {
         String ticker = message.getText();
         String chatId = message.getChatId().toString();
@@ -36,7 +41,7 @@ public class MessageSender {
         }
     }
 
-    public SendMessage getBondMessage(Message message){
+    public SendMessage getBondInfo(Message message){
         String ticker = message.getText();
         String chatId = message.getChatId().toString();
         try {
@@ -50,10 +55,10 @@ public class MessageSender {
 
 
 
-    /*
 
+    @SneakyThrows
     public SendMessage getPortfolioInfo(Message message, User user)  {
         return compositionSender.getInfo(message,user);
-    }*/
+    }
 
 }
