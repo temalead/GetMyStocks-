@@ -24,7 +24,9 @@ public class UserService {
         }
         else {
             log.info("Creating new user..." );
-            return new User().setCommand(BotCommand.DEFAULT).setId(chatId);
+            User user = new User().setCommand(BotCommand.DEFAULT).setId(chatId);
+            repository.save(user);
+            return user;
         }
     }
 

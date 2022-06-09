@@ -39,7 +39,7 @@ public class MessageUpdateHandler {
         if (botCommand == null) {
             botCommand = user.getCommand();
         }
-        if (user.getCommand().equals(BotCommand.DEFAULT)) {
+        if (user.getCommand().equals(BotCommand.DEFAULT) && botCommand!=null) {
             botCommand = BotCommand.UNRECOGNIZED;
         }
 
