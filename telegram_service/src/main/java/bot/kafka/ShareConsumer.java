@@ -17,7 +17,7 @@ public class ShareConsumer implements Consumer{
     private final ObjectMapper mapper;
 
 
-    @KafkaListener(topics = "share.topic")
+    @KafkaListener(id="share",topics = "share.topic")
     @SneakyThrows
     @Override
     public MyShare getSecurityFromKafka(String message) {

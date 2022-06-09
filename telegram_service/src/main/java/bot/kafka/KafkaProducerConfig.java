@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
 import java.util.Map;
@@ -27,11 +28,25 @@ public class KafkaProducerConfig {
     }
 
 
+
     @Bean
-    public NewTopic requestSecurityTopic() {
+    public KafkaTemplate<String, String> kafkaTemplate(){
+        return new KafkaTemplate<>(producerFactory());
+    }
+
+    @Bean
+    public NewTopic shareTopic() {
         return TopicBuilder
                 .name("share.topic")
-                .replicas(2)
+                .replicas(1)
+                .partitions(2)
+                .build();
+    }
+    @Bean
+    public NewTopic bondTopic() {
+        return TopicBuilder
+                .name("bond.topic")
+                .replicas(1)
                 .partitions(2)
                 .build();
     }

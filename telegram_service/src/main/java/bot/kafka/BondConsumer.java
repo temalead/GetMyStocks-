@@ -17,7 +17,7 @@ public class BondConsumer implements Consumer {
     private final ObjectMapper mapper;
 
 
-    @KafkaListener(topics = "bond.topic")
+    @KafkaListener(id="bond",topics = "bond.topic")
     @SneakyThrows
     @Override
     public MyBond getSecurityFromKafka(String message) {

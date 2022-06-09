@@ -49,6 +49,7 @@ bot/service/sender/SecuritySender.class
 bot/service/sender/PortfolioCompositionSender.class
 bot/entity/dto/FigiesDto.class
 bot/telegram/ui/keyboard/Keyboard.class
+bot/config/JasyptConfig.class
 bot/telegram/WebhookBot.class
 bot/telegram/ui/buttons/BotMessageSend.class
 bot/config/WebhookSetter.class
