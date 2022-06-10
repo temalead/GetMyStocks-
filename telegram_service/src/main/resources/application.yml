@@ -4,15 +4,10 @@ bot:
   telegram:
     botToken: ${secret.bot.telegram.token}
     botUsername: get_my_stocks_bot
-    botPath: https://14e9-78-85-4-68.ngrok.io
+    botPath: https://f76d-78-85-49-12.ngrok.io
 spring:
   application:
     name: telegram_service
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
 
 topic:
   portfolio: portfolio.topic

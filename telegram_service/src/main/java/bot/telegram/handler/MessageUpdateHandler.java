@@ -39,7 +39,7 @@ public class MessageUpdateHandler {
         if (botCommand == null) {
             botCommand = user.getCommand();
         }
-        if (user.getCommand().equals(BotCommand.DEFAULT) && botCommand!=null) {
+        if (user.getCommand().equals(BotCommand.DEFAULT) && botCommand==null) {
             botCommand = BotCommand.UNRECOGNIZED;
         }
 
@@ -50,7 +50,7 @@ public class MessageUpdateHandler {
         user.setCommand(botCommand);
 
         service.saveCondition(user);
-        log.info("Current bot state {}", botCommand.name());
+        log.info("Current bot state {}", user.getCommand());
         return controller.processMessage(botCommand, message);
     }
 
