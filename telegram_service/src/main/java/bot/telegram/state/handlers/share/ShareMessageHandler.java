@@ -2,6 +2,7 @@ package bot.telegram.state.handlers.share;
 
 import bot.entity.Request;
 import bot.entity.User;
+import bot.exception.sender.Asset;
 import bot.kafka.RequestProducer;
 import bot.repository.UserService;
 import bot.telegram.state.handlers.MessageHandler;
@@ -31,7 +32,7 @@ public class ShareMessageHandler implements MessageHandler {
         BotCommand state = user.getCommand();
 
         SendMessage reply = null;
-        Request request = new Request(message, user);
+        Request request = new Request(message, user, Asset.SHARE);
 
         if (state.equals(BotCommand.FIND_SHARE)) {
             user.setCommand(BotCommand.FOUND_SHARE);

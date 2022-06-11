@@ -13,6 +13,7 @@ import stock_service.entity.MyShare;
 import stock_service.entity.share.Dividend;
 import stock_service.entity.share.DividendList;
 import stock_service.exception.ShareNotFoundException;
+import stock_service.repository.ShareRepository;
 import stock_service.utils.PriceCalculator;
 
 import java.math.BigDecimal;

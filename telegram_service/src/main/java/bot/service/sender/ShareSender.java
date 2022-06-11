@@ -4,7 +4,9 @@ package bot.service.sender;
 import bot.entity.MyShare;
 import bot.entity.dto.DividendDto;
 import bot.entity.dto.DividendListDto;
+import bot.exception.ShareNotFoundException;
 import bot.kafka.ShareConsumer;
+import bot.repository.ShareRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -16,14 +18,15 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class ShareSender implements SecuritySender {
-    private final ShareConsumer shareConsumer;
+    private final ShareRepository repository;
 
     @Override
     public SendMessage getInfo(Message message) {
         String chatId = message.getChatId().toString();
-
-        MyShare info = shareConsumer.getSecurityFromKafka(message.getText());
+        String ticker = message.getText();
+        MyShare info = repository.findById(ticker).orElseThrow(()->new ShareNotFoundException(ticker));
         String result = createMessage(info);
+
         return SendMessage.builder().chatId(chatId).text(result).build();
 
 

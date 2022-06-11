@@ -12,6 +12,7 @@ import ru.tinkoff.piapi.contract.v1.Bond;
 import ru.tinkoff.piapi.core.InvestApi;
 import stock_service.entity.MyBond;
 import stock_service.exception.BondNotFoundException;
+import stock_service.repository.BondRepository;
 import stock_service.utils.PriceCalculator;
 
 import java.math.BigDecimal;

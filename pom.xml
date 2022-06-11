@@ -14,7 +14,6 @@
     <modules>
         <module>kafka</module>
         <module>telegram_service</module>
-        <module>discovery</module>
         <module>stock_service</module>
     </modules>
     <packaging>pom</packaging>
@@ -30,6 +29,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-metadata</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>ru.tinkoff.piapi</groupId>
             <artifactId>java-sdk-core</artifactId>

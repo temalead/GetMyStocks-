@@ -1,7 +1,7 @@
-package stock_service.service;
+package bot.repository;
 
+import bot.entity.MyShare;
 import org.springframework.data.repository.CrudRepository;
-import stock_service.entity.MyShare;
 
 public interface ShareRepository extends CrudRepository<MyShare, String> {
 

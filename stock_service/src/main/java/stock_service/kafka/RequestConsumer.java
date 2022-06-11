@@ -1,6 +1,8 @@
 package stock_service.kafka;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -16,18 +18,23 @@ public class RequestConsumer {
     private final String BOND_TOPIC = "bond.topic";
     private final ShareProducer shareProducer;
     private final BondProducer bondProducer;
+    private final ObjectMapper mapper;
 
 
-    @KafkaListener(topics = SHARE_TOPIC)
-    public void getShareRequest(Request request) {
+    @SneakyThrows
+    @KafkaListener(id = "share", topics = SHARE_TOPIC)
+    public void getShareRequest(String message) {
+        Request request = mapper.readValue(message, Request.class);
 
+
+        System.out.println("Got request from share topic");
         String requestedShare = request.getMessage().getText();
 
         shareProducer.sendResponse(requestedShare);
 
     }
 
-    @KafkaListener(topics = BOND_TOPIC)
+    @KafkaListener(id = "bond", topics = BOND_TOPIC)
     public void getBondRequest(Request request) {
 
         String requestedShare = request.getMessage().getText();

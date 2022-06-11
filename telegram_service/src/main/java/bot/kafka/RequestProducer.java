@@ -1,7 +1,10 @@
 package bot.kafka;
 
 import bot.entity.Request;
+import bot.exception.sender.Asset;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -12,13 +15,26 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @EnableConfigurationProperties(TopicsProperties.class)
 public class RequestProducer {
-    KafkaTemplate<String, Request> kafkaTemplate;
-    TopicsProperties topics;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final TopicsProperties topics;
 
+    private final ObjectMapper mapper;
 
+    @SneakyThrows
     public void sendRequest(Request request) {
+        String value = mapper.writeValueAsString(request);
+        Asset asset = request.getAsset();
 
-        kafkaTemplate.send(topics.getShare(), request);
+        switch (asset){
+            case SHARE:
+                kafkaTemplate.send(topics.getShare(), value);
+                log.info("Getting request to share topic");
+                break;
+            case BOND:
+                kafkaTemplate.send(topics.getBond(),value);
+                break;
+        }
+
 
     }
 }

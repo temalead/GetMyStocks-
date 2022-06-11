@@ -33,7 +33,7 @@ public class AvailableCommands {
     );
 
     public static BotCommand findCommand(String input) {
-        return Optional.of(commands.get(input)).orElse(null);
+        return commands.get(input);
 
     }
 
