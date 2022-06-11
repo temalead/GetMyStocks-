@@ -48,9 +48,8 @@ class MessageUpdateHandlerTest {
 
     @Test
     void shouldCallProcessNeededProcessor() {
-        when(service.getUserOrCreateNewUserByChatId(chatId)).thenReturn(userWithDefaultCommand);
+        when(service.getUserOrCreateNewUserByChatId(any())).thenReturn(userWithDefaultCommand);
         when(AvailableCommands.findCommand(any())).thenReturn(BotCommand.HELP);
-        when(message.getChatId()).thenReturn(Long.valueOf(chatId));
 
         BotCommand actual = handler.findCommandByUserMessage(message);
 
@@ -64,9 +63,8 @@ class MessageUpdateHandlerTest {
     void shouldReturnUnrecognizedMessage() {
 
 
-        when(service.getUserOrCreateNewUserByChatId(chatId)).thenReturn(userWithDefaultCommand);
+        when(service.getUserOrCreateNewUserByChatId(any())).thenReturn(userWithDefaultCommand);
         when(AvailableCommands.findCommand(any())).thenReturn(null);
-        when(message.getChatId()).thenReturn(Long.valueOf(chatId));
 
         BotCommand actual = handler.findCommandByUserMessage(message);
 

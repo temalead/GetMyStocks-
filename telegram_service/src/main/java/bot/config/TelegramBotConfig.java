@@ -1,19 +1,19 @@
 package bot.config;
 
-import lombok.Data;
+import lombok.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 
-@Data
+@Value
 @ConfigurationProperties(prefix = "bot.telegram")
 public class TelegramBotConfig {
-    private String botToken;
-    private String botUsername;
-    private String botPath;
+    String botToken;
+    String botUsername;
+    String port;
 
-    private String proxyHost;
-    private int proxyPort;
-    private DefaultBotOptions.ProxyType proxyType;
+    String proxyHost;
+    int proxyPort;
+    DefaultBotOptions.ProxyType proxyType;
 
 }
 

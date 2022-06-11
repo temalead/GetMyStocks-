@@ -19,16 +19,18 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class MessageUpdateHandler {
-    MainMenuKeyboard menu;
-    CommandProcessor controller;
-    UserService service;
+    final MainMenuKeyboard menu;
+    final CommandProcessor controller;
+    final UserService service;
 
+    String chatId;
 
     public BotApiMethod<?> handleMessage(Message message) {
+        chatId= String.valueOf(message.getChatId());
         if (!message.hasText()) {
-            return sendError(message);
+            return sendError();
         }
 
 
@@ -40,8 +42,7 @@ public class MessageUpdateHandler {
     }
 
 
-    private SendMessage sendError(Message message) {
-        String chatId = String.valueOf(message.getChatId());
+    private SendMessage sendError() {
         SendMessage reply = SendMessage.builder().chatId(chatId).text(BotMessageSend.UNRECOGNIZED_MESSAGE.getMessage()).build();
         reply.enableMarkdown(true);
         reply.setReplyMarkup(menu.getKeyboard());
@@ -49,7 +50,6 @@ public class MessageUpdateHandler {
     }
 
     public BotCommand findCommandByUserMessage(Message message) {
-        String chatId = String.valueOf(message.getChatId());
         User user = service.getUserOrCreateNewUserByChatId(chatId);
 
         String input = message.getText();
