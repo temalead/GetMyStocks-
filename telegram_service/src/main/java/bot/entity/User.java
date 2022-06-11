@@ -2,7 +2,9 @@ package bot.entity;
 
 import bot.telegram.state.BotCommand;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.redis.core.RedisHash;
@@ -16,6 +18,8 @@ import java.util.Objects;
 @Component
 @RedisHash("User")
 @Accessors(chain = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements Serializable {
     String id;
     BotCommand command;

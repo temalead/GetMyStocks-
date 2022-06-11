@@ -27,8 +27,28 @@ public class MessageUpdateHandler {
 
 
     public BotApiMethod<?> handleMessage(Message message) {
+        if (!message.hasText()) {
+            return sendError(message);
+        }
 
 
+        BotCommand botCommand = findCommandByUserMessage(message);
+
+
+        log.info("Current bot state {}", botCommand);
+        return controller.processMessage(botCommand, message);
+    }
+
+
+    private SendMessage sendError(Message message) {
+        String chatId = String.valueOf(message.getChatId());
+        SendMessage reply = SendMessage.builder().chatId(chatId).text(BotMessageSend.UNRECOGNIZED_MESSAGE.getMessage()).build();
+        reply.enableMarkdown(true);
+        reply.setReplyMarkup(menu.getKeyboard());
+        return reply;
+    }
+
+    public BotCommand findCommandByUserMessage(Message message) {
         String chatId = String.valueOf(message.getChatId());
         User user = service.getUserOrCreateNewUserByChatId(chatId);
 
@@ -36,32 +56,18 @@ public class MessageUpdateHandler {
 
         BotCommand botCommand = AvailableCommands.findCommand(input);
 
-        if (botCommand == null) {
-            botCommand = user.getCommand();
-        }
-        System.out.println(botCommand);
 
-
-        if (user.getCommand().equals(BotCommand.DEFAULT) && botCommand==null) {
+        if (user.getCommand().equals(BotCommand.DEFAULT) && botCommand == null) {
             botCommand = BotCommand.UNRECOGNIZED;
         }
 
-        if (!message.hasText()) {
-            return sendError(chatId);
+        if (botCommand == null) {
+            botCommand = user.getCommand();
         }
 
+
         user.setCommand(botCommand);
-
         service.saveCondition(user);
-        log.info("Current bot state {}", user.getCommand());
-        return controller.processMessage(botCommand, message);
-    }
-
-
-    private SendMessage sendError(String chatId) {
-        SendMessage reply = SendMessage.builder().chatId(chatId).text(BotMessageSend.UNRECOGNIZED_MESSAGE.getMessage()).build();
-        reply.enableMarkdown(true);
-        reply.setReplyMarkup(menu.getKeyboard());
-        return reply;
+        return botCommand;
     }
 }
