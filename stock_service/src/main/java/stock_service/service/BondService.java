@@ -64,7 +64,6 @@ public class BondService implements SecurityService{
                 .setAci(PriceCalculator.calculateACI(bond.getAciValue()))
                 .setFigi(bond.getFigi());
 
-        repository.save(result);
 
         return result;
     }

@@ -28,9 +28,8 @@ public class KafkaProducerConfig {
     }
 
 
-
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate(){
+    public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 
@@ -42,10 +41,29 @@ public class KafkaProducerConfig {
                 .partitions(2)
                 .build();
     }
+
     @Bean
     public NewTopic bondTopic() {
         return TopicBuilder
                 .name("bond.topic")
+                .replicas(1)
+                .partitions(2)
+                .build();
+    }
+
+    @Bean
+    public NewTopic ShareResTopic() {
+        return TopicBuilder
+                .name("share_res.topic")
+                .replicas(1)
+                .partitions(2)
+                .build();
+    }
+
+    @Bean
+    public NewTopic bondResTopic() {
+        return TopicBuilder
+                .name("bond_res.topic")
                 .replicas(1)
                 .partitions(2)
                 .build();

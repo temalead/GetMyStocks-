@@ -64,6 +64,8 @@ public class ShareService implements SecurityService{
         myShare.setPrice(price);
         myShare.setId(ticker);
 
+
+        log.info("Created {} share",ticker);
         repository.save(myShare);
 
         return myShare;

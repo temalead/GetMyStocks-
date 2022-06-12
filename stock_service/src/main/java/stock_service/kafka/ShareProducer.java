@@ -1,29 +1,31 @@
 package stock_service.kafka;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import stock_service.config.TopicsProperties;
 import stock_service.entity.MyShare;
 import stock_service.repository.ShareRepository;
+import stock_service.service.ShareMessageCreator;
 import stock_service.service.ShareService;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class ShareProducer {
 
     private final ShareService service;
-
-    private final ShareRepository repository;
-
+    private final ShareMessageCreator creator;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final TopicsProperties topics;
 
     @SneakyThrows
     public void sendResponse(String requestedShare) {
 
         MyShare resultShare = service.getInfo(requestedShare);
+        String result = creator.createMessage(resultShare);
 
-        repository.save(resultShare);
+
+        kafkaTemplate.send(topics.getShare_res(), result);
     }
 }

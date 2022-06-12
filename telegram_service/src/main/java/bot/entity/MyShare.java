@@ -1,7 +1,7 @@
 package bot.entity;
 
 
-import bot.entity.dto.DividendListDto;
+import bot.entity.dto.DividendList;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.Objects;
 public class MyShare extends Security implements Serializable {
     String name;
     String figi;
-    DividendListDto dividends;
+    DividendList dividends;
 
     @Override
     public boolean equals(Object o) {

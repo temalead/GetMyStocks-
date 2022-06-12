@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Value
 @AllArgsConstructor
-public class DividendDto {
+public class Dividend {
     BigDecimal payment;
     LocalDate paymentDate;
 }

@@ -2,7 +2,8 @@ package bot.service.sender;
 
 
 import bot.entity.MyBond;
-import bot.kafka.BondConsumer;
+import bot.exception.BondNotFoundException;
+import bot.repository.BondRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,14 +18,15 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 @Slf4j
 public class BondSender implements SecuritySender {
-    private final BondConsumer consumer;
+    private final BondRepository repository;
 
 
     @Override
     public SendMessage getInfo(Message message) {
         String chatId = message.getChatId().toString();
 
-        MyBond bond = consumer.getSecurityFromKafka(message.getText());
+        String ticker = message.getText();
+        MyBond bond = repository.findById(ticker).orElseThrow(() -> new BondNotFoundException(ticker));
         String result = createMessage(bond);
 
 

@@ -25,18 +25,21 @@ public class RequestConsumer {
     @SneakyThrows
     @KafkaListener(id = "share", topics = SHARE_TOPIC)
     public void getShareRequest(String message) {
-        Request request = mapper.readValue(message, Request.class);
-        String requestedShare = request.getMessage().getText();
+        String requestedShare = getRequestedTicker(message);
         shareProducer.sendResponse(requestedShare);
 
     }
 
     @KafkaListener(id = "bond", topics = BOND_TOPIC)
-    public void getBondRequest(Request request) {
+    public void getBondRequest(String message) {
+        String requestedBond = getRequestedTicker(message);
+        bondProducer.sendResponse(requestedBond);
 
-        String requestedShare = request.getMessage().getText();
+    }
 
-        bondProducer.sendResponse(requestedShare);
-
+    @SneakyThrows
+    private String getRequestedTicker(String message) {
+        Request request = mapper.readValue(message, Request.class);
+        return request.getMessage().getText();
     }
 }

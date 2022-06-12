@@ -7,6 +7,6 @@ import java.util.List;
 
 @Value
 @AllArgsConstructor
-public class DividendListDto {
-    List<DividendDto> dividends;
+public class DividendList {
+    List<Dividend> dividends;
 }
