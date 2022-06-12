@@ -30,7 +30,6 @@ public class TelegramBotBuilder {
         webhookBot.setBotPath(createBotPath());
         webhookBot.setBotToken(botConfig.getBotToken());
 
-        System.out.println(webhookBot.getBotPath());
         return webhookBot;
     }
 
