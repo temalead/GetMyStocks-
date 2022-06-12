@@ -3,7 +3,6 @@ package bot.kafka;
 
 import bot.entity.MyBond;
 import bot.entity.Security;
-import bot.repository.BondRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -15,12 +14,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 public class BondConsumer implements Consumer {
-    private final BondRepository repository;
+    private final ObjectMapper mapper;
 
+
+    @KafkaListener(id="bond",topics = "bond.topic")
     @SneakyThrows
     @Override
     public MyBond getSecurityFromKafka(String message) {
-        return repository.findById(message).orElseThrow();
+        log.info("Got Bond {}", message);
 
+        return mapper.readValue(message, MyBond.class);
     }
 }

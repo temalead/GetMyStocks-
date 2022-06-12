@@ -6,7 +6,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import stock_service.entity.MyShare;
 import stock_service.entity.Request;
 
 @Component
@@ -26,7 +25,11 @@ public class RequestConsumer {
     @KafkaListener(id = "share", topics = SHARE_TOPIC)
     public void getShareRequest(String message) {
         Request request = mapper.readValue(message, Request.class);
+
+
+        System.out.println("Got request from share topic");
         String requestedShare = request.getMessage().getText();
+
         shareProducer.sendResponse(requestedShare);
 
     }

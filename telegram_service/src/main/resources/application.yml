@@ -10,6 +10,9 @@ spring:
     name: telegram_service
 
 topic:
-  portfolio: portfolio.topic
   share: share.topic
   bond: bond.topic
+  portfolio: portfolio.topic
+  request: req.topic
+  share_res: share_res.topic
+  bond_res: bond_res.topic
