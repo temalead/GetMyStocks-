@@ -5,7 +5,6 @@ import bot.entity.MyShare;
 import bot.entity.dto.DividendDto;
 import bot.entity.dto.DividendListDto;
 import bot.exception.ShareNotFoundException;
-import bot.kafka.ShareConsumer;
 import bot.repository.ShareRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -43,6 +42,9 @@ public class ShareSender implements SecuritySender {
     private String createDividendMessage(DividendListDto dividends) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Dividends per year\n");
+        if (dividends.getDividends()==null){
+            return stringBuilder.append("Dividends were not paid").toString();
+        }
         List<DividendDto> list = dividends.getDividends();
         if (list.isEmpty()) {
             return "Dividends were not paid";

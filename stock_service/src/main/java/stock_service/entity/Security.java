@@ -3,11 +3,12 @@ package stock_service.entity;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 
 @Accessors(chain = true)
-public abstract class Security {
+public abstract class Security  implements Serializable {
     @Id
     String id;
     BigDecimal price;

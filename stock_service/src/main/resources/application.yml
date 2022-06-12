@@ -1,7 +1,7 @@
 bot:
   invest:
     isSandBoxMode: true
-    token: ${secret.bot.telegram.token}
+    token: ${secret.bot.invest.token}
     code: TQBR
 
 spring:
@@ -9,7 +9,6 @@ spring:
     port: 6379
   application:
     name: stock_service
-
 
 server:
   port: 8081
