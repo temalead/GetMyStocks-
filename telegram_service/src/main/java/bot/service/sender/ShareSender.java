@@ -7,6 +7,7 @@ import bot.entity.dto.DividendList;
 import bot.exception.ShareNotFoundException;
 import bot.repository.ShareRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -23,7 +24,7 @@ public class ShareSender implements SecuritySender {
     public SendMessage getInfo(Message message) {
         String chatId = message.getChatId().toString();
         String ticker = message.getText();
-        MyShare info = repository.findById(ticker).orElseThrow(() -> new ShareNotFoundException(ticker));
+        MyShare info = getInfoFromDB(ticker);
         String result = createMessage(info);
 
         return SendMessage.builder().chatId(chatId).text(result).build();
@@ -39,9 +40,16 @@ public class ShareSender implements SecuritySender {
         return price + "\n" + dividendMessage;
     }
 
+
+    @SneakyThrows
+    private MyShare getInfoFromDB(String ticker) {
+        Thread.sleep(500);
+        return repository.findById(ticker).orElseThrow(() -> new ShareNotFoundException(ticker));
+    }
+
     private String createDividendMessage(DividendList dividends) {
         StringBuilder stringBuilder = new StringBuilder();
-        if (dividends==null){
+        if (dividends == null) {
             return stringBuilder.append("Dividends were not paid").toString();
         }
         stringBuilder.append("Dividends per year\n");
