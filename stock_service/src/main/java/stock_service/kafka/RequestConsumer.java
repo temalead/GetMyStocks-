@@ -29,7 +29,7 @@ public class RequestConsumer {
         Request request = mapper.readValue(message, Request.class);
 
 
-        System.out.println("Got request from share topic");
+        log.info("Got share request from {} topic", request.getMessage());
         String requestedShare = request.getMessage();
 
         shareProducer.sendResponse(requestedShare);
@@ -37,7 +37,10 @@ public class RequestConsumer {
     }
 
     @KafkaListener(id = "bond", topics = BOND_TOPIC)
-    public void getBondRequest(Request request) {
+    @SneakyThrows
+    public void getBondRequest(String message) {
+        Request request = mapper.readValue(message, Request.class);
+        log.info("Got bond request from {} topic", request.getMessage());
 
         String requestedShare = request.getMessage();
 

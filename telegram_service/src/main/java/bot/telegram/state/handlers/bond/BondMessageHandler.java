@@ -1,6 +1,9 @@
 package bot.telegram.state.handlers.bond;
 
+import bot.entity.Request;
 import bot.entity.User;
+import bot.exception.sender.Asset;
+import bot.kafka.RequestProducer;
 import bot.telegram.state.handlers.MessageHandler;
 import bot.telegram.ui.buttons.BotMessageSend;
 import bot.repository.UserService;
@@ -19,6 +22,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public class BondMessageHandler implements MessageHandler {
     UserService service;
     MessageSender sender;
+    RequestProducer producer;
 
 
     @Override
@@ -28,12 +32,15 @@ public class BondMessageHandler implements MessageHandler {
         BotCommand state = user.getCommand();
 
         SendMessage reply = null;
+        Request request = new Request(message.getText(), user, Asset.BOND);
+
 
         if (state.equals(BotCommand.FIND_BOND)) {
             user.setCommand(BotCommand.FOUND_BOND);
             reply = SendMessage.builder().text(BotMessageSend.BOND_ADVICE_MESSAGE.getMessage()).chatId(chatId).build();
         }
         if (state.equals(BotCommand.FOUND_BOND)) {
+            producer.sendRequest(request);
             reply = sender.getBondInfo(message);
             if (reply.getText().startsWith("Error")) {
                 return reply;
