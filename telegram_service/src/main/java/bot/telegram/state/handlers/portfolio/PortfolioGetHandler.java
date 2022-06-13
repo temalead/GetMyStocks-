@@ -37,7 +37,7 @@ public class PortfolioGetHandler implements PortfolioMessageHandler {
             return result;
         }
         producer.sendRequest(new Request(message.getText(),user,null));
-        SendMessage portfolioInfo = sender.getPortfolioInfo(message,user);
+        SendMessage portfolioInfo = sender.getPortfolioInfo(user);
         portfolioInfo.setReplyMarkup(keyBoard.getKeyboard());
 
         return portfolioInfo;

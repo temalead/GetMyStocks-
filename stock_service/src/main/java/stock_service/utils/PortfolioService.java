@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import stock_service.entity.Portfolio;
 import stock_service.entity.User;
 import stock_service.entity.dto.SecurityDto;
 import stock_service.entity.Asset;
+import stock_service.repository.UserRepository;
 import stock_service.service.BondService;
 import stock_service.service.ShareService;
 
@@ -22,16 +22,15 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Slf4j
-public class PortfolioCreator {
+public class PortfolioService {
     ShareService shareService;
     BondService bondService;
-    //UserService service;
+    UserRepository repository;
     FractionOccupiedPortfolioCalculator portfolioCalculator;
 
 
-    public Portfolio createPortfolio(Message message, User user) {
+    public Portfolio getInfo(String text, User user) {
         log.info("Creating new user portfolio");
-        String text = message.getText();
         Portfolio portfolio = new Portfolio();
         List<SecurityDto> result = new ArrayList<>();
 
@@ -54,7 +53,7 @@ public class PortfolioCreator {
         portfolio.setPortfolioValue(value);
         user.setPortfolio(portfolio);
 
-        //service.saveCondition(user);
+        repository.save(user);
 
         log.info("User {}", user);
 

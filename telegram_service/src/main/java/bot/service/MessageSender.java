@@ -4,7 +4,7 @@ import bot.entity.User;
 import bot.exception.sender.Asset;
 import bot.exception.sender.NotFoundMessageBuilder;
 import bot.service.sender.BondSender;
-import bot.service.sender.PortfolioCompositionSender;
+import bot.service.sender.PortfolioSender;
 import bot.service.sender.ShareSender;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class MessageSender {
     private final ShareSender shareSender;
     private final BondSender bondSender;
 
-    private final PortfolioCompositionSender compositionSender;
+    private final PortfolioSender compositionSender;
 
     public SendMessage getShareInfo(Message message) {
         String ticker = message.getText();
@@ -41,7 +41,7 @@ public class MessageSender {
         }
     }
 
-    public SendMessage getBondInfo(Message message){
+    public SendMessage getBondInfo(Message message) {
         String ticker = message.getText();
         String chatId = message.getChatId().toString();
         try {
@@ -54,11 +54,9 @@ public class MessageSender {
     }
 
 
-
-
     @SneakyThrows
-    public SendMessage getPortfolioInfo(Message message, User user)  {
-        return compositionSender.getInfo(message,user);
+    public SendMessage getPortfolioInfo(User user) {
+        return compositionSender.getInfo(user);
     }
 
 }

@@ -1,53 +1,47 @@
 package bot.service.sender;
 
 
+import bot.entity.Portfolio;
+import bot.entity.Security;
 import bot.entity.User;
 import bot.exception.NonExistentPortfolioException;
+import bot.exception.sender.Asset;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class PortfolioCompositionSender {
+public class PortfolioSender {
 
     //TODO portfolio actions: create, get, update, delete
-    public SendMessage getInfo(Message message, User user) throws NonExistentPortfolioException {
+    public SendMessage getInfo(User user) throws NonExistentPortfolioException {
+        Portfolio portfolio = user.getPortfolio();
+
+        //createSecurityMessage(portfolio);
         return null;
     }
 
-    /*PortfolioCreator creator;
-    FractionOccupiedPortfolioCalculator calculator;
+/*
+    public SendMessage createSecurityMessage(String chatId, Portfolio portfolio, User user) {
 
 
-    @Override
-    public SendMessage getInfo(Message message, User user) {
-
-        String chatId = message.getChatId().toString();
-        log.info("Got portfolio from user {}", user);
-
-        Portfolio portfolio;
-
-        if (user.getPortfolio() != null) {
-            portfolio = user.getPortfolio();
-        } else {
-            portfolio = creator.createPortfolio(message, user);
-        }
-
-        List<SecurityDto> list = portfolio.getSecurities();
+        List<Security> list = portfolio.getSecurityList();
 
         StringBuilder stringBuilder = new StringBuilder();
 
 
-        for (SecurityDto security : list) {
-            stringBuilder.append(createMessage(security));
+        for (Security security : list) {
+            stringBuilder.append(createSecurityMessage(security));
             BigDecimal fraction = calculator.calculateOccupiedFractionOfSecurityByUser(security, user);
             stringBuilder.append("Fraction of Portfolio:").append(fraction).append("%").append("\n");
             stringBuilder.append("\n");
@@ -63,13 +57,11 @@ public class PortfolioCompositionSender {
         return SendMessage.builder().chatId(chatId).text(stringBuilder.toString()).build();
     }
 
-    public String createMessage(SecurityDto securityDto) {
+    public String createSecurityMessage(Security security) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        BigDecimal price = securityDto.getPrice();
-        String name = securityDto.getName();
-        BigDecimal lot = securityDto.getLot();
-        stringBuilder.append("Name: ").append(name).append("\n");
+        BigDecimal price = security.getPrice();
+        Integer lot = security.getLot();
         stringBuilder.append("Price: ").append(price).append("\n");
         stringBuilder.append("Quantity: ").append(lot).append("\n");
 

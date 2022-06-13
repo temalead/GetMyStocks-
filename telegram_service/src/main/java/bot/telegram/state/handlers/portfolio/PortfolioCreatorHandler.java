@@ -1,6 +1,8 @@
 package bot.telegram.state.handlers.portfolio;
 
+import bot.entity.Request;
 import bot.entity.User;
+import bot.kafka.RequestProducer;
 import bot.repository.UserService;
 import bot.telegram.state.handlers.PortfolioMessageHandler;
 import bot.telegram.ui.buttons.BotMessageSend;
@@ -24,6 +26,7 @@ public class PortfolioCreatorHandler implements PortfolioMessageHandler {
     UserService service;
     MessageSender sender;
     MainMenuKeyboard mainMenuKeyboard;
+    RequestProducer producer;
 
     @Override
     public SendMessage sendMessageDependsOnCommand(Message message) {
@@ -33,12 +36,13 @@ public class PortfolioCreatorHandler implements PortfolioMessageHandler {
         SendMessage reply = SendMessage.builder().chatId(chatId).text(state.name()).build();
 
 
-        if (state.equals(BotCommand.WISH_MAKE_PORTFOLIO)){
+        if (state.equals(BotCommand.WISH_MAKE_PORTFOLIO)) {
             user.setCommand(BotCommand.MAKE_PORTFOLIO);
-            reply=SendMessage.builder().chatId(chatId).text(BotMessageSend.MAKE_PORTFOLIO_ADVICE.getMessage()).build();
+            reply = SendMessage.builder().chatId(chatId).text(BotMessageSend.MAKE_PORTFOLIO_ADVICE.getMessage()).build();
         }
-        if (state.equals(BotCommand.MAKE_PORTFOLIO)){
-            reply=sender.getPortfolioInfo(message, user);
+        if (state.equals(BotCommand.MAKE_PORTFOLIO)) {
+            producer.sendRequest(new Request(message.getText(), user, null));
+            reply = sender.getPortfolioInfo(user);
             if (reply.getText().startsWith("Error")) {
                 return reply;
             }
@@ -47,7 +51,7 @@ public class PortfolioCreatorHandler implements PortfolioMessageHandler {
 
         service.saveCondition(user);
 
-        log.info("User from creator {}",user);
+        log.info("User from creator {}", user);
 
         return reply;
     }

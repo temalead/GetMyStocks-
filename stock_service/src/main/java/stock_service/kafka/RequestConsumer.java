@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+import stock_service.entity.Portfolio;
 import stock_service.entity.Request;
 import stock_service.entity.User;
 
@@ -20,6 +21,8 @@ public class RequestConsumer {
     private final String PORTFOLIO_TOPIC = "portfolio.topic";
     private final ShareProducer shareProducer;
     private final BondProducer bondProducer;
+
+    private final PortfolioProducer portfolioProducer;
     private final ObjectMapper mapper;
 
 
@@ -54,7 +57,7 @@ public class RequestConsumer {
         User user = request.getUser();
 
 
-        //portfolioProducer.sendResponse(message, user);
+        portfolioProducer.sendResponse(message, user);
 
     }
 }
