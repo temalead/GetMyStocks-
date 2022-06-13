@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Builder
 public class Request implements Serializable {
 
-    Message message;
+    String message;
     User user;
 
 }

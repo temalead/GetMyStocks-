@@ -43,7 +43,7 @@ public class ShareSender implements SecuritySender {
 
     @SneakyThrows
     private MyShare getInfoFromDB(String ticker) {
-        Thread.sleep(500);
+        Thread.sleep(1000);
         return repository.findById(ticker).orElseThrow(() -> new ShareNotFoundException(ticker));
     }
 

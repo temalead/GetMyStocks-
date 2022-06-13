@@ -1,8 +1,10 @@
 package bot.telegram.state.handlers.portfolio;
 
 
+import bot.entity.Request;
 import bot.entity.User;
 import bot.exception.sender.NonExistentPortfolioMessage;
+import bot.kafka.RequestProducer;
 import bot.repository.UserService;
 import bot.telegram.state.handlers.PortfolioMessageHandler;
 import bot.telegram.ui.keyboard.PortfolioMenuKeyBoard;
@@ -23,6 +25,9 @@ public class PortfolioGetHandler implements PortfolioMessageHandler {
     PortfolioMenuKeyBoard keyBoard;
     UserService service;
 
+    RequestProducer producer;
+
+
     @Override
     public SendMessage sendMessageDependsOnCommand(Message message) {
         User user = service.getUserOrCreateNewUserByChatId(message.getChatId().toString());
@@ -31,7 +36,7 @@ public class PortfolioGetHandler implements PortfolioMessageHandler {
             result.setReplyMarkup(keyBoard.getKeyboard());
             return result;
         }
-
+        producer.sendRequest(new Request(message.getText(),user,null));
         SendMessage portfolioInfo = sender.getPortfolioInfo(message,user);
         portfolioInfo.setReplyMarkup(keyBoard.getKeyboard());
 

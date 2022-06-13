@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Value
 public class Request {
-    Message message;
+    String message;
     User user;
     Asset asset;
 }

@@ -32,7 +32,7 @@ public class ShareMessageHandler implements MessageHandler {
         BotCommand state = user.getCommand();
 
         SendMessage reply = null;
-        Request request = new Request(message, user, Asset.SHARE);
+        Request request = new Request(message.getText(), user, Asset.SHARE);
 
         if (state.equals(BotCommand.FIND_SHARE)) {
             user.setCommand(BotCommand.FOUND_SHARE);

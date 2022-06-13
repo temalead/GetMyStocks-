@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import stock_service.entity.Request;
+import stock_service.entity.User;
 
 @Component
 @Slf4j
@@ -16,6 +17,7 @@ public class RequestConsumer {
 
     private final String SHARE_TOPIC = "share.topic";
     private final String BOND_TOPIC = "bond.topic";
+    private final String PORTFOLIO_TOPIC = "portfolio.topic";
     private final ShareProducer shareProducer;
     private final BondProducer bondProducer;
     private final ObjectMapper mapper;
@@ -28,7 +30,7 @@ public class RequestConsumer {
 
 
         System.out.println("Got request from share topic");
-        String requestedShare = request.getMessage().getText();
+        String requestedShare = request.getMessage();
 
         shareProducer.sendResponse(requestedShare);
 
@@ -37,9 +39,19 @@ public class RequestConsumer {
     @KafkaListener(id = "bond", topics = BOND_TOPIC)
     public void getBondRequest(Request request) {
 
-        String requestedShare = request.getMessage().getText();
+        String requestedShare = request.getMessage();
 
         bondProducer.sendResponse(requestedShare);
+
+    }
+
+    @KafkaListener(id = "portfolio", topics = PORTFOLIO_TOPIC)
+    public void getPortfolioRequest(Request request) {
+        String message = request.getMessage();
+        User user = request.getUser();
+
+
+        //portfolioProducer.sendResponse(message, user);
 
     }
 }
