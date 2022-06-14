@@ -55,8 +55,8 @@ public class MessageSender {
 
 
     @SneakyThrows
-    public SendMessage getPortfolioInfo(User user) {
-        return compositionSender.getInfo(user);
+    public SendMessage getPortfolioInfo(String chatId,User user) {
+        return compositionSender.getInfo(chatId,user);
     }
 
 }

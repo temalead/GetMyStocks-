@@ -22,10 +22,10 @@ import java.util.List;
 @Slf4j
 public class FractionOccupiedPortfolioCalculator {
 
-    /*public BigDecimal calculateOccupiedFractionOfSecurityByUser(Security security, User user) {
+    public BigDecimal calculateOccupiedFractionOfSecurityByUser(SecurityDto security, User user) {
         Portfolio portfolio = user.getPortfolio();
         BigDecimal portfolioValue = portfolio.getPortfolioValue();
-        BigDecimal securityValue = security.getPrice().multiply(BigDecimal.valueOf(security.getLot()));
+        BigDecimal securityValue = security.getPrice().multiply(security.getLot());
 
 
         float v = securityValue.floatValue() / portfolioValue.floatValue();
@@ -39,7 +39,7 @@ public class FractionOccupiedPortfolioCalculator {
 
         final BigDecimal[] portfolioValue = {BigDecimal.ZERO};
 
-        List<Security> list = portfolio.getSecurityList();
+        List<SecurityDto> list = portfolio.getSecurityList();
 
         list.forEach(security -> portfolioValue[0] = portfolioValue[0].add(calculateSecurityValue(security)));
 
@@ -61,7 +61,7 @@ public class FractionOccupiedPortfolioCalculator {
 
     private BigDecimal findAssetByRequest(Portfolio portfolioDto, Asset asset) {
 
-        List<Security> portfolio = portfolioDto.getSecurityList();
+        List<SecurityDto> portfolio = portfolioDto.getSecurityList();
         final BigDecimal[] result = {BigDecimal.ZERO};
 
 
@@ -70,5 +70,5 @@ public class FractionOccupiedPortfolioCalculator {
 
 
         return result[0];
-    }*/
+    }
 }

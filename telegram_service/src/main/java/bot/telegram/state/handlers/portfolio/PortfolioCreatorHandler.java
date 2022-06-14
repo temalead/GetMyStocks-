@@ -2,6 +2,7 @@ package bot.telegram.state.handlers.portfolio;
 
 import bot.entity.Request;
 import bot.entity.User;
+import bot.exception.sender.Asset;
 import bot.kafka.RequestProducer;
 import bot.repository.UserService;
 import bot.telegram.state.handlers.PortfolioMessageHandler;
@@ -41,8 +42,8 @@ public class PortfolioCreatorHandler implements PortfolioMessageHandler {
             reply = SendMessage.builder().chatId(chatId).text(BotMessageSend.MAKE_PORTFOLIO_ADVICE.getMessage()).build();
         }
         if (state.equals(BotCommand.MAKE_PORTFOLIO)) {
-            producer.sendRequest(new Request(message.getText(), user, null));
-            reply = sender.getPortfolioInfo(user);
+            producer.sendRequest(new Request(message.getText(), user, Asset.ABSTRACT));
+            reply = sender.getPortfolioInfo(chatId,user);
             if (reply.getText().startsWith("Error")) {
                 return reply;
             }
