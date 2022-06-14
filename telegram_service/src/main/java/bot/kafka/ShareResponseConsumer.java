@@ -6,20 +6,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ShareResponseConsumer {
+public class ShareResponseConsumer{
     private final String SHARE_RES_TOPIC = "share_res.topic";
 
-    //private final ShareRedundant shareRedundant;
+    private final ShareRespondent respondent;
 
     @SneakyThrows
     @KafkaListener(id = "share_res", topics = SHARE_RES_TOPIC)
-    public void getShareResponse(String message) {
+    public String getShareResponse(String message) {
 
-        //  shareRedundant.setMessage(message);
-
+        ExecutorService service = Executors.newFixedThreadPool(1);
+        service.submit(respondent);
+        respondent.sendMessageFromKafka(message);
+        return message;
     }
 }
 

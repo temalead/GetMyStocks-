@@ -5,6 +5,7 @@ import bot.entity.MyShare;
 import bot.entity.dto.Dividend;
 import bot.entity.dto.DividendList;
 import bot.exception.ShareNotFoundException;
+import bot.kafka.ShareRespondent;
 import bot.repository.ShareRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -19,17 +20,43 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShareSender implements SecuritySender {
     private final ShareRepository repository;
+    private final ShareRespondent respondent;
+
+    private String message;
 
     @Override
+    @SneakyThrows
     public SendMessage getInfo(Message message) {
         String chatId = message.getChatId().toString();
         String ticker = message.getText();
-        MyShare info = getInfoFromDB(ticker);
-        String result = createMessage(info);
 
-        return SendMessage.builder().chatId(chatId).text(result).build();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            @SneakyThrows
+            public void run() {
+                synchronized (message) {
+                    if (message == null) wait();
+
+                }
+            }
+        });
+
+        thread.start();
+        thread.join();
+        String s = respondent.getMessage();
+        respondent.shutDown();
+        /*MyShare info = getInfoFromDB(ticker);
+        String result = createMessage(info);*/
+
+        return SendMessage.builder().chatId(chatId).text(s).build();
 
 
+    }
+
+    @SneakyThrows
+    private MyShare getInfoFromDB(String ticker) {
+        Thread.sleep(1000);
+        return repository.findById(ticker).orElseThrow(() -> new ShareNotFoundException(ticker));
     }
 
     public String createMessage(MyShare share) {
@@ -40,12 +67,6 @@ public class ShareSender implements SecuritySender {
         return price + "\n" + dividendMessage;
     }
 
-
-    @SneakyThrows
-    private MyShare getInfoFromDB(String ticker) {
-        Thread.sleep(1000);
-        return repository.findById(ticker).orElseThrow(() -> new ShareNotFoundException(ticker));
-    }
 
     private String createDividendMessage(DividendList dividends) {
         StringBuilder stringBuilder = new StringBuilder();

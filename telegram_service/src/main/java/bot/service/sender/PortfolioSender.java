@@ -33,8 +33,12 @@ public class PortfolioSender {
 
     public SendMessage createSecurityMessage(String chatId, Portfolio portfolio, User user) {
 
+        if (portfolio==null){
+            return SendMessage.builder().chatId(chatId).text("null").build();
+        }
 
         List<SecurityDto> list = portfolio.getSecurityList();
+
 
         StringBuilder stringBuilder = new StringBuilder();
 

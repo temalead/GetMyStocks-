@@ -51,13 +51,15 @@ public class RequestConsumer {
 
     }
 
+    @SneakyThrows
     @KafkaListener(id = "portfolio", topics = PORTFOLIO_TOPIC)
-    public void getPortfolioRequest(Request request) {
-        String message = request.getMessage();
+    public void getPortfolioRequest(String message) {
+        Request request = mapper.readValue(message, Request.class);
+        String text = request.getMessage();
         User user = request.getUser();
 
 
-        portfolioProducer.sendResponse(message, user);
+        portfolioProducer.sendResponse(text, user);
 
     }
 }

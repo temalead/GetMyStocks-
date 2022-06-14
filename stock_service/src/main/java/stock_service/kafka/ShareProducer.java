@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import stock_service.config.TopicsProperties;
 import stock_service.entity.MyShare;
 import stock_service.repository.ShareRepository;
+import stock_service.service.ShareMessageCreator;
 import stock_service.service.ShareService;
 
 @Service
@@ -18,6 +19,8 @@ public class ShareProducer {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final TopicsProperties properties;
 
+    private final ShareMessageCreator creator;
+
     private final ShareRepository repository;
     private final ObjectMapper mapper;
 
@@ -27,8 +30,10 @@ public class ShareProducer {
         MyShare resultShare = service.getInfo(requestedShare);
         String value = mapper.writeValueAsString(resultShare);
 
+        String message = creator.createMessage(resultShare);
+
         repository.save(resultShare);
 
-        kafkaTemplate.send(properties.getShare_res(),value);
+        kafkaTemplate.send(properties.getShare_res(), message);
     }
 }
