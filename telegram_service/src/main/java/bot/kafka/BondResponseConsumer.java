@@ -32,4 +32,8 @@ public class BondResponseConsumer implements Callable<String> {
 
         return this.message;
     }
+
+    public void shutdown() {
+        this.message=null;
+    }
 }

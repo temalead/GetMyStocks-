@@ -63,7 +63,7 @@ class ShareServiceTest {
         when(PriceCalculator.calculateValue(any())).thenReturn(BigDecimal.ONE);
 
         //when
-        MyShare result = service.getInfo(ticker);
+        MyShare result = service.getAssetFromTinkoffByTicker(ticker);
 
 
         //then

@@ -1,6 +1,7 @@
 package stock_service.service;
 
 
+import stock_service.config.StockBotConfig;
 import stock_service.entity.MyShare;
 import stock_service.entity.share.DividendList;
 import stock_service.entity.share.SharePriceList;
@@ -37,25 +38,12 @@ import java.util.stream.Collectors;
 public class ShareService implements SecurityService {
     InvestApi api;
     ShareRepository repository;
-
-    ShareMessageCreator creator;
     String code = "TQBR";
 
 
-    public String getResult(String ticker) {
-
-        try {
-            MyShare info = getInfo(ticker);
-            return creator.createMessage(info);
-        } catch (ShareNotFoundException exception) {
-            return exception.getMessage();
-        }
-
-    }
-
     @NonNull
     @Override
-    public MyShare getInfo(String ticker) {
+    public MyShare getAssetFromTinkoffByTicker(String ticker) {
         Optional<MyShare> share = repository.findById(ticker);
         if (share.isPresent()) {
             log.info("Found share {} in cache. Returning...", ticker);
@@ -67,7 +55,7 @@ public class ShareService implements SecurityService {
         }
     }
 
-    private MyShare createShare(String ticker) throws ShareNotFoundException{
+    private MyShare createShare(String ticker) throws ShareNotFoundException {
         Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new ShareNotFoundException(ticker));
         String figi = share.getFigi();
         DividendList dividends = getDividendsForYear(figi);
@@ -117,7 +105,7 @@ public class ShareService implements SecurityService {
 
     public List<MyShare> createShareCollection(List<String> tickers) {
         List<MyShare> result = new ArrayList<>();
-        tickers.forEach(ticker -> result.add(getInfo(ticker)));
+        tickers.forEach(ticker -> result.add(getAssetFromTinkoffByTicker(ticker)));
         return result;
     }
 

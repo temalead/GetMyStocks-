@@ -28,13 +28,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Slf4j
-public class BondService implements SecurityService{
+public class BondService implements SecurityService {
     InvestApi api;
     BondRepository repository;
 
     @NonNull
-    @Override
-    public MyBond getInfo(String name) {
+    public MyBond getAssetFromTinkoffByTicker(String name) {
         Optional<MyBond> foundBond = repository.findById(name);
         if (foundBond.isPresent()) {
             MyBond bond = foundBond.get();
@@ -87,7 +86,9 @@ public class BondService implements SecurityService{
 
     public List<MyBond> createBondCollection(List<String> tickers) {
         List<MyBond> result = new ArrayList<>();
-        tickers.forEach(ticker -> result.add(getInfo(ticker)));
+        tickers.forEach(ticker -> result.add(getAssetFromTinkoffByTicker(ticker)));
         return result;
     }
+
+
 }

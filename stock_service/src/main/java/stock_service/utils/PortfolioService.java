@@ -41,10 +41,10 @@ public class PortfolioService {
             if (security.contains("ОФЗ")) {
                 log.info("Security {}", (Object[]) securityResult);
                 BigDecimal lot = BigDecimal.valueOf(Long.parseLong(securityResult[1]));
-                result.add(SecurityDtoTranslator.translateToSecurityDto(bondService.getInfo(securityName), lot, Asset.BOND));
+                result.add(SecurityDtoTranslator.translateToSecurityDto(bondService.getAssetFromTinkoffByTicker(securityName), lot, Asset.BOND));
             } else {
                 BigDecimal lot = BigDecimal.valueOf(Long.parseLong(securityResult[1]));
-                result.add(SecurityDtoTranslator.translateToSecurityDto(shareService.getInfo(securityName), lot, Asset.SHARE));
+                result.add(SecurityDtoTranslator.translateToSecurityDto(shareService.getAssetFromTinkoffByTicker(securityName), lot, Asset.SHARE));
             }
         }
         portfolio.setSecurities(result);

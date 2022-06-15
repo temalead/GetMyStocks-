@@ -4,6 +4,6 @@ import stock_service.entity.Security;
 
 public interface SecurityService {
 
-    Security getInfo(String name);
+    Security getAssetFromTinkoffByTicker(String name);
 
 }

@@ -3,9 +3,11 @@ package stock_service.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import stock_service.entity.MyBond;
 import stock_service.entity.MyShare;
 import stock_service.entity.share.Dividend;
 import stock_service.entity.share.DividendList;
+import stock_service.exception.ShareNotFoundException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,8 +15,18 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ShareMessageCreator{
-    public String createMessage(MyShare share) {
+public class ShareMessageCreator {
+
+    private final ShareService service;
+
+    public String createMessage(String request) {
+
+        MyShare share;
+        try {
+            share = service.getAssetFromTinkoffByTicker(request);
+        } catch (ShareNotFoundException ex) {
+            return ex.getMessage();
+        }
 
         String dividendMessage = createDividendMessage(share.getDividends());
         String price = "Price: " + share.getPrice() + "\n";
