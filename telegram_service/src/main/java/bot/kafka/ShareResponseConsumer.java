@@ -32,5 +32,9 @@ public class ShareResponseConsumer implements Callable<String> {
 
         return this.message;
     }
+
+    public void shutdown(){
+        this.message=null;
+    }
 }
 

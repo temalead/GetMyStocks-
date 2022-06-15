@@ -25,6 +25,7 @@ public class ShareSender implements SecuritySender {
 
         ExecutorService service = Executors.newSingleThreadExecutor();
         String result = service.submit(consumer).get();
+        consumer.shutdown();
 
 
         return SendMessage.builder().chatId(chatId).text(result).build();

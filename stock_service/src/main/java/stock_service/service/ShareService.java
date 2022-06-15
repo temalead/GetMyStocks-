@@ -34,10 +34,24 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class ShareService implements SecurityService{
+public class ShareService implements SecurityService {
     InvestApi api;
     ShareRepository repository;
+
+    ShareMessageCreator creator;
     String code = "TQBR";
+
+
+    public String getResult(String ticker) {
+
+        try {
+            MyShare info = getInfo(ticker);
+            return creator.createMessage(info);
+        } catch (ShareNotFoundException exception) {
+            return exception.getMessage();
+        }
+
+    }
 
     @NonNull
     @Override
@@ -53,8 +67,8 @@ public class ShareService implements SecurityService{
         }
     }
 
-    private MyShare createShare(String ticker) throws ShareNotFoundException {
-        Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new ShareNotFoundException("Share not found"));
+    private MyShare createShare(String ticker) throws ShareNotFoundException{
+        Share share = getFigiByTicker(ticker).join().orElseThrow(() -> new ShareNotFoundException(ticker));
         String figi = share.getFigi();
         DividendList dividends = getDividendsForYear(figi);
         BigDecimal price = getSharePrice(figi);
@@ -65,7 +79,7 @@ public class ShareService implements SecurityService{
         myShare.setId(ticker);
 
 
-        log.info("Created {} share",ticker);
+        log.info("Created {} share", ticker);
         repository.save(myShare);
 
         return myShare;

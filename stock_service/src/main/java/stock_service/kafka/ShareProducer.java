@@ -19,18 +19,11 @@ public class ShareProducer {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final TopicsProperties properties;
 
-    private final ShareMessageCreator creator;
-
-    private final ShareRepository repository;
-
     @SneakyThrows
     public void sendResponse(String requestedShare) {
 
-        MyShare resultShare = service.getInfo(requestedShare);
+        String message = service.getResult(requestedShare);
 
-        String message = creator.createMessage(resultShare);
-
-        repository.save(resultShare);
 
         kafkaTemplate.send(properties.getShare_res(), message);
     }
