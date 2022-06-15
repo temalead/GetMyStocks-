@@ -5,11 +5,11 @@ import bot.entity.User;
 import bot.exception.sender.Asset;
 import bot.kafka.RequestProducer;
 import bot.repository.UserService;
+import bot.service.MessageSender;
 import bot.service.handlers.PortfolioMessageHandler;
+import bot.telegram.state.BotCommand;
 import bot.telegram.ui.buttons.BotMessageSend;
 import bot.telegram.ui.keyboard.MainMenuKeyboard;
-import bot.telegram.state.BotCommand;
-import bot.service.MessageSender;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -43,7 +43,7 @@ public class PortfolioCreatorHandler implements PortfolioMessageHandler {
         }
         if (state.equals(BotCommand.MAKE_PORTFOLIO)) {
             producer.sendRequest(new Request(message.getText(), user, Asset.ABSTRACT));
-            reply = sender.getPortfolioInfo(chatId,user);
+            reply = sender.getPortfolioInfo(chatId);
             if (reply.getText().startsWith("Error")) {
                 return reply;
             }

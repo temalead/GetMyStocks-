@@ -2,16 +2,12 @@ package bot.service.sender;
 
 
 import bot.kafka.BondResponseConsumer;
+import bot.utils.KafkaResultReceiver;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
-
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Component
 @RequiredArgsConstructor
@@ -22,13 +18,9 @@ public class BondSender implements SecuritySender {
 
     @Override
     @SneakyThrows
-    public SendMessage getInfo(Message message) {
-        String chatId = message.getChatId().toString();
+    public SendMessage getInfo(String chatId) {
 
-
-        ExecutorService service = Executors.newSingleThreadExecutor();
-        String result = service.submit(consumer).get();
-        consumer.shutdown();
+        String result = KafkaResultReceiver.getResult(consumer);
 
 
         return SendMessage.builder().chatId(chatId).text(result).build();

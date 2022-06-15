@@ -1,5 +1,6 @@
 package bot.kafka;
 
+import bot.service.sender.PortfolioSender;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -7,22 +8,19 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ShareResponseConsumer extends Consumer implements Callable<String> {
+public class PortfolioResponseConsumer extends Consumer implements Callable<String> {
+    private final String PORTFOLIO_TOPIC = "portfolio.topic";
 
-    private final String SHARE_RES_TOPIC = "share_res.topic";
-
-
+    @KafkaListener(id = "portfolio", topics = PORTFOLIO_TOPIC)
     @SneakyThrows
-    @KafkaListener(id = "share_res", topics = SHARE_RES_TOPIC)
-    public void getShareResponse(String message) {
-        this.message = message;
+    public void getPortfolioFromKafka(String message) {
+        this.message=message;
     }
+
 
     @Override
     public String call() throws Exception {
@@ -33,4 +31,3 @@ public class ShareResponseConsumer extends Consumer implements Callable<String> 
         return this.message;
     }
 }
-

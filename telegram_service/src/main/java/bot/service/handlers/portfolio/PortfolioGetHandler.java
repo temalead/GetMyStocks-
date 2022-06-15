@@ -1,7 +1,9 @@
 package bot.service.handlers.portfolio;
 
 
+import bot.entity.Request;
 import bot.entity.User;
+import bot.exception.sender.Asset;
 import bot.exception.sender.NonExistentPortfolioMessage;
 import bot.kafka.RequestProducer;
 import bot.repository.UserService;
@@ -29,15 +31,15 @@ public class PortfolioGetHandler implements PortfolioMessageHandler {
 
     @Override
     public SendMessage sendMessageDependsOnCommand(Message message) {
-        Long chatId = message.getChatId();
-        User user = service.getUserOrCreateNewUserByChatId(chatId.toString());
+        String chatId = String.valueOf(message.getChatId());
+        User user = service.getUserOrCreateNewUserByChatId(chatId);
         if (user.getPortfolio() == null) {
             SendMessage result = SendMessage.builder().text(NonExistentPortfolioMessage.createMessageError()).chatId(user.getId()).build();
             result.setReplyMarkup(keyBoard.getKeyboard());
             return result;
         }
-
-        SendMessage portfolioInfo = sender.getPortfolioInfo(String.valueOf(chatId), user);
+        producer.sendRequest(new Request(message.getText(), user, Asset.ABSTRACT));
+        SendMessage portfolioInfo = sender.getPortfolioInfo(chatId);
         portfolioInfo.setReplyMarkup(keyBoard.getKeyboard());
 
         return portfolioInfo;

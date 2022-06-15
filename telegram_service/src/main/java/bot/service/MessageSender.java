@@ -1,6 +1,8 @@
 package bot.service;
 
 import bot.entity.User;
+import bot.exception.PortfolioCompositionValidationException;
+import bot.exception.PortfolioNotFoundException;
 import bot.exception.sender.Asset;
 import bot.exception.sender.NotFoundMessageBuilder;
 import bot.service.sender.BondSender;
@@ -27,14 +29,14 @@ public class MessageSender {
     private final ShareSender shareSender;
     private final BondSender bondSender;
 
-    private final PortfolioSender compositionSender;
+    private final PortfolioSender portfolioSender;
 
     public SendMessage getShareInfo(Message message) {
         String ticker = message.getText();
         String chatId = message.getChatId().toString();
         try {
 
-            return shareSender.getInfo(message);
+            return shareSender.getInfo(chatId);
 
         } catch (CompletionException e) {
             return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(ticker, Asset.SHARE)).build();
@@ -46,7 +48,7 @@ public class MessageSender {
         String chatId = message.getChatId().toString();
         try {
 
-            return bondSender.getInfo(message);
+            return bondSender.getInfo(chatId);
 
         } catch (CompletionException e) {
             return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createMessageError(ticker, Asset.BOND)).build();
@@ -54,9 +56,13 @@ public class MessageSender {
     }
 
 
-    @SneakyThrows
-    public SendMessage getPortfolioInfo(String chatId,User user) {
-        return null;
-    }
+    public SendMessage getPortfolioInfo(String chatId) {
 
+        try {
+            return null;
+        }
+        catch (Exception ex){
+            return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createPortfolioError()).build();
+        }
+    }
 }

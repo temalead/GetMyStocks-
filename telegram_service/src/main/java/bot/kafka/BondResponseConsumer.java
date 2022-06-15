@@ -12,16 +12,14 @@ import java.util.concurrent.Callable;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class BondResponseConsumer implements Callable<String> {
+public class BondResponseConsumer extends Consumer implements Callable<String> {
     private final String BOND_RES_TOPIC = "bond_res.topic";
 
 
-    private String message;
-
-    @KafkaListener(id="bond_res",topics = BOND_RES_TOPIC)
+    @KafkaListener(id = "bond_res", topics = BOND_RES_TOPIC)
     @SneakyThrows
     public void getSecurityFromKafka(String message) {
-        this.message=message;
+        this.message = message;
     }
 
     @Override
@@ -31,9 +29,5 @@ public class BondResponseConsumer implements Callable<String> {
         }
 
         return this.message;
-    }
-
-    public void shutdown() {
-        this.message=null;
     }
 }

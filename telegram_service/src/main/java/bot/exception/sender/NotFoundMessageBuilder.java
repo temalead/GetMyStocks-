@@ -8,4 +8,8 @@ public class NotFoundMessageBuilder {
         return String.format( "Error. %s %s not found!\n" +
                 "Please, try again", asset.name().toLowerCase(Locale.ROOT),name);
     }
+
+    public static String createPortfolioError( ) {
+        return "Error. Portfolio not found";
+    }
 }
