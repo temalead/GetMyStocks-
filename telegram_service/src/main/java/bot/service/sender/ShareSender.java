@@ -6,6 +6,7 @@ import bot.entity.dto.Dividend;
 import bot.entity.dto.DividendList;
 import bot.exception.ShareNotFoundException;
 import bot.kafka.ShareRespondent;
+import bot.kafka.ShareResponseConsumer;
 import bot.repository.ShareRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -15,12 +16,17 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Component
 @RequiredArgsConstructor
 public class ShareSender implements SecuritySender {
     private final ShareRepository repository;
     private final ShareRespondent respondent;
+
+    private final ShareResponseConsumer consumer;
 
     private String message;
 
@@ -30,25 +36,14 @@ public class ShareSender implements SecuritySender {
         String chatId = message.getChatId().toString();
         String ticker = message.getText();
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            @SneakyThrows
-            public void run() {
-                synchronized (message) {
-                    if (message == null) wait();
 
-                }
-            }
-        });
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        String result = service.submit(consumer).get();
 
-        thread.start();
-        thread.join();
-        String s = respondent.getMessage();
-        respondent.shutDown();
         /*MyShare info = getInfoFromDB(ticker);
         String result = createMessage(info);*/
 
-        return SendMessage.builder().chatId(chatId).text(s).build();
+        return SendMessage.builder().chatId(chatId).text(result).build();
 
 
     }
