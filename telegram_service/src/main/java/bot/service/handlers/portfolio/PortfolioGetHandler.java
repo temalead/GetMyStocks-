@@ -42,6 +42,9 @@ public class PortfolioGetHandler implements PortfolioMessageHandler {
         SendMessage portfolioInfo = sender.getPortfolioInfo(chatId);
         portfolioInfo.setReplyMarkup(keyBoard.getKeyboard());
 
+
+        service.saveCondition(user);
+
         return portfolioInfo;
     }
 

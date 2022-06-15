@@ -57,9 +57,8 @@ public class MessageSender {
 
 
     public SendMessage getPortfolioInfo(String chatId) {
-
         try {
-            return null;
+            return portfolioSender.getInfo(chatId);
         }
         catch (Exception ex){
             return SendMessage.builder().chatId(chatId).text(NotFoundMessageBuilder.createPortfolioError()).build();

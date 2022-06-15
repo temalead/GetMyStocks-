@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
 @Slf4j
 @RequiredArgsConstructor
 public class PortfolioResponseConsumer extends Consumer implements Callable<String> {
-    private final String PORTFOLIO_TOPIC = "portfolio.topic";
+    private final String PORTFOLIO_TOPIC = "portfolio_res.topic";
 
     @KafkaListener(id = "portfolio", topics = PORTFOLIO_TOPIC)
     @SneakyThrows

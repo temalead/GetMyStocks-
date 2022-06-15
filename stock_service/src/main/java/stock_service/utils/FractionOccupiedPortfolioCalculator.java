@@ -12,6 +12,8 @@ import stock_service.entity.dto.SecurityDto;
 import stock_service.entity.Asset;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Component
@@ -20,15 +22,14 @@ import java.util.List;
 @Slf4j
 public class FractionOccupiedPortfolioCalculator {
 
-    public BigDecimal calculateOccupiedFractionOfSecurityByUser(SecurityDto security, User user) {
-        Portfolio portfolio = user.getPortfolio();
+    public BigDecimal calculateOccupiedFractionOfSecurityByUser(SecurityDto security, Portfolio portfolio) {
         BigDecimal portfolioValue = portfolio.getPortfolioValue();
         BigDecimal securityValue = security.getPrice().multiply(security.getLot());
 
 
         float v = securityValue.floatValue() / portfolioValue.floatValue();
 
-        return BigDecimal.valueOf(v).multiply(BigDecimal.valueOf(100));
+        return BigDecimal.valueOf(v).multiply(BigDecimal.valueOf(100)).round(new MathContext(3, RoundingMode.HALF_UP));
     }
 
 

@@ -30,6 +30,10 @@ public class PortfolioService {
 
 
     public Portfolio getInfo(String text, User user) {
+        if (user.getPortfolio() != null) {
+            return user.getPortfolio();
+        }
+
         log.info("Creating new user portfolio");
         Portfolio portfolio = new Portfolio();
         List<SecurityDto> result = new ArrayList<>();

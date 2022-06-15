@@ -7,6 +7,7 @@ import stock_service.entity.Portfolio;
 import stock_service.entity.User;
 import stock_service.entity.dto.SecurityDto;
 import stock_service.exception.PortfolioCompositionValidationException;
+import stock_service.repository.UserRepository;
 import stock_service.utils.FractionOccupiedPortfolioCalculator;
 import stock_service.utils.PortfolioService;
 
@@ -25,18 +26,17 @@ public class PortfolioMessageCreator {
         Portfolio info;
         try {
             info = service.getInfo(request, user);
+            return createPortfolioMessage(info);
         } catch (PortfolioCompositionValidationException ex) {
             return ex.getMessage();
         }
-
-        return null;
     }
 
 
-    public String createSecurityMessage(Portfolio portfolio, User user) {
+    public String createPortfolioMessage(Portfolio portfolio) {
 
         if (portfolio == null) {
-            return "null";
+            return "Portfolio not found!";
         }
 
         List<SecurityDto> list = portfolio.getSecurities();
@@ -46,9 +46,9 @@ public class PortfolioMessageCreator {
 
 
         for (SecurityDto security : list) {
-            stringBuilder.append(createSecurityMessage(security));
-            BigDecimal fraction = calculator.calculateOccupiedFractionOfSecurityByUser(security, user);
-            stringBuilder.append("Fraction of Portfolio:").append(fraction).append("%").append("\n");
+            stringBuilder.append(createPortfolioMessage(security));
+            BigDecimal fraction = calculator.calculateOccupiedFractionOfSecurityByUser(security, portfolio);
+            stringBuilder.append("Fraction of Portfolio: ").append(fraction).append("%").append("\n");
             stringBuilder.append("\n");
         }
 
@@ -62,7 +62,7 @@ public class PortfolioMessageCreator {
 
     }
 
-    public String createSecurityMessage(SecurityDto security) {
+    public String createPortfolioMessage(SecurityDto security) {
         StringBuilder stringBuilder = new StringBuilder();
 
         BigDecimal price = security.getPrice();

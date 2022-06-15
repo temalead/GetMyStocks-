@@ -1,14 +1,15 @@
 package bot.service.sender;
 
 
+import bot.kafka.PortfolioResponseConsumer;
 import bot.kafka.ShareResponseConsumer;
+import bot.utils.KafkaResultReceiver;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 
 @Component
@@ -16,13 +17,15 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class PortfolioSender {
-    private final ShareResponseConsumer consumer;
+    private final PortfolioResponseConsumer consumer;
 
 
-    public SendMessage getInfo(Message message) {
-        String chatId = String.valueOf(message.getChatId());
+    public SendMessage getInfo(String chatId) {
 
-        return null;
+
+        String result= KafkaResultReceiver.getResult(consumer);
+
+        return SendMessage.builder().chatId(chatId).text(result).build();
 
     }
 }

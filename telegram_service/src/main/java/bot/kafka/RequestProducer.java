@@ -33,9 +33,12 @@ public class RequestProducer {
                 break;
             case BOND:
                 kafkaTemplate.send(topics.getBond(),value);
+                log.info("Getting request to bond topic");
+
                 break;
             default:
                 kafkaTemplate.send(topics.getPortfolio(),value);
+                log.info("Getting request to portfolio topic");
         }
 
 

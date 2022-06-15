@@ -4,6 +4,7 @@ import bot.entity.Request;
 import bot.entity.User;
 import bot.exception.sender.Asset;
 import bot.kafka.RequestProducer;
+import bot.repository.UserRepository;
 import bot.repository.UserService;
 import bot.service.MessageSender;
 import bot.service.handlers.PortfolioMessageHandler;
@@ -29,6 +30,8 @@ public class PortfolioCreatorHandler implements PortfolioMessageHandler {
     MainMenuKeyboard mainMenuKeyboard;
     RequestProducer producer;
 
+    UserRepository repository;
+
     @Override
     public SendMessage sendMessageDependsOnCommand(Message message) {
         String chatId = message.getChatId().toString();
@@ -44,13 +47,15 @@ public class PortfolioCreatorHandler implements PortfolioMessageHandler {
         if (state.equals(BotCommand.MAKE_PORTFOLIO)) {
             producer.sendRequest(new Request(message.getText(), user, Asset.ABSTRACT));
             reply = sender.getPortfolioInfo(chatId);
+
+            log.info("old user: {}",repository.findById(user.getId()).orElse(null));
             if (reply.getText().startsWith("Error")) {
                 return reply;
             }
             reply.setReplyMarkup(mainMenuKeyboard.getKeyboard());
         }
-
         service.saveCondition(user);
+
 
         log.info("User from creator {}", user);
 

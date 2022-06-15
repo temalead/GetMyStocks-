@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 @Getter
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public enum BotState {
+public enum BotCommand {
     BACK,
     DELETE_PORTFOLIO,
     FIND_BOND,
