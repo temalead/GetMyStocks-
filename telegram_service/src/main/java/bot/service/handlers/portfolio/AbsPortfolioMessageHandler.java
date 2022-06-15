@@ -1,8 +1,8 @@
-package bot.telegram.state.handlers.portfolio;
+package bot.service.handlers.portfolio;
 
 import bot.entity.User;
 import bot.repository.UserService;
-import bot.telegram.state.handlers.MessageHandler;
+import bot.service.handlers.MessageHandler;
 import bot.telegram.ui.buttons.BotMessageSend;
 import bot.telegram.ui.keyboard.PortfolioMenuKeyBoard;
 import bot.telegram.state.BotCommand;

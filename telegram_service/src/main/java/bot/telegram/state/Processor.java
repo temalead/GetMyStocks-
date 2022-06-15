@@ -1,6 +1,6 @@
 package bot.telegram.state;
 
-import bot.telegram.state.handlers.MessageHandler;
+import bot.service.handlers.MessageHandler;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 

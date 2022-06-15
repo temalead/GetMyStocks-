@@ -1,13 +1,11 @@
-package bot.telegram.state.handlers.portfolio;
+package bot.service.handlers.portfolio;
 
 
-import bot.entity.Request;
 import bot.entity.User;
-import bot.exception.sender.Asset;
 import bot.exception.sender.NonExistentPortfolioMessage;
 import bot.kafka.RequestProducer;
 import bot.repository.UserService;
-import bot.telegram.state.handlers.PortfolioMessageHandler;
+import bot.service.handlers.PortfolioMessageHandler;
 import bot.telegram.ui.keyboard.PortfolioMenuKeyBoard;
 import bot.telegram.state.BotCommand;
 import bot.service.MessageSender;

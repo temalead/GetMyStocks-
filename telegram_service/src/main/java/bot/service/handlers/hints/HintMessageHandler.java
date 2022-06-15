@@ -1,8 +1,8 @@
-package bot.telegram.state.handlers.hints;
+package bot.service.handlers.hints;
 
 import bot.entity.User;
 import bot.repository.UserService;
-import bot.telegram.state.handlers.MessageHandler;
+import bot.service.handlers.MessageHandler;
 import bot.telegram.ui.keyboard.MainMenuKeyboard;
 import bot.telegram.ui.buttons.BotMessageSend;
 import bot.telegram.state.BotCommand;

@@ -1,6 +1,6 @@
 package bot.telegram.state;
 
-import bot.telegram.state.handlers.MessageHandler;
+import bot.service.handlers.MessageHandler;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

@@ -1,27 +1,27 @@
 package bot.kafka;
 
+
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-@Service
+@Component
 @Slf4j
 @RequiredArgsConstructor
-public class ShareResponseConsumer implements Callable<String> {
+public class BondResponseConsumer implements Callable<String> {
+    private final String BOND_RES_TOPIC = "bond_res.topic";
 
-    private final String SHARE_RES_TOPIC = "share_res.topic";
+
     private String message;
 
+    @KafkaListener(id="bond_res",topics = BOND_RES_TOPIC)
     @SneakyThrows
-    @KafkaListener(id = "share_res", topics = SHARE_RES_TOPIC)
-    public void getShareResponse(String message) {
-        this.message = message;
+    public void getSecurityFromKafka(String message) {
+        this.message=message;
     }
 
     @Override
@@ -33,4 +33,3 @@ public class ShareResponseConsumer implements Callable<String> {
         return this.message;
     }
 }
-

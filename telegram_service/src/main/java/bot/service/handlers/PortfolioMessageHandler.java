@@ -1,4 +1,4 @@
-package bot.telegram.state.handlers;
+package bot.service.handlers;
 
 public interface PortfolioMessageHandler extends MessageHandler{
 

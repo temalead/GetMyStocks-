@@ -22,13 +22,11 @@ public class ShareProducer {
     private final ShareMessageCreator creator;
 
     private final ShareRepository repository;
-    private final ObjectMapper mapper;
 
     @SneakyThrows
     public void sendResponse(String requestedShare) {
 
         MyShare resultShare = service.getInfo(requestedShare);
-        String value = mapper.writeValueAsString(resultShare);
 
         String message = creator.createMessage(resultShare);
 

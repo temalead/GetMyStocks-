@@ -1,11 +1,11 @@
-package bot.telegram.state.handlers.share;
+package bot.service.handlers.share;
 
 import bot.entity.Request;
 import bot.entity.User;
 import bot.exception.sender.Asset;
 import bot.kafka.RequestProducer;
 import bot.repository.UserService;
-import bot.telegram.state.handlers.MessageHandler;
+import bot.service.handlers.MessageHandler;
 import bot.telegram.ui.buttons.BotMessageSend;
 import bot.telegram.state.BotCommand;
 import bot.service.MessageSender;
