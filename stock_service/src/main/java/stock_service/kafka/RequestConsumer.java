@@ -10,6 +10,8 @@ import stock_service.entity.Portfolio;
 import stock_service.entity.Request;
 import stock_service.entity.User;
 
+import java.util.Locale;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class RequestConsumer {
 
 
         log.info("Got share request from {} topic", request.getMessage());
-        String requestedShare = request.getMessage();
+        String requestedShare = request.getMessage().toUpperCase(Locale.ROOT);
 
         shareProducer.sendResponse(requestedShare);
 

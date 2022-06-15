@@ -22,8 +22,3 @@ topic:
   share_res: share_res.topic
   bond_res: bond_res.topic
   portfolio_res: portfolio_res.topic
-
-logging:
-  level:
-    org.apache: OFF
-    kafka: OFF

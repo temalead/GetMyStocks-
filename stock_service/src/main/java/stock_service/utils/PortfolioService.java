@@ -17,6 +17,7 @@ import stock_service.service.ShareService;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Component
 @RequiredArgsConstructor
@@ -48,7 +49,7 @@ public class PortfolioService {
                 result.add(SecurityDtoTranslator.translateToSecurityDto(bondService.getAssetFromTinkoffByTicker(securityName), lot, Asset.BOND));
             } else {
                 BigDecimal lot = BigDecimal.valueOf(Long.parseLong(securityResult[1]));
-                result.add(SecurityDtoTranslator.translateToSecurityDto(shareService.getAssetFromTinkoffByTicker(securityName), lot, Asset.SHARE));
+                result.add(SecurityDtoTranslator.translateToSecurityDto(shareService.getAssetFromTinkoffByTicker(securityName.toUpperCase(Locale.ROOT)), lot, Asset.SHARE));
             }
         }
         portfolio.setSecurities(result);
