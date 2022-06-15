@@ -1,6 +1,5 @@
 package bot.entity;
 
-import bot.entity.dto.SecurityDto;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 

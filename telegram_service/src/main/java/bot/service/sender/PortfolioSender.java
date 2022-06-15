@@ -1,20 +1,11 @@
 package bot.service.sender;
 
 
-import bot.entity.Portfolio;
-import bot.entity.User;
-import bot.entity.dto.SecurityDto;
-import bot.exception.sender.Asset;
-import bot.utils.FractionOccupiedPortfolioCalculator;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 
 @Component
@@ -23,7 +14,7 @@ import java.util.List;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class PortfolioSender {
 
-    FractionOccupiedPortfolioCalculator calculator;
+    /*FractionOccupiedPortfolioCalculator calculator;
 
     public SendMessage getInfo(String chatId, User user) {
         Portfolio portfolio = user.getPortfolio();
@@ -71,5 +62,5 @@ public class PortfolioSender {
         stringBuilder.append("Quantity: ").append(lot).append("\n");
 
         return stringBuilder.toString();
-    }
+    }*/
 }

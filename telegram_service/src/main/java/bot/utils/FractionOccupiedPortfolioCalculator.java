@@ -1,20 +1,11 @@
 package bot.utils;
 
 
-import bot.entity.Portfolio;
-import bot.entity.Security;
-import bot.entity.User;
-import bot.entity.dto.SecurityDto;
-import bot.exception.sender.Asset;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -22,7 +13,7 @@ import java.util.List;
 @Slf4j
 public class FractionOccupiedPortfolioCalculator {
 
-    public BigDecimal calculateOccupiedFractionOfSecurityByUser(SecurityDto security, User user) {
+   /* public BigDecimal calculateOccupiedFractionOfSecurityByUser(SecurityDto security, User user) {
         Portfolio portfolio = user.getPortfolio();
         BigDecimal portfolioValue = portfolio.getPortfolioValue();
         BigDecimal securityValue = security.getPrice().multiply(security.getLot());
@@ -70,5 +61,5 @@ public class FractionOccupiedPortfolioCalculator {
 
 
         return result[0];
-    }
+    }*/
 }

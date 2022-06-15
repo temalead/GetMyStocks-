@@ -1,10 +1,7 @@
 package bot.service.sender;
 
 
-import bot.entity.MyBond;
-import bot.exception.BondNotFoundException;
 import bot.kafka.BondResponseConsumer;
-import bot.repository.BondRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +10,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
