@@ -46,9 +46,9 @@ public class PortfolioCreatorHandler implements PortfolioMessageHandler {
         }
         if (state.equals(BotCommand.MAKE_PORTFOLIO)) {
             producer.sendRequest(new Request(message.getText(), user, Asset.ABSTRACT));
+            user.setPortfolio(message.getText());
             reply = sender.getPortfolioInfo(chatId);
 
-            log.info("old user: {}",repository.findById(user.getId()).orElse(null));
             if (reply.getText().startsWith("Error")) {
                 return reply;
             }

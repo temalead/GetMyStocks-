@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import stock_service.config.TopicsProperties;
-import stock_service.entity.Portfolio;
 import stock_service.entity.User;
 import stock_service.service.PortfolioMessageCreator;
-import stock_service.utils.PortfolioService;
 
 @Service
 @RequiredArgsConstructor

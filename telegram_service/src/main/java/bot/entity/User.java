@@ -23,7 +23,7 @@ import java.util.Objects;
 public class User implements Serializable {
     String id;
     BotCommand command;
-    Portfolio portfolio;
+    String portfolio;
 
 
     @Override

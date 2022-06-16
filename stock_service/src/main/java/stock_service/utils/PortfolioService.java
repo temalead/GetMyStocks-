@@ -31,15 +31,17 @@ public class PortfolioService {
 
 
     public Portfolio getInfo(String text, User user) {
-        if (user.getPortfolio() != null) {
-            return user.getPortfolio();
-        }
 
         log.info("Creating new user portfolio");
         Portfolio portfolio = new Portfolio();
         List<SecurityDto> result = new ArrayList<>();
-
-        String[] securities = text.split(", ");
+        String[] securities;
+        if (user.getPortfolio()!=null){
+            securities=user.getPortfolio().split(", ");
+        }
+        else{
+            securities = text.split(", ");
+        }
         for (String security : securities) {
             String[] securityResult = security.split("-");
             String securityName = securityResult[0];
@@ -56,8 +58,6 @@ public class PortfolioService {
         log.info("Portfolio {}", portfolio.getSecurities());
         BigDecimal value = portfolioCalculator.calculatePortfolioValue(portfolio);
         portfolio.setPortfolioValue(value);
-        user.setPortfolio(portfolio);
-
         repository.save(user);
 
         log.info("User {}", user);
