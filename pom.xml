@@ -12,7 +12,6 @@
     <artifactId>GetMyStocks</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>kafka</module>
         <module>telegram_service</module>
         <module>stock_service</module>
     </modules>
@@ -64,8 +63,6 @@
             <artifactId>spring-kafka-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-
 
 
         <dependency>
@@ -139,7 +136,6 @@
         </dependency>
 
     </dependencies>
-
 
 
     <dependencyManagement>
