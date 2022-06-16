@@ -9,6 +9,14 @@ spring:
   application:
     name: telegram_service
 
+  data:
+    redis:
+      host: redis
+      port: 6379
+      repositories:
+        enabled: true
+
+
 topic:
   share: share.topic
   bond: bond.topic
