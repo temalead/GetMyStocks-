@@ -21,6 +21,8 @@ services:
       - redis
     networks:
       - stocks
+    environment:
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
 
   telegram_service:
     container_name: telegram_service
@@ -36,6 +38,9 @@ services:
       - kafka
     networks:
       - stocks
+    environment:
+      SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:29092
+
 
   redis:
     hostname: redis
@@ -55,6 +60,7 @@ services:
       - kafka
 
   zookeeper:
+    hostname: zookeeper
     image: zookeeper
     container_name: zookeeper
     restart: "always"
@@ -67,6 +73,7 @@ services:
       - "2181:2181"
 
   kafka:
+    hostname: kafka
     image: obsidiandynamics/kafka
     container_name: kafka
     restart: "always"
@@ -101,3 +108,4 @@ services:
 volumes:
   cache:
     driver: local
+

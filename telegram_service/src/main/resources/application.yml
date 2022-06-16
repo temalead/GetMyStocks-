@@ -8,6 +8,8 @@ bot:
 spring:
   application:
     name: telegram_service
+  kafka:
+    bootstrap-servers: PLAINTEXT://kafka:9092
 
   redis:
     host: redis

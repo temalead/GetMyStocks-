@@ -9,6 +9,8 @@ spring:
     port: 6379
   application:
     name: stock_service
+  kafka:
+    bootstrap-servers: PLAINTEXT://kafka:9092
 
 server:
   port: 8081
