@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function build_basic() {
+function build_image() {
   JAR_FILE=$1
   APP_NAME=$2
 
@@ -15,5 +15,5 @@ cd ..
 
 mvn clean package -DskipTests
 
-build_basic ./stock_service/target/stock_service-${APP_VERSION}.jar stock_service
-build_basic ./telegram_service/target/telegram_service-${APP_VERSION}.jar telegram_service
+build_image ./stock_service/target/stock_service-${APP_VERSION}.jar stock_service
+build_image ./telegram_service/target/telegram_service-${APP_VERSION}.jar telegram_service

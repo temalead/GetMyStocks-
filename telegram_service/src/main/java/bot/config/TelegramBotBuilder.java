@@ -40,7 +40,7 @@ public class TelegramBotBuilder {
 
         final CreateTunnel sshCreateTunnel = new CreateTunnel.Builder()
                 .withProto(Proto.HTTP)
-                .withAddr(8080)
+                .withAddr(8082)
                 .build();
         final Tunnel tunnel = ngrokClient.connect(sshCreateTunnel);
         String url = tunnel.getPublicUrl();

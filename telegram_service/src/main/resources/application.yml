@@ -1,20 +1,17 @@
 server:
-  port: 8080
+  port: 8082
 bot:
   telegram:
     botToken: ${secret.bot.telegram.token}
     botUsername: get_my_stocks_bot
-    port: 8080
+    port: 8082
 spring:
   application:
     name: telegram_service
   kafka:
     bootstrap-servers: PLAINTEXT://kafka:9092
-
   redis:
     host: redis
-    port: 6379
-    password: pass
 
 
 topic:
