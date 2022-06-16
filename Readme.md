@@ -15,7 +15,7 @@ Usage
 ---
 Java 16
 
-Spring boot
+Spring boot frameworks
 
 Tinkoff API
 
@@ -23,10 +23,12 @@ Telegram API
 
 Kafka
 
+And other libraries
+
 Work Logic
 ---
 
-![Alt text](/home/tema/Downloads/logic.drawio.png)
+![Alt text]()
 
 Got request from user -> find needed handler -> send to needed kafka topic ->
 Got request by stock service -> do some work with request -> sending response
