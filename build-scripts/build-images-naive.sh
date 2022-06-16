@@ -6,8 +6,7 @@ function build_basic() {
 
   docker build -f ./build-scripts/docker/Dockerfile \
     --build-arg JAR_FILE=${JAR_FILE} \
-    -t nikulinme/${APP_NAME}:latest \
-    -t nikulinme/${APP_NAME}:naive .
+    -t nikulinme/${APP_NAME}:latest .
 }
 
 APP_VERSION=0.0.1-SNAPSHOT
